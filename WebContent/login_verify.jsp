@@ -13,15 +13,32 @@
 	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user = "sook";
 	String password = "2019";
+	System.out.println(userID);
+	System.out.println(userPassword);
+	
 	try{
 		Class.forName(driver);
-		out.println("jdbc driver 로딩 성공");
 		myConn = DriverManager.getConnection(url,user,password);
-		out.println("오라클 연결 성공");
 		stmt = myConn.createStatement();
 		
-		
 		mySQL="select s_id from student where s_id='" + userID + " 'and s_pwd='" + userPassword + "'";
+		
+		ResultSet  myResultSet = stmt.executeQuery(mySQL);
+		
+		if(myResultSet.next() != false){
+		
+			String name = myResultSet.getString("s_name");
+			session.setAttribute("userName", name);
+			session.setAttribute("userID", userID);  
+			response.sendRedirect("main.jsp");
+		}
+	    else { %>
+	    <script>
+	    	alert("로그인 실패.");
+	    	location.href="login.jsp";
+	    </script>
+	    <%
+	    }
 		
 		myConn.close();
 		stmt.close();
@@ -32,7 +49,5 @@
 	}catch (SQLException e){
 		System.out.println("오라클 연결 실패");
 	}
-
-
 
 %>
