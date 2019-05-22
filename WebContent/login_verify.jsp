@@ -2,7 +2,6 @@
 <%@page import="java.sql.*"%>
 
 <%
-//test/ashdfskhdfkshdfjsbvjabjdfvsdfasdfasdgsdagd
 
 	String userID=request.getParameter("userID");
 	String userPassword=request.getParameter("userPassword");
@@ -23,12 +22,13 @@
 		myConn = DriverManager.getConnection(url,user,password);
 		stmt = myConn.createStatement();
 		
-		mySQL="select s_id from student where s_id='" + userID + " 'and s_pwd='" + userPassword + "'";
+		mySQL="select s_name from student where s_id=" + userID + " and s_pwd='" + userPassword + "';";
+		System.out.println(mySQL);
 		
 		ResultSet  myResultSet = stmt.executeQuery(mySQL);
+		System.out.println(myResultSet);
 		
 		if(myResultSet.next() != false){
-		
 			String name = myResultSet.getString("s_name");
 			session.setAttribute("userName", name);
 			session.setAttribute("userID", userID);  
