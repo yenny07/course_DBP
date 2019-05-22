@@ -22,7 +22,7 @@
 
 	if(rs.next()) {
 		// request.setAttribute("userID", session_id);
-		response.sendRedirect("main.jsp?userID="+session_id);
+		response.sendRedirect("main.jsp?user="+session_id);
 		}
 	else{
 		response.sendRedirect("login.jsp");
