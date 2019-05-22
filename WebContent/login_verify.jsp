@@ -2,12 +2,13 @@
 <%@page import="java.sql.*"%>
 
 <%
-//String userID=request.getParameter("userID");
-//String userPassword=request.getParameter("userPassword");
+	String userID=request.getParameter("userID");
+	String userPassword=request.getParameter("userPassword");
 
-//Connection myConn = null;
-//Statement stmt = null;
-
+	Connection myConn = null;
+	Statement stmt = null;
+	String mySQL = null;
+	
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user = "sook";
@@ -15,8 +16,16 @@
 	try{
 		Class.forName(driver);
 		out.println("jdbc driver 로딩 성공");
-		DriverManager.getConnection(url,user,password);
+		myConn = DriverManager.getConnection(url,user,password);
 		out.println("오라클 연결 성공");
+		stmt = myConn.createStatement();
+		
+		
+		mySQL="select s_id from student where s_id='" + userID + " 'and s_pwd='" + userPassword + "'";
+		
+		myConn.close();
+		stmt.close();
+		
 	}catch (ClassNotFoundException e){
 		e.printStackTrace();
 		System.out.println("jdbc driver 로딩 실패");
