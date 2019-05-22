@@ -13,7 +13,7 @@
 		</tr>
 	</table>
 	<table width="75%" align="center" border>
-		<form method="post" action="lovin_verify.jsp">
+		<form method="post" action="login_verify.jsp">
 		<tr>
 			<td><div align="center">아이디</div></td>
 			<td>
