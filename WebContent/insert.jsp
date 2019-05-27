@@ -13,18 +13,39 @@
 			<th>과목번호</th>
 			<th>분반</th>
 			<th>과목명</th>
+			<th>교수</th>
 			<th>시간</th>
 			<th>학점</th>
+			<th>현재 수강인원</th>
+			<th>최대 수강인원</th>
 			<th>수강신청</th>
 		</tr>
+		<form method="post" action="insert_verify.jsp">
 		<tr>
-			<td> test1 </td>
-			<td> test2 </td>
-			<td> test3 </td>
-			<td> test4 </td>
-			<td> test5 </td>
-			<td> test6 </td>
+			<td align="center"> C1234 </td>
+			<td align="center"> 1 </td>
+			<td align="center"> 데이터베이스 프로그래밍 </td>
+			<td align="center"> 심준호 </td>
+			<td align="center"> 월 3교시 <br> 수 3교시 </td>
+			<td align="center"> 3 </td>
+			<td align="center"> 10 </td>
+			<td align="center"> 30 </td>
+			<td align="center"><a href="insert_verify.jsp?c_id=C1234">신청</a></td>
 		</tr>
+		</form>
+		<form method="post" action="insert_verify.jsp">
+		<tr>
+			<td align="center"> C1256 </td>
+			<td align="center"> 1 </td>
+			<td align="center"> 시스템종합설계 </td>
+			<td align="center"> 박숙영 </td>
+			<td align="center"> 월 3교시 <br> 수 3교시 </td>
+			<td align="center"> 3 </td>
+			<td align="center"> 10 </td>
+			<td align="center"> 20 </td>
+			<td align="center"><a href="insert_verify.jsp?c_id=C1256">신청</a></td>
+		</tr>
+		</form>
 	</table>
 </body>
 

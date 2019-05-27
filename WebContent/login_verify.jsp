@@ -22,6 +22,7 @@
 		boolean result = rs.next();
 		System.out.println(result);
 		if(result) {
+			session.setAttribute("user", session_id);
 			// request.setAttribute("userID", session_id);
 			response.sendRedirect("main.jsp?user="+session_id);
 			}
