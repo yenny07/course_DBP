@@ -30,7 +30,7 @@
 			<td align="center"> 3 </td>
 			<td align="center"> 10 </td>
 			<td align="center"> 30 </td>
-			<td align="center"><a href="insert_verify.jsp?c_id=C1234">신청</a></td>
+			<td align="center"><a href="insert_verify.jsp?c_id=C1234&c_id_no=1">신청</a></td>
 		</tr>
 		</form>
 		<form method="post" action="insert_verify.jsp">
@@ -43,7 +43,7 @@
 			<td align="center"> 3 </td>
 			<td align="center"> 10 </td>
 			<td align="center"> 20 </td>
-			<td align="center"><a href="insert_verify.jsp?c_id=C1256">신청</a></td>
+			<td align="center"><a href="insert_verify.jsp?c_id=C1256&c_id_no=1">신청</a></td>
 		</tr>
 		</form>
 	</table>
