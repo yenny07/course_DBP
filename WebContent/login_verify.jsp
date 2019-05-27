@@ -4,7 +4,7 @@
 	String userID=request.getParameter("userID");
 	String userPassword=request.getParameter("userPassword");
 	String session_id = request.getParameter("userID");
-	// Oracle 연결
+	
 	String dbdriver = "oracle.jdbc.driver.OracleDriver";
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user = "sook";
@@ -14,7 +14,7 @@
 		Class.forName(dbdriver);
 		Connection myConn = DriverManager.getConnection(dburl, user, passwd);
 		
-		String mySQL = "select s_id from student where s_id=" + userID + " and s_pwd='" + userPassword + "'"; 
+		String mySQL = "select s_id, s_name from student where s_id=" + userID + " and s_pwd='" + userPassword + "'"; 
 		Statement stmt = myConn.createStatement();
 		ResultSet rs = stmt.executeQuery(mySQL);
 		
