@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<<<<<<< HEAD
 <% String session_id = (String)session.setAttribute("userID");
+=======
+<% String session_id = (String)session.getAttribute("user");
+>>>>>>> f042d3f95611ca0ac6a2020a4e3a0feedf6d7aff
 	String log;
 	
 	if (session_id == null)
