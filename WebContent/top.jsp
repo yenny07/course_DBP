@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<% String session_id = (String)request.getParameter("user");
+<% String session_id = (String)session.setAttribute("userID");
 	String log;
+	
 	if (session_id == null)
 		log = "<a href=login.jsp>로그인</a>";
 	else 
