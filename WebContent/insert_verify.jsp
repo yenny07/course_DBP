@@ -3,6 +3,7 @@
 <html><head><title> 수강신청 입력 </title></head>
 <body>
 <%
+
 	String s_id = (String)session.getAttribute("user");
 	String c_id=request.getParameter("c_id");
 	int c_id_no = Integer.parseInt(request.getParameter("c_id_no"));
@@ -28,7 +29,9 @@
 		System.out.println("오라클 연결 실패");
 	}
 	
-	CallableStatement cstmt = myConn.prepareCall("{call InsertEnroll(?,?,?,?)}");
+	CallableStatement cstmt = myConn.prepareCall("{call InsertEnroll(?,?,?,?)}",
+			ResultSet.TYPE_SCROLL_SENSITIVE,
+	        ResultSet.CONCUR_READ_ONLY);
 	cstmt.setString(1, s_id);
 	cstmt.setString(2, c_id);
 	cstmt.setInt(3,c_id_no);

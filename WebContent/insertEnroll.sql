@@ -1,18 +1,20 @@
-CREATE OR REPLACE PROCEDURE InserEnroll(studentID IN VARCHAR2, courseID IN VARCHAR2,
+CREATE OR REPLACE PROCEDURE InsertEnroll(studentID IN NUMBER, courseID IN VARCHAR2,
 					courseIDNO IN NUMBER, result OUT VARCHAR2 )
 IS
 	credit_limit_over EXCEPTION;
 	duplicate_course EXCEPTION;
 	too_many_students EXCEPTION;
-	duplicate_time EXCEPTION;
+	duplicate_period EXCEPTION;
 	courseSUM NUMBER;
 	courseCREDIT NUMBER;
 	courseCOUNT NUMBER;
+	periodCOUNT1 NUMBER;
+	periodCOUNT2 NUMBER;
 	courseMAX NUMBER;
 	courseCURRENT NUMBER;
 
 BEGIN
-	result := "";
+	result := ' ';
 	DBMS_OUTPUT.put_line(studentID || '님이 과목번호 ' || courseID ||
 	', 분반 ' || courseIDNO || '의 수강 등록을 요청하였습니다.');
 
@@ -27,8 +29,8 @@ BEGIN
 	FROM course
 	WHERE c_id = courseID AND c_number = courseIDNO;
 
-	IF( courseSUM + courseCREDIT >18) THEN
-		RAISE credit_limit_over EXCEPTION;
+	IF (courseSUM + courseCREDIT) >18 THEN
+		RAISE credit_limit_over;
 	END IF;
 
 	/*중복된 과목*/
@@ -37,7 +39,7 @@ BEGIN
 	FROM enroll
 	WHERE s_id = studentID AND c_id = courseID;
 
-	IF (courseCOUNT > 0) THEN
+	IF courseCOUNT > 0 THEN
 		RAISE duplicate_course;
 	END if;
 
@@ -47,13 +49,56 @@ BEGIN
 	FROM course
 	WHERE c_id = courseID;
 
-	IF ( (courseCURRENT+1) > course MAX) THEN
+	IF (courseCURRENT+1) > courseMAX THEN
 		RAISE too_many_students;
 	END IF;
 	
 	/*중복된 시간*/
 	SELECT COUNT(*)
-	INTO courseCOUNT
-	FROM course c
-	WHERE c.c_id = courseID AND c.c_period IN  (SELECT c_period
-						FROM 
+	INTO periodCOUNT1
+	FROM course
+	WHERE c_period IN (SELECT c.c_period FROM enroll e, course c WHERE e.s_id = studentID AND e.c_id IN (SELECT c_id FROM course new_c  INNER JOIN course enrolled_c ON new_c.c_day1 = enrolled_c.c_day1));
+
+	SELECT COUNT(*)
+	INTO periodCOUNT2
+	FROM course
+	WHERE c_period IN (SELECT c.c_period FROM enroll e, course c WHERE e.s_id = studentID AND e.c_id IN (SELECT c_id FROM course new_c  INNER JOIN course enrolled_c ON new_c.c_day2 = enrolled_c.c_day2));
+
+	IF periodCOUNT1 > 0 OR periodCOUNT2 > 0 THEN
+		RAISE duplicate_period;
+	END IF;
+
+	INSERT INTO enroll(s_id, c_id, c_number)
+	VALUES (studentID, courseID, courseIDNO);
+	
+	UPDATE course
+	SET c_current = courseCURRENT + 1
+	WHERE c_id = courseID;
+
+	UPDATE student
+	SET s_credit = (courseSUM + courseCREDIT)
+	WHERE s_id = studentID;
+
+	result := '수강신청이 완료되었습니다.';
+	DBMS_OUTPUT.put_line(result);
+
+	COMMIT;
+
+EXCEPTION
+	WHEN credit_limit_over THEN
+		result := '최대학점을 초과하였습니다.';
+		DBMS_OUTPUT.put_line(result);
+	WHEN duplicate_course THEN
+		result :='이미 수강신청한 과목입니다.';
+		DBMS_OUTPUT.put_line(result);
+	WHEN too_many_students THEN
+		result :='최대 수강신청 인원을 초과하여 등록할 수 없습니다.';
+		DBMS_OUTPUT.put_line(result);
+	WHEN duplicate_period THEN
+		result :='같은 시간에 수강신청한 과목이 있습니다.';
+		DBMS_OUTPUT.put_line(result);
+	WHEN OTHERS THEN
+		ROLLBACK;
+	result := SQLCODE;
+END;
+/

@@ -26,7 +26,7 @@
 			<td align="center"> 1 </td>
 			<td align="center"> 데이터베이스 프로그래밍 </td>
 			<td align="center"> 심준호 </td>
-			<td align="center"> 월 3교시 <br> 수 3교시 </td>
+			<td align="center"> 월 2교시 <br> 수 2교시 </td>
 			<td align="center"> 3 </td>
 			<td align="center"> 10 </td>
 			<td align="center"> 30 </td>
@@ -39,7 +39,7 @@
 			<td align="center"> 1 </td>
 			<td align="center"> 시스템종합설계 </td>
 			<td align="center"> 박숙영 </td>
-			<td align="center"> 월 3교시 <br> 수 3교시 </td>
+			<td align="center"> 월 2교시 <br> 수 2교시 </td>
 			<td align="center"> 3 </td>
 			<td align="center"> 10 </td>
 			<td align="center"> 20 </td>
