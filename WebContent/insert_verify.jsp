@@ -29,6 +29,17 @@
 		System.out.println("오라클 연결 실패");
 	}
 	
+	String mySQL = "select s_credit from student where s_id=" + s_id; 
+	Statement stmt = myConn.createStatement();
+	ResultSet rs = stmt.executeQuery(mySQL);
+	
+	System.out.println(mySQL);
+	boolean besult = rs.next();
+	System.out.println(besult);
+	if(besult) {
+		System.out.print(rs.getInt("s_credit"));
+	}
+	
 	CallableStatement cstmt = myConn.prepareCall("{call InsertEnroll(?,?,?,?)}",
 			ResultSet.TYPE_SCROLL_SENSITIVE,
 	        ResultSet.CONCUR_READ_ONLY);

@@ -28,9 +28,22 @@
 			<td align="center"> 심준호 </td>
 			<td align="center"> 월 2교시 <br> 수 2교시 </td>
 			<td align="center"> 3 </td>
-			<td align="center"> 10 </td>
+			<td align="center"> 29 </td>
 			<td align="center"> 30 </td>
 			<td align="center"><a href="insert_verify.jsp?c_id=C1234&c_id_no=1">신청</a></td>
+		</tr>
+		</form>
+		<form method="post" action="insert_verify.jsp">
+		<tr>
+			<td align="center"> C1234 </td>
+			<td align="center"> 2 </td>
+			<td align="center"> 데이터베이스 프로그래밍 </td>
+			<td align="center"> 심준호 </td>
+			<td align="center"> 화 3교시 <br> 목 3교시 </td>
+			<td align="center"> 3 </td>
+			<td align="center"> 29 </td>
+			<td align="center"> 30 </td>
+			<td align="center"><a href="insert_verify.jsp?c_id=C1234&c_id_no=2">신청</a></td>
 		</tr>
 		</form>
 		<form method="post" action="insert_verify.jsp">
@@ -41,7 +54,7 @@
 			<td align="center"> 박숙영 </td>
 			<td align="center"> 월 2교시 <br> 수 2교시 </td>
 			<td align="center"> 3 </td>
-			<td align="center"> 10 </td>
+			<td align="center"> 29 </td>
 			<td align="center"> 20 </td>
 			<td align="center"><a href="insert_verify.jsp?c_id=C1256&c_id_no=1">신청</a></td>
 		</tr>

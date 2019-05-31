@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE InsertEnroll(studentID IN NUMBER, courseID IN VARCHAR2,
+CREATE OR REPLACE PROCEDURE InsertEnroll(studentID IN VARCHAR2, courseID IN VARCHAR2,
 					courseIDNO IN NUMBER, result OUT VARCHAR2 )
 IS
 	credit_limit_over EXCEPTION;
@@ -15,20 +15,27 @@ IS
 
 BEGIN
 	result := ' ';
+	
 	DBMS_OUTPUT.put_line(studentID || '님이 과목번호 ' || courseID ||
 	', 분반 ' || courseIDNO || '의 수강 등록을 요청하였습니다.');
 
 	/*최대학점 초과*/
-	SELECT SUM(c.c_credit)
+	SELECT s_credit
 	INTO courseSUM
-	FROM course c, enroll e
-	WHERE e.s_id = studentID AND e.c_id = c.c_id AND e.c_number = c.c_number;
+	FROM student s, enroll e
+	WHERE e.s_id = studentID AND e.s_id = s.s_id;
+	
+	IF courseSUM IS NULL THEN
+		courseSUM := 0;
+	END IF;
 
 	SELECT c_credit
 	INTO courseCREDIT
 	FROM course
 	WHERE c_id = courseID AND c_number = courseIDNO;
-
+	
+	DBMS_OUTPUT.put_line(courseSUM || ' / ' || courseCREDIT);
+	
 	IF (courseSUM + courseCREDIT) >18 THEN
 		RAISE credit_limit_over;
 	END IF;
@@ -39,6 +46,8 @@ BEGIN
 	FROM enroll
 	WHERE s_id = studentID AND c_id = courseID;
 
+	DBMS_OUTPUT.put_line(courseCOUNT);
+	
 	IF courseCOUNT > 0 THEN
 		RAISE duplicate_course;
 	END if;
@@ -47,7 +56,9 @@ BEGIN
 	SELECT c_max, c_current
 	INTO courseMAX, courseCURRENT
 	FROM course
-	WHERE c_id = courseID;
+	WHERE c_id = courseID AND c_number = courseIDNO;
+
+	DBMS_OUTPUT.put_line(courseMAX || ' / ' || courseCURRENT);
 
 	IF (courseCURRENT+1) > courseMAX THEN
 		RAISE too_many_students;
@@ -56,13 +67,25 @@ BEGIN
 	/*중복된 시간*/
 	SELECT COUNT(*)
 	INTO periodCOUNT1
-	FROM course
-	WHERE c_period IN (SELECT c.c_period FROM enroll e, course c WHERE e.s_id = studentID AND e.c_id IN (SELECT c_id FROM course new_c  INNER JOIN course enrolled_c ON new_c.c_day1 = enrolled_c.c_day1));
+	FROM course c
+	WHERE c.c_id = courseID AND c.c_period IN (SELECT distinct c.c_period
+			FROM enroll e, course c 
+			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (SELECT enrolled_c.c_id, enrolled_c.c_number
+							FROM course new_c INNER JOIN course enrolled_c
+							ON new_c.c_day1 = enrolled_c.c_day1
+							WHERE new_c.c_id = courseID));
 
 	SELECT COUNT(*)
 	INTO periodCOUNT2
-	FROM course
-	WHERE c_period IN (SELECT c.c_period FROM enroll e, course c WHERE e.s_id = studentID AND e.c_id IN (SELECT c_id FROM course new_c  INNER JOIN course enrolled_c ON new_c.c_day2 = enrolled_c.c_day2));
+	FROM course c
+	WHERE c.c_id = courseID AND c.c_period IN (SELECT distinct c.c_period
+			FROM enroll e, course c 
+			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (SELECT enrolled_c.c_id, enrolled_c.c_number
+							FROM course new_c INNER JOIN course enrolled_c
+							ON new_c.c_day2 = enrolled_c.c_day2
+							WHERE new_c.c_id = courseID));
+
+	DBMS_OUTPUT.put_line(periodCOUNT1 || ' / ' || periodCOUNT2);
 
 	IF periodCOUNT1 > 0 OR periodCOUNT2 > 0 THEN
 		RAISE duplicate_period;
@@ -73,7 +96,7 @@ BEGIN
 	
 	UPDATE course
 	SET c_current = courseCURRENT + 1
-	WHERE c_id = courseID;
+	WHERE c_id = courseID AND c_number = courseIDNO;
 
 	UPDATE student
 	SET s_credit = (courseSUM + courseCREDIT)
@@ -99,6 +122,7 @@ EXCEPTION
 		DBMS_OUTPUT.put_line(result);
 	WHEN OTHERS THEN
 		ROLLBACK;
-	result := SQLCODE;
+		result := SQLCODE;
+		DBMS_OUTPUT.put_line(result);
 END;
 /
