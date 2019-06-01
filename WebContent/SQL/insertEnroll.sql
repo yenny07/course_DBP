@@ -1,6 +1,11 @@
 CREATE OR REPLACE PROCEDURE InsertEnroll(studentID IN VARCHAR2, courseID IN VARCHAR2,
 					courseIDNO IN NUMBER, result OUT VARCHAR2 )
 IS
+	CURSOR courseLIST(student_id VARCHAR2) IS
+	SELECT NVL(c_id, 0) c_id
+	FROM enroll
+	WHERE s_id = student_id;
+
 	credit_limit_over EXCEPTION;
 	duplicate_course EXCEPTION;
 	too_many_students EXCEPTION;
@@ -20,14 +25,14 @@ BEGIN
 	', 분반 ' || courseIDNO || '의 수강 등록을 요청하였습니다.');
 
 	/*최대학점 초과*/
-	SELECT s_credit
+	SELECT SUM(s_credit)
 	INTO courseSUM
 	FROM student s, enroll e
 	WHERE e.s_id = studentID AND e.s_id = s.s_id;
 	
 	IF courseSUM IS NULL THEN
 		courseSUM := 0;
-	END IF;
+	END IF;	
 
 	SELECT c_credit
 	INTO courseCREDIT
@@ -41,16 +46,11 @@ BEGIN
 	END IF;
 
 	/*중복된 과목*/
-	SELECT COUNT(*)
-	INTO courseCOUNT
-	FROM enroll
-	WHERE s_id = studentID AND c_id = courseID;
-
-	DBMS_OUTPUT.put_line(courseCOUNT);
-	
-	IF courseCOUNT > 0 THEN
-		RAISE duplicate_course;
-	END if;
+	FOR course_list IN courseLIST(studentID) LOOP
+		IF course_list.c_id = courseID THEN
+			RAISE duplicate_course;
+		END IF;
+	END LOOP;
 
 	/*수강신청 인원 초과*/
 	SELECT c_max, c_current
@@ -70,7 +70,8 @@ BEGIN
 	FROM course c
 	WHERE c.c_id = courseID AND c.c_period IN (SELECT distinct c.c_period
 			FROM enroll e, course c 
-			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (SELECT enrolled_c.c_id, enrolled_c.c_number
+			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (
+							SELECT enrolled_c.c_id, enrolled_c.c_number
 							FROM course new_c INNER JOIN course enrolled_c
 							ON new_c.c_day1 = enrolled_c.c_day1
 							WHERE new_c.c_id = courseID));
@@ -80,7 +81,8 @@ BEGIN
 	FROM course c
 	WHERE c.c_id = courseID AND c.c_period IN (SELECT distinct c.c_period
 			FROM enroll e, course c 
-			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (SELECT enrolled_c.c_id, enrolled_c.c_number
+			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (
+							SELECT enrolled_c.c_id, enrolled_c.c_number
 							FROM course new_c INNER JOIN course enrolled_c
 							ON new_c.c_day2 = enrolled_c.c_day2
 							WHERE new_c.c_id = courseID));
@@ -108,6 +110,8 @@ BEGIN
 	COMMIT;
 
 EXCEPTION
+	WHEN NO_DATA_FOUND THEN
+		DBMS_OUTPUT.put_line('no data found');
 	WHEN credit_limit_over THEN
 		result := '최대학점을 초과하였습니다.';
 		DBMS_OUTPUT.put_line(result);
