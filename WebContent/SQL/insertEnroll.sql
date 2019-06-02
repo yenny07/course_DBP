@@ -25,10 +25,10 @@ BEGIN
 	', 분반 ' || courseIDNO || '의 수강 등록을 요청하였습니다.');
 
 	/*최대학점 초과*/
-	SELECT SUM(s_credit)
+	SELECT SUM(c.c_credit)
 	INTO courseSUM
-	FROM student s, enroll e
-	WHERE e.s_id = studentID AND e.s_id = s.s_id;
+	FROM course c, enroll e
+	WHERE e.s_id = studentID AND e.c_id = c.c_id and e.c_number = c.c_number;
 	
 	IF courseSUM IS NULL THEN
 		courseSUM := 0;
@@ -68,9 +68,10 @@ BEGIN
 	SELECT COUNT(*)
 	INTO periodCOUNT1
 	FROM course c
-	WHERE c.c_id = courseID AND c.c_period IN (SELECT distinct c.c_period
+	WHERE c.c_id = courseID AND c.c_period IN (SELECT c.c_period
 			FROM enroll e, course c 
-			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (
+			WHERE e.s_id = studentID AND e.c_id = c.c_id AND c.c_id != courseID AND e.c_number = c.c_number 
+							AND (e.c_id, e.c_number) IN (
 							SELECT enrolled_c.c_id, enrolled_c.c_number
 							FROM course new_c INNER JOIN course enrolled_c
 							ON new_c.c_day1 = enrolled_c.c_day1
@@ -79,9 +80,10 @@ BEGIN
 	SELECT COUNT(*)
 	INTO periodCOUNT2
 	FROM course c
-	WHERE c.c_id = courseID AND c.c_period IN (SELECT distinct c.c_period
+	WHERE c.c_id = courseID AND c.c_period IN (SELECT c.c_period
 			FROM enroll e, course c 
-			WHERE e.s_id = studentID AND c.c_id != courseID AND (e.c_id, e.c_number) IN (
+			WHERE e.s_id = studentID AND e.c_id = c.c_id AND c.c_id != courseID AND e.c_number = c.c_number 
+							AND (e.c_id, e.c_number) IN (
 							SELECT enrolled_c.c_id, enrolled_c.c_number
 							FROM course new_c INNER JOIN course enrolled_c
 							ON new_c.c_day2 = enrolled_c.c_day2
