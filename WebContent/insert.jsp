@@ -26,7 +26,7 @@ Statement stmt = null;
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user="sook";     String passwd="2019";
      String dbdriver = "oracle.jdbc.driver.OracleDriver";    
-     String sql = "select * from COURSE where c_id = ?";
+     String sql = "select * from COURSE ";
      //session_id = session.getId();
 	session_id=(String)session.getAttribute("user");
 	System.out.println("sessionid:"+session_id);

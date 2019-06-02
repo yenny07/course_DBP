@@ -7,7 +7,7 @@
 	
 	String dbdriver = "oracle.jdbc.driver.OracleDriver";
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String user = "SOOK";
+	String user = "sook";
 	String passwd = "2019";
 	
 	try{

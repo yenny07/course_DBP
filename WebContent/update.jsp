@@ -12,7 +12,7 @@
 <%
 String dbdriver = "oracle.jdbc.driver.OracleDriver"; //JDBC 드라이버 로딩
 String dburl = "jdbc:oracle:thin:@localhost:1521:orcl"; //url
-String user = "SOOK"; //oracle login id
+String user = "sook"; //oracle login id
 String passwd = "2019"; //pw
 
 Class.forName(dbdriver); // DriverManager.registerDriver(dbdriver);
