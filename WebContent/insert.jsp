@@ -182,7 +182,7 @@
   <td align="center"><%= c_current %></td>
   <td align="center"><%= c_max %></td>
   <%
-  	if(year_semester == 201901){
+  	if(year_semester == 201902){
   		%>
   		<td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
   		<%
