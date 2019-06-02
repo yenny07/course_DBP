@@ -8,7 +8,34 @@
 </head>
 <body>
 <%@include file="top.jsp"%>
+
+<form action="select.jsp" method="post">
+   <div class="yearAndSemesterSelect" style = "padding : 0px 0px 0px 160px;">
+    <table>
+     <tbody>
+      <td>
+       <select id="year" name="year">                                                     
+       <option value="2019">2019</option>
+       <option value="2018">2018</option>
+       <option value="2017">2017</option>
+       <option value="2016">2016</option>                                               
+       </select>
+                 
+       <select id="semester" name="semester">
+       <option value="2학기">2학기</option>
+       <option value="1학기">1학기</option>
+
+       </select>                                   
+      </td>
+      <td>
+      <input type = "submit" name = "newPage" value = "선택" onClick="select.jsp:setYearAndSemester;">
+      </td>
+     </tbody>
+    </table>
+   </div>
+</form>
 <%
+
 String dbdriver = "oracle.jdbc.driver.OracleDriver";
 String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
 String user = "SOOK";
@@ -24,15 +51,22 @@ ArrayList<Integer> courseDay1 = new ArrayList<>();
 ArrayList<Integer> coursePeriod = new ArrayList<>();
 int day;
 String period;
+String year = request.getParameter("year");
+out.println(year);
 
-try{
+int year_semester = Integer.parseInt(request.getParameter("year_semester"));
+int nYear = year_semester / 100;
+int nSemester = year_semester % 100;
+PreparedStatement pstmt;
+
+try {
    Class.forName(dbdriver);
    Connection myConn = DriverManager.getConnection(dburl, user, passwd);
-   
-   String mySQL = "select c_id, c_name, p_id, c_credit, c_number, c_major, c_period, c_day1 from course " +
-               "where c_id in (select c_id from enroll where s_id = " + session_id + ")"; 
-   Statement stmt = myConn.createStatement();
-   ResultSet rs = stmt.executeQuery(mySQL);
+   pstmt = myConn.prepareStatement("SELECT c_id, c_name, p_id, c_credit, c_number, c_major, c_period, c_day1 FROM course WHERE c_year = ? AND c_semester = ? AND (c_id, c_number) IN (SELECT c_id, c_number FROM enroll WHERE s_id = ?)");
+   pstmt.setInt(1, nYear);
+   pstmt.setInt(2, nSemester);
+   pstmt.setString(3, session_id);
+   ResultSet rs = pstmt.executeQuery();
    
    while (rs.next()) {
       courseID.add(rs.getString("c_id"));
@@ -44,9 +78,9 @@ try{
       coursePeriod.add(rs.getInt("c_period"));
       courseDay1.add(rs.getInt("c_day1"));
    }
-   
+
    rs.close();
-   stmt.close();
+   pstmt.close();
    myConn.close();
    
 }catch (ClassNotFoundException e){
