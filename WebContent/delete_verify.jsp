@@ -48,17 +48,17 @@
 	if(besult) {
 		System.out.print(rs.getInt("s_credit"));
 	}*/
-	
+	/*
 	CallableStatement cstmt = myConn.prepareCall("{call DeleteEnroll()}",
 			ResultSet.TYPE_SCROLL_SENSITIVE,
 	        ResultSet.CONCUR_READ_ONLY);
 	
 	
 	cstmt.execute();
-		
+		*/
 		%>
 		<script>
-		
+		alert("수강신청이 취소되었습니다.");
 		location.href="delete2.jsp";
 		</script>
 		<%
