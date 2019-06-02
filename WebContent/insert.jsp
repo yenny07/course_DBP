@@ -11,7 +11,16 @@
 	int year = year_semester / 100;
 	int semester = year_semester % 100;
 	
-	if(year_semester == 201901){
+	if(year_semester == 201902){
+		%>
+		<select name="year_semester">
+			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" selected="selected">2019년 2학기</option>	
+			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'" >2019년 1학기</option>
+    		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
+    		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
+		</select>
+		<%
+	}else if(year_semester == 201901){
 		%>
 		<select name="year_semester">
 			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'" selected="selected">2019년 1학기</option>
@@ -70,12 +79,6 @@
 	std_rs.next();
 	int s_credit = std_rs.getInt("s_credit");
 %>
-
-<select name="year_semester">
-	<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'">2019년 1학기</option>
-    <option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
-    <option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
-</select>
 
 
 <p>현재 신청한 학점 : <%= s_credit %></h4>
@@ -167,7 +170,7 @@
 		Statement prof_stmt = myConn.createStatement();
 		ResultSet rs = prof_stmt.executeQuery(mySQL);
 		rs.next();
-		String p_name = rs.getString("p_name");
+		String p_name = rs.getString("P_NAME");
 		
 %>
 <tr>
