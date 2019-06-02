@@ -15,6 +15,7 @@
 
 		<td align="center"><b><a href="insert.jsp?year_semester=201901">수강신청 입력</b></td>
 		<td align="center"><b><a href="delete2.jsp">수강신청 삭제</b></td>
-	<td align="center"><b><a href="select.jsp">수강신청 조회</b></td>
+		<td align="center"><b><a href="select.jsp?year_semester=201901">수강신청 조회</b></td>
+		<td align="center"><b><a href="logout.jsp">로그아웃</a></b></td>
 	</tr>
 </table>
