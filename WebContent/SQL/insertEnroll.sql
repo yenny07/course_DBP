@@ -21,7 +21,7 @@ IS
 BEGIN
    result := ' ';
    
-   DBMS_OUTPUT.put_line(studentID || ' / ' || courseID ||
+   DBMS_OUTPUT.put_line(studentID || ' /  ' || courseID ||
    ' / ' || courseIDNO);
 
    /*최대학점 초과*/
