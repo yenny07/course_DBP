@@ -23,6 +23,7 @@
 	}else if(year_semester == 201901){
 		%>
 		<select name="year_semester">
+			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" >2019년 2학기</option>	
 			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'" selected="selected">2019년 1학기</option>
     		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
     		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
@@ -31,6 +32,7 @@
 	}else if(year_semester == 201802){
 		%>
 		<select name="year_semester">
+			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" >2019년 2학기</option>	
 			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'">2019년 1학기</option>
     		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'" selected="selected">2018년 2학기</option>
     		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
@@ -39,6 +41,7 @@
 	}else if(year_semester == 201801){
 		%>
 		<select name="year_semester">
+			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" >2019년 2학기</option>	
 			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'">2019년 1학기</option>
     		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
     		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'" selected="selected">2018년 1학기</option>
