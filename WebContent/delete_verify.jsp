@@ -17,6 +17,9 @@
 	String passwd = "2019";
 	Connection myConn = null;
 	String result = null;
+	ResultSet rs = null;
+	PreparedStatement pstmt = null;
+
 	
 	try{
 		Class.forName(dbdriver);
@@ -29,43 +32,43 @@
 		System.out.println("오라클 연결 실패");
 	}
 	
-	String mySQL = "select s_credit from student where s_id=" + s_id; 
-	Statement stmt = myConn.createStatement();
-	ResultSet rs = stmt.executeQuery(mySQL);
+    String sql = "delete from enroll where c_id = ? and c_number = ?";
+    System.out.println("c_id :"+c_id + " / c_number: " + c_id_no);
+	pstmt = myConn.prepareStatement(sql);
+	pstmt.setString(1,c_id);
+	pstmt.setInt(2,c_id_no);
+//	rs= pstmt.executeUpdate();
+	pstmt.executeUpdate();
+
 	
-	System.out.println(mySQL);
+	
+	/*
 	boolean besult = rs.next();
 	System.out.println(besult);
 	if(besult) {
 		System.out.print(rs.getInt("s_credit"));
-	}
-	
-	CallableStatement cstmt = myConn.prepareCall("{call InsertEnroll(?,?,?,?)}",
+	}*/
+	/*
+	CallableStatement cstmt = myConn.prepareCall("{call DeleteEnroll()}",
 			ResultSet.TYPE_SCROLL_SENSITIVE,
 	        ResultSet.CONCUR_READ_ONLY);
-	cstmt.setString(1, s_id);
-	cstmt.setString(2, c_id);
-	cstmt.setInt(3,c_id_no);
-	cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
-
-	try {
-		cstmt.execute();
-		result = cstmt.getString(4);
+	
+	
+	cstmt.execute();
+		*/
 		%>
 		<script>
-		alert("<%= result %>");
-		location.href="insert.jsp?year_semester=201901";
+		alert("수강신청이 취소되었습니다.");
+		location.href="delete2.jsp";
 		</script>
 		<%
-		} catch(SQLException ex) {
-		System.err.println("SQLException: " + ex.getMessage());
-		}
-		finally {
-		if (cstmt != null)
-		try { myConn.commit(); cstmt.close(); myConn.close(); }
-		catch(SQLException ex) { }
-		}
-	
+		
+		
+		
+		 myConn.commit(); pstmt.close(); myConn.close(); 
+		
+	//pstmt.close();
+	//myConn.close();
 	%>
 </body>
 </html>
