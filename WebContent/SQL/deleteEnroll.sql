@@ -1,0 +1,7 @@
+CREATE OR REPLACE PROCEDURE DeleteEnroll (str IN VARCHAR2)
+  AS
+     
+  BEGIN
+     COMMIT;
+  END;
+  /
