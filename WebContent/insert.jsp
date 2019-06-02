@@ -67,8 +67,6 @@ if (myResultSet != null) {
 		
 		int c_credit= myResultSet.getInt("c_credit");//분반			
 		int c_number = myResultSet.getInt("c_number");//분반			
-
-	
 %>
 <tr>
   <td align="center"><%= c_id %></td> <td align="center"><%= c_number %></td> 

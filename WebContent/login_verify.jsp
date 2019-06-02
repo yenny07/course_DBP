@@ -7,20 +7,21 @@
 	
 	String dbdriver = "oracle.jdbc.driver.OracleDriver";
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String user = "sook";
+	String user = "SOOK";
 	String passwd = "2019";
 	
 	try{
 		Class.forName(dbdriver);
 		Connection myConn = DriverManager.getConnection(dburl, user, passwd);
 		
-		String mySQL = "select s_id, s_name from student where s_id=" + userID + " and s_pwd='" + userPassword + "'"; 
+		String mySQL = "select s_id, s_name from student where s_id='" + userID + "' and s_pwd='" + userPassword + "'"; 
 		Statement stmt = myConn.createStatement();
 		ResultSet rs = stmt.executeQuery(mySQL);
 		
 		System.out.println(mySQL);
 		boolean result = rs.next();
 		System.out.println(result);
+		
 		if(result) {
 			session.setAttribute("user", session_id);
 			response.sendRedirect("main.jsp");

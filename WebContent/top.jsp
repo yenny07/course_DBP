@@ -2,6 +2,7 @@
 
 <% String session_id = (String)session.getAttribute("user");
 	String log;
+
 	if (session_id == null)
 		log = "<a href=login.jsp>로그인</a>";
 	else 
