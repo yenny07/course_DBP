@@ -54,7 +54,7 @@
 		%>
 		<script>
 		alert("<%= result %>");
-		location.href="insert.jsp";
+		location.href="insert.jsp?year_semester=201901";
 		</script>
 		<%
 		} catch(SQLException ex) {

@@ -4,20 +4,8 @@
 <body>
 <%@ include file="top.jsp" %>
 <%   if (session_id==null) response.sendRedirect("login.jsp");  %>
-
-<table width="75%" align="center" border>
-<br>
-<tr>
-         <th>과목번호</th>
-         <th>분반</th>
-         <th>과목명</th>
-         <th>교수</th>
-         <th>시간</th>
-         <th>학점</th>
-         <th>수강신청</th>
-      </tr>
 <%
-	Connection myConn = null;     
+Connection myConn = null;     
 Statement stmt = null;
 	PreparedStatement pstmt = null;
 	ResultSet myResultSet = null;   String mySQL = "";
@@ -48,6 +36,25 @@ Statement stmt = null;
     } catch(SQLException ex) {
 	     System.err.println("SQLException: " + ex.getMessage());
     }
+String std_SQL = "select s_credit from student where s_id = '" + session_id + "'";
+Statement std_stmt = myConn.createStatement();
+ResultSet std_rs = std_stmt.executeQuery(std_SQL);
+std_rs.next();
+int s_credit = std_rs.getInt("s_credit");
+%>
+<p>현재 신청한 학점 : <%= s_credit %></h4>
+<table width="75%" align="center" border>
+<br>
+<tr>
+         <th>과목번호</th>
+         <th>분반</th>
+         <th>과목명</th>
+         <th>교수</th>
+         <th>시간</th>
+         <th>학점</th>
+         <th>수강신청</th>
+      </tr>
+<%
 
 //mySQL = "select c_id,c_id_no,c_name,c_unit from course where c_id not in (select c_id from enroll where s_id='" + session_id + "')";
 	mySQL="select * from course";

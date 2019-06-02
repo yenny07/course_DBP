@@ -172,7 +172,17 @@
   <td align="center"><%= c_credit %></td>
   <td align="center"><%= c_current %></td>
   <td align="center"><%= c_max %></td>
-  <td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
+  <%
+  	if(year_semester == 201901){
+  		%>
+  		<td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
+  		<%
+  	}else{
+	  %>
+	  <td align="center">신청불가</td>
+  		<%
+  }
+  %>
 </tr>
 <%
 		}
