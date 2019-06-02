@@ -48,14 +48,14 @@
 	if(besult) {
 		System.out.print(rs.getInt("s_credit"));
 	}*/
-	
+	/*
 	CallableStatement cstmt = myConn.prepareCall("{call DeleteEnroll()}",
 			ResultSet.TYPE_SCROLL_SENSITIVE,
 	        ResultSet.CONCUR_READ_ONLY);
 	
 	
 	cstmt.execute();
-		
+		*/
 		%>
 		<script>
 		

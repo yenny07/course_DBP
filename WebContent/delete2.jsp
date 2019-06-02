@@ -14,8 +14,6 @@
          <th>교수</th>
          <th>시간</th>
          <th>학점</th>
-         <th>현재 수강인원</th>
-         <th>최대 수강인원</th>
          <th>수강신청</th>
       </tr>
 <%
@@ -53,10 +51,10 @@ Statement stmt = null;
 
 //mySQL = "select c_id,c_id_no,c_name,c_unit from course where c_id not in (select c_id from enroll where s_id='" + session_id + "')";
 	mySQL="select * from course";
-myResultSet = pstmt.executeQuery();
-System.out.println("myreslutset"+myResultSet);
+	myResultSet = pstmt.executeQuery();
+	System.out.println("myreslutset"+myResultSet);
 
-if (myResultSet != null) {
+	if (myResultSet != null) {
 	while (myResultSet.next()) {
 		
 		
@@ -66,13 +64,73 @@ if (myResultSet != null) {
 	//	System.out.println("c_name"+c_name);
 
 		
-		int c_credit= myResultSet.getInt("c_credit");//분반			
-		int c_number = myResultSet.getInt("c_number");//분반			
+		int c_credit= myResultSet.getInt("c_credit");//학점			
+		int c_number = myResultSet.getInt("c_number");//분반
+		int p_id = myResultSet.getInt("p_id");
+		int c_day1 = myResultSet.getInt("c_day1");
+		int c_day2 = myResultSet.getInt("c_day2");
+		int c_period = myResultSet.getInt("c_period");
+		
+String c_time = "";
+		
+		switch(c_day1){
+		case 1:
+			c_time = "월";
+			break;
+		case 2:
+			c_time = "화";
+			break;
+		case 3:
+			c_time = "수";
+			break;
+		case 4:
+			c_time = "목";
+			break;
+		case 5:
+			c_time = "금";
+			break;
+		default:
+			break;
+		}
+		
+		c_time = c_time + " " + c_period + " 교시";
+		
+		switch(c_day2){
+		case 1:
+			c_time = "\n" + c_time +"월";
+			break;
+		case 2:
+			c_time = "\n" + c_time +"화";
+			break;
+		case 3:
+			c_time = "\n" + c_time +"수";
+			break;
+		case 4:
+			c_time = "\n" + c_time +"목";
+			break;
+		case 5:
+			c_time = "\n" + c_time +"금";
+			break;
+		default:
+			break;
+		}
+		
+		c_time = c_time + " " + c_period + " 교시";
+		
+		String pSQL = "select p_name from professor where p_id = '" + p_id + "'";
+		Statement prof_stmt = myConn.createStatement();
+		ResultSet rs = prof_stmt.executeQuery(pSQL);
+		rs.next();
+		String p_name = rs.getString("p_name");
 %>
 <tr>
-  <td align="center"><%= c_id %></td> <td align="center"><%= c_number %></td> 
-  <td align="center"><%= c_name %></td><td align="center"><%= c_credit %></td>
-  <td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
+  <td align="center"><%= c_id %></td>
+  <td align="center"><%= c_number %></td> 
+  <td align="center"><%= c_name %></td>
+  <td align="center"><%= p_name %></td>
+  <td align="center"><%= c_time %></td>
+  <td align="center"><%= c_credit %></td>
+  <td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>
 </tr>
 <%
 		}
