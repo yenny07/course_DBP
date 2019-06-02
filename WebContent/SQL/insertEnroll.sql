@@ -21,10 +21,10 @@ IS
 BEGIN
 	result := ' ';
 	
-	DBMS_OUTPUT.put_line(studentID || '´ÔÀÌ °ú¸ñ¹øÈ£ ' || courseID ||
-	', ºĞ¹İ ' || courseIDNO || 'ÀÇ ¼ö°­ µî·ÏÀ» ¿äÃ»ÇÏ¿´½À´Ï´Ù.');
+	DBMS_OUTPUT.put_line(studentID || 'ë‹˜ì´ ê³¼ëª©ë²ˆí˜¸ ' || courseID ||
+	', ë¶„ë°˜ ' || courseIDNO || 'ì˜ ìˆ˜ê°• ë“±ë¡ì„ ìš”ì²­í•˜ì˜€ìŠµë‹ˆë‹¤.');
 
-	/*ÃÖ´ëÇĞÁ¡ ÃÊ°ú*/
+	/*ìµœëŒ€í•™ì  ì´ˆê³¼*/
 	SELECT SUM(c.c_credit)
 	INTO courseSUM
 	FROM course c, enroll e
@@ -45,14 +45,14 @@ BEGIN
 		RAISE credit_limit_over;
 	END IF;
 
-	/*Áßº¹µÈ °ú¸ñ*/
+	/*ì¤‘ë³µëœ ê³¼ëª©*/
 	FOR course_list IN courseLIST(studentID) LOOP
 		IF course_list.c_id = courseID THEN
 			RAISE duplicate_course;
 		END IF;
 	END LOOP;
 
-	/*¼ö°­½ÅÃ» ÀÎ¿ø ÃÊ°ú*/
+	/*ìˆ˜ê°•ì‹ ì²­ ì¸ì› ì´ˆê³¼*/
 	SELECT c_max, c_current
 	INTO courseMAX, courseCURRENT
 	FROM course
@@ -64,7 +64,7 @@ BEGIN
 		RAISE too_many_students;
 	END IF;
 	
-	/*Áßº¹µÈ ½Ã°£*/
+	/*ì¤‘ë³µëœ ì‹œê°„*/
 	SELECT COUNT(*)
 	INTO periodCOUNT1
 	FROM course c
@@ -106,7 +106,7 @@ BEGIN
 	SET s_credit = (courseSUM + courseCREDIT)
 	WHERE s_id = studentID;
 
-	result := '¼ö°­½ÅÃ»ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.';
+	result := 'ìˆ˜ê°•ì‹ ì²­ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.';
 	DBMS_OUTPUT.put_line(result);
 
 	COMMIT;
@@ -115,16 +115,16 @@ EXCEPTION
 	WHEN NO_DATA_FOUND THEN
 		DBMS_OUTPUT.put_line('no data found');
 	WHEN credit_limit_over THEN
-		result := 'ÃÖ´ëÇĞÁ¡À» ÃÊ°úÇÏ¿´½À´Ï´Ù.';
+		result := 'ìµœëŒ€í•™ì ì„ ì´ˆê³¼í•˜ì˜€ìŠµë‹ˆë‹¤.';
 		DBMS_OUTPUT.put_line(result);
 	WHEN duplicate_course THEN
-		result :='ÀÌ¹Ì ¼ö°­½ÅÃ»ÇÑ °ú¸ñÀÔ´Ï´Ù.';
+		result :='ì´ë¯¸ ìˆ˜ê°•ì‹ ì²­í•œ ê³¼ëª©ì…ë‹ˆë‹¤.';
 		DBMS_OUTPUT.put_line(result);
 	WHEN too_many_students THEN
-		result :='ÃÖ´ë ¼ö°­½ÅÃ» ÀÎ¿øÀ» ÃÊ°úÇÏ¿© µî·ÏÇÒ ¼ö ¾ø½À´Ï´Ù.';
+		result :='ìµœëŒ€ ìˆ˜ê°•ì‹ ì²­ ì¸ì›ì„ ì´ˆê³¼í•˜ì—¬ ë“±ë¡í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.';
 		DBMS_OUTPUT.put_line(result);
 	WHEN duplicate_period THEN
-		result :='°°Àº ½Ã°£¿¡ ¼ö°­½ÅÃ»ÇÑ °ú¸ñÀÌ ÀÖ½À´Ï´Ù.';
+		result :='ê°™ì€ ì‹œê°„ì— ìˆ˜ê°•ì‹ ì²­í•œ ê³¼ëª©ì´ ìˆìŠµë‹ˆë‹¤.';
 		DBMS_OUTPUT.put_line(result);
 	WHEN OTHERS THEN
 		ROLLBACK;
