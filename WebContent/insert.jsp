@@ -71,13 +71,6 @@
 	int s_credit = std_rs.getInt("s_credit");
 %>
 
-<select name="year_semester">
-	<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'">2019년 1학기</option>
-    <option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
-    <option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
-</select>
-
-
 <p>현재 신청한 학점 : <%= s_credit %></h4>
 
 <table width="80%" align="center" border>
