@@ -20,10 +20,17 @@ IS
 
 BEGIN
 <<<<<<< HEAD
+<<<<<<< HEAD
    result := ' ';
    
    DBMS_OUTPUT.put_line(studentID || '님이 과목번호 ' || courseID ||
    ', 분반 ' || courseIDNO || '의 수강 등록을 요청하였습니다.');
+=======
+   result := ' ';
+   
+   DBMS_OUTPUT.put_line(studentID || ' /  ' || courseID ||
+   ' / ' || courseIDNO);
+>>>>>>> 55cab73f51104e177ed0b030585d777136fab51f
 
    /*최대학점 초과*/
    SELECT SUM(c.c_credit)
@@ -111,6 +118,7 @@ BEGIN
    DBMS_OUTPUT.put_line(result);
 
    COMMIT;
+<<<<<<< HEAD
 
 EXCEPTION
    WHEN NO_DATA_FOUND THEN
@@ -244,5 +252,27 @@ EXCEPTION
 		result := SQLCODE;
 		DBMS_OUTPUT.put_line(result);
 >>>>>>> d09a88ceb95bd0965745ffe6af820eecf754c402
+=======
+
+EXCEPTION
+   WHEN NO_DATA_FOUND THEN
+      DBMS_OUTPUT.put_line('no data found');
+   WHEN credit_limit_over THEN
+      result := '최대학점을 초과하였습니다.';
+      DBMS_OUTPUT.put_line(result);
+   WHEN duplicate_course THEN
+      result :='이미 수강신청한 과목입니다.';
+      DBMS_OUTPUT.put_line(result);
+   WHEN too_many_students THEN
+      result :='최대 수강신청 인원을 초과하여 등록할 수 없습니다.';
+      DBMS_OUTPUT.put_line(result);
+   WHEN duplicate_period THEN
+      result :='같은 시간에 수강신청한 과목이 있습니다.';
+      DBMS_OUTPUT.put_line(result);
+   WHEN OTHERS THEN
+      ROLLBACK;
+      result := SQLCODE;
+      DBMS_OUTPUT.put_line(result);
+>>>>>>> 55cab73f51104e177ed0b030585d777136fab51f
 END;
 /
