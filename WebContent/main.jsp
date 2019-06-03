@@ -123,6 +123,9 @@ int s_credit = 0;
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
           		<table class="table table-bordered" align="center" id="update_table">
+          		<tr>
+          			<th colspan="3" style="text-align:center">회원 정보</th>
+   				<tr>
    <tr>
    	 <td rowspan="5" style="text-align:center"><img src="img/character_new03.gif" alt="profile" id="profile"></td>
      <td id="update_td">학번</td>
@@ -144,17 +147,8 @@ int s_credit = 0;
      <td id = "student_credit">수강학점</td>
      <td ><%=s_credit%></td>
    </tr>
-   <tr>  
-     <td id="update_td">비밀번호</td>
-     <td colspan="2"><input id="update_pw_in" type="password" name="password" size="10" value="<%=s_pwd%>"></td>
-   </tr>
-   <tr>
-     <td id="update_td_confirm">비밀번호 확인</td>
-     <td colspan="2"><input id="update_pw_in_confirm" type="password" name="passwordConfirm" size="10" ></td>
-   </tr>
     </table>
-          
-				
+
 		  </div>
 		  
 		  
@@ -162,11 +156,6 @@ int s_credit = 0;
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-				
-		  </div>
 		<% } %>
 
         </div>

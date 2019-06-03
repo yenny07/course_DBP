@@ -63,10 +63,7 @@
 
 <body>
 <%@ include file="top.jsp" %>
-
-<% System.out.println(session_id);
-	if (session_id == null)
-		response.sendRedirect("login.jsp");  %>
+=
 <%
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
@@ -75,6 +72,12 @@
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}
 	System.out.println(year_semester);
+	if (session_id != null){
+		System.out.println(session_id);
+	}else{
+			System.out.println(session_id);
+			response.sendRedirect("login.jsp");
+	}
 	
 	int year = year_semester / 100;
 	int semester = year_semester % 100;
