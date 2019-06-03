@@ -3,7 +3,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="main.jsp">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
@@ -35,7 +35,7 @@
         	수강신청
       </div>
       <li class="nav-item">
-        <b><a class="nav-link" href=insert.jsp?year_semester=201902><i class="fas fa-fw fa-mouse-pointer"></i>
+        <b><a class="nav-link" href=login.jsp=><i class="fas fa-fw fa-mouse-pointer"></i>
           <span>수강신청 입력</span></a></b>
       </li>
       <li class="nav-item">
@@ -53,7 +53,7 @@
     <!-- End of Sidebar -->
     <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-            <h2>로그인 후 사용하세요.</h2>
+            <h2 style="text-align:center" >로그인 후 사용하세요.</h2>
         </nav>
         <!-- End of Topbar -->
     

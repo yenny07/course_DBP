@@ -16,66 +16,106 @@
   	<link href="css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <style type="text/css">
-	/*select{
-		margin-top:10px;
-    	margin-bottom:10px;
-    	float: left;
-    }
-    p{
-    	margin-top:10px;
-    	margin-bottom:10px;
-    	float: left;
-    }*/
+	html{
+		height:100vh;
+		overflow:hidden;
+	}
+	body{
+		background:#f8f9fa;
+	}
+	#accordionSidebar{
+		width:20%;
+		float:left;
+	}
+
+	.navbar-expand{
+		width:75%;
+		float:left;
+		text-align:right
+	}
+	#content-wrapper{
+		width:75%;
+		height:85vh;
+		float:left;
+		overflow:auto
+	}
+	.select{
+		float:right;
+	}
+	
+	#current-credit{
+		padding:20px;
+		float:left;
+	}
+	
+	.form{
+		margin : auto;
+		width:100%;
+	}
+	
+	.table{
+		background: white;
+		margin : auto;
+		width:100%;
+	}
+	
 </style>
 
 <body>
 <%@ include file="top.jsp" %>
-<%   if (session_id==null) response.sendRedirect("login.jsp");  %>
+
+<% System.out.println(session_id);
+	if (session_id == null)
+		response.sendRedirect("login.jsp");  %>
 <%
-	int year_semester = Integer.parseInt(request.getParameter("year_semester"));
+	int year_semester = 0;
+	if( request.getParameter("year_semester") == null){
+		year_semester = 201902;
+	}else{
+		year_semester = Integer.parseInt(request.getParameter("year_semester"));
+	}
+	System.out.println(year_semester);
 	
 	int year = year_semester / 100;
 	int semester = year_semester % 100;
 	
 	if(year_semester == 201902){
 		%>
-		<select name="year_semester">
-			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" selected="selected">2019년 2학기</option>	
-			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'" >2019년 1학기</option>
-    		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
-    		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
+		<select name="year_semester" onchange="location = this.value;">
+			<option value='insert.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
+			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
+    		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
+    		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
 		</select>
 		<%
 	}else if(year_semester == 201901){
 		%>
-		<select name="year_semester">
-			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" >2019년 2학기</option>	
-			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'" selected="selected">2019년 1학기</option>
-    		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
-    		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
+		<select name="year_semester" onchange="location = this.value;">
+			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
+			<option value='insert.jsp?year_semester=201901' selected="selected" >2019년 1학기</option>
+    		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
+    		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
 		</select>
 		<%
 	}else if(year_semester == 201802){
 		%>
-		<select name="year_semester">
-			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" >2019년 2학기</option>	
-			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'">2019년 1학기</option>
-    		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'" selected="selected">2018년 2학기</option>
-    		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'">2018년 1학기</option>
+		<select name="year_semester" onchange="location = this.value;">
+			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
+			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
+    		<option value='insert.jsp?year_semester=201802' selected="selected">2018년 2학기</option>
+    		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
 		</select>
 		<%
 	}else if(year_semester == 201801){
 		%>
-		<select name="year_semester">
-			<option value=201902 onclick="location.href='insert.jsp?year_semester=201802'" >2019년 2학기</option>	
-			<option value=201901 onclick="location.href='insert.jsp?year_semester=201901'">2019년 1학기</option>
-    		<option value=201802 onclick="location.href='insert.jsp?year_semester=201802'">2018년 2학기</option>
-    		<option value=201801 onclick="location.href='insert.jsp?year_semester=201801'" selected="selected">2018년 1학기</option>
+		<select name="year_semester" onchange="location = this.value;">
+			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
+			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
+    		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
+    		<option value='insert.jsp?year_semester=201801' selected="selected">2018년 1학기</option>
 		</select>
 		<%
 	}
-	
-	session_id=(String)session.getAttribute("user");
 
 	Connection myConn = null;     
 	PreparedStatement pstmt = null;
@@ -97,21 +137,32 @@
 		     System.err.println("SQLException: " + ex.getMessage());
 	    }
 
-	System.out.println("sessionid:"+session_id); 
-	String id = request.getParameter("userID");
-	String pwd = request.getParameter("userPassword");
-
-	
+%>
+<% 
 	String std_SQL = "select s_credit from student where s_id = '" + session_id + "'";
 	Statement std_stmt = myConn.createStatement();
 	ResultSet std_rs = std_stmt.executeQuery(std_SQL);
 	std_rs.next();
 	int s_credit = std_rs.getInt("s_credit");
 %>
+<div id="current-credit">
+	<p>현재 신청한 학점 : <%= s_credit %></p>
+</div>
 
-<p>현재 신청한 학점 : <%= s_credit %></p>
+
+	<!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
 <br>
-<table width="80%" align="center" border>
+<table class="table table-bordered" align="center" border>
 <tr>
          <th>과목번호</th>
          <th>분반</th>
@@ -124,6 +175,7 @@
          <th>수강신청</th>
       </tr>
 <%
+
 
 	//mySQL = "select c_id,c_id_no,c_name,c_unit from course where c_id not in (select c_id from enroll where s_id='" + session_id + "')";
 	myResultSet = pstmt.executeQuery();
@@ -227,6 +279,16 @@
 	//myConn.close();
 %>
 </table>
+          	
+          </div>
+        </div>
+        <!-- /.container-fluid -->
 
+      </div>
+      <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+ 
 </body>
 </html>
