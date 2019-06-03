@@ -7,13 +7,12 @@
 </head>
 <body>
 <% 
-	String session_id = request.getParameter("userID");
-	session_id = null;
+	session.invalidate();
 %>
 	<form action = "login.jsp?=session_id" method = "post"> 
 		<script>
 			alert("로그아웃 되었습니다.");
-			location.href="login.jsp";
+			location.href="main.jsp";
 		</script>
 	</form>
 </body>
