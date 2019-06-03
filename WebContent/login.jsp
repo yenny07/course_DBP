@@ -55,7 +55,7 @@
                     	
                       <form method="post" action="login_verify.jsp">
         				<input class="col-12" id="input-text" type="text" name="userID" placeholder="아이디">
-        				<input class="col-12" id="input-text" type="text" name="userPassword" placeholder="비밀번호">
+        				<input class="col-12" id="input-text" type="password" name="userPassword" placeholder="비밀번호">
         				<div id ="input-box">
         					<INPUT class="btn btn-primary" id="input-button" TYPE="SUBMIT" NAME="Submit" VALUE="로그인">
 							<INPUT class="btn btn-primary" id="input-button" TYPE="RESET" VALUE="취소">
