@@ -1,8 +1,22 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*"  %>
 <html><head><title>수강신청 입력</title></head>
+<style type="text/css">
+	/*select{
+		margin-top:10px;
+    	margin-bottom:10px;
+    	float: left;
+    }
+    p{
+    	margin-top:10px;
+    	margin-bottom:10px;
+    	float: left;
+    }*/
+</style>
+
 <body>
 <%@ include file="top.jsp" %>
+
 <%   if (session_id==null) response.sendRedirect("login.jsp");  %>
 
 <%
@@ -83,10 +97,9 @@
 	int s_credit = std_rs.getInt("s_credit");
 %>
 
-<p>현재 신청한 학점 : <%= s_credit %></h4>
-
-<table width="80%" align="center" border>
+<p>현재 신청한 학점 : <%= s_credit %></p>
 <br>
+<table width="80%" align="center" border>
 <tr>
          <th>과목번호</th>
          <th>분반</th>
@@ -99,8 +112,6 @@
          <th>수강신청</th>
       </tr>
 <%
-	int cmax = 30;
-	
 
 	//mySQL = "select c_id,c_id_no,c_name,c_unit from course where c_id not in (select c_id from enroll where s_id='" + session_id + "')";
 	myResultSet = pstmt.executeQuery();
@@ -203,4 +214,7 @@
 	//pstmt.close();
 	//myConn.close();
 %>
-</table></body></html>
+</table>
+
+</body>
+</html>

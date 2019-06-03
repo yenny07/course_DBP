@@ -17,20 +17,16 @@ IS
    periodCOUNT2 NUMBER;
    courseMAX NUMBER;
    courseCURRENT NUMBER;
+   nYEAR NUMBER;
+   nSEMESTER NUMBER;
 
 BEGIN
-<<<<<<< HEAD
-<<<<<<< HEAD
    result := ' ';
+   nYEAR := Date2EnrollYear(SYSDATE);
+   nSEMESTER := Date2EnrollSemester(SYSDATE);
    
-   DBMS_OUTPUT.put_line(studentID || '¥‘¿Ã ∞˙∏Òπ¯»£ ' || courseID ||
-   ', ∫–π› ' || courseIDNO || '¿« ºˆ∞≠ µÓ∑œ¿ª ø‰√ª«œø¥Ω¿¥œ¥Ÿ.');
-=======
-   result := ' ';
-   
-   DBMS_OUTPUT.put_line(studentID || ' /  ' || courseID ||
-   ' / ' || courseIDNO);
->>>>>>> 55cab73f51104e177ed0b030585d777136fab51f
+   DBMS_OUTPUT.put_line(studentID || ' / ' || courseID ||
+   ' / ' || courseIDNO );
 
    /*√÷¥Î«–¡° √ ∞˙*/
    SELECT SUM(c.c_credit)
@@ -103,8 +99,8 @@ BEGIN
       RAISE duplicate_period;
    END IF;
 
-   INSERT INTO enroll(s_id, c_id, c_number)
-   VALUES (studentID, courseID, courseIDNO);
+   INSERT INTO enroll(s_id, c_id, c_number, c_year, c_semester)
+   VALUES (studentID, courseID, courseIDNO, nYEAR, nSEMESTER);
    
    UPDATE course
    SET c_current = courseCURRENT + 1
@@ -118,7 +114,6 @@ BEGIN
    DBMS_OUTPUT.put_line(result);
 
    COMMIT;
-<<<<<<< HEAD
 
 EXCEPTION
    WHEN NO_DATA_FOUND THEN
@@ -139,140 +134,5 @@ EXCEPTION
       ROLLBACK;
       result := SQLCODE;
       DBMS_OUTPUT.put_line(result);
-=======
-	result := ' ';
-	
-	DBMS_OUTPUT.put_line(studentID || 'ÎãòÏù¥ Í≥ºÎ™©Î≤àÌò∏ ' || courseID ||
-	', Î∂ÑÎ∞ò ' || courseIDNO || 'Ïùò ÏàòÍ∞ï Îì±Î°ùÏùÑ ÏöîÏ≤≠ÌïòÏòÄÏäµÎãàÎã§.');
-
-	/*ÏµúÎåÄÌïôÏ†ê Ï¥àÍ≥º*/
-	SELECT SUM(c.c_credit)
-	INTO courseSUM
-	FROM course c, enroll e
-	WHERE e.s_id = studentID AND e.c_id = c.c_id and e.c_number = c.c_number;
-	
-	IF courseSUM IS NULL THEN
-		courseSUM := 0;
-	END IF;	
-
-	SELECT c_credit
-	INTO courseCREDIT
-	FROM course
-	WHERE c_id = courseID AND c_number = courseIDNO;
-	
-	DBMS_OUTPUT.put_line(courseSUM || ' / ' || courseCREDIT);
-	
-	IF (courseSUM + courseCREDIT) >18 THEN
-		RAISE credit_limit_over;
-	END IF;
-
-	/*Ï§ëÎ≥µÎêú Í≥ºÎ™©*/
-	FOR course_list IN courseLIST(studentID) LOOP
-		IF course_list.c_id = courseID THEN
-			RAISE duplicate_course;
-		END IF;
-	END LOOP;
-
-	/*ÏàòÍ∞ïÏã†Ï≤≠ Ïù∏Ïõê Ï¥àÍ≥º*/
-	SELECT c_max, c_current
-	INTO courseMAX, courseCURRENT
-	FROM course
-	WHERE c_id = courseID AND c_number = courseIDNO;
-
-	DBMS_OUTPUT.put_line(courseMAX || ' / ' || courseCURRENT);
-
-	IF (courseCURRENT+1) > courseMAX THEN
-		RAISE too_many_students;
-	END IF;
-	
-	/*Ï§ëÎ≥µÎêú ÏãúÍ∞Ñ*/
-	SELECT COUNT(*)
-	INTO periodCOUNT1
-	FROM course c
-	WHERE c.c_id = courseID AND c.c_period IN (SELECT c.c_period
-			FROM enroll e, course c 
-			WHERE e.s_id = studentID AND e.c_id = c.c_id AND c.c_id != courseID AND e.c_number = c.c_number 
-							AND (e.c_id, e.c_number) IN (
-							SELECT enrolled_c.c_id, enrolled_c.c_number
-							FROM course new_c INNER JOIN course enrolled_c
-							ON new_c.c_day1 = enrolled_c.c_day1
-							WHERE new_c.c_id = courseID));
-
-	SELECT COUNT(*)
-	INTO periodCOUNT2
-	FROM course c
-	WHERE c.c_id = courseID AND c.c_period IN (SELECT c.c_period
-			FROM enroll e, course c 
-			WHERE e.s_id = studentID AND e.c_id = c.c_id AND c.c_id != courseID AND e.c_number = c.c_number 
-							AND (e.c_id, e.c_number) IN (
-							SELECT enrolled_c.c_id, enrolled_c.c_number
-							FROM course new_c INNER JOIN course enrolled_c
-							ON new_c.c_day2 = enrolled_c.c_day2
-							WHERE new_c.c_id = courseID));
-
-	DBMS_OUTPUT.put_line(periodCOUNT1 || ' / ' || periodCOUNT2);
-
-	IF periodCOUNT1 > 0 OR periodCOUNT2 > 0 THEN
-		RAISE duplicate_period;
-	END IF;
-
-	INSERT INTO enroll(s_id, c_id, c_number)
-	VALUES (studentID, courseID, courseIDNO);
-	
-	UPDATE course
-	SET c_current = courseCURRENT + 1
-	WHERE c_id = courseID AND c_number = courseIDNO;
-
-	UPDATE student
-	SET s_credit = (courseSUM + courseCREDIT)
-	WHERE s_id = studentID;
-
-	result := 'ÏàòÍ∞ïÏã†Ï≤≠Ïù¥ ÏôÑÎ£åÎêòÏóàÏäµÎãàÎã§.';
-	DBMS_OUTPUT.put_line(result);
-
-	COMMIT;
-
-EXCEPTION
-	WHEN NO_DATA_FOUND THEN
-		DBMS_OUTPUT.put_line('no data found');
-	WHEN credit_limit_over THEN
-		result := 'ÏµúÎåÄÌïôÏ†êÏùÑ Ï¥àÍ≥ºÌïòÏòÄÏäµÎãàÎã§.';
-		DBMS_OUTPUT.put_line(result);
-	WHEN duplicate_course THEN
-		result :='Ïù¥ÎØ∏ ÏàòÍ∞ïÏã†Ï≤≠Ìïú Í≥ºÎ™©ÏûÖÎãàÎã§.';
-		DBMS_OUTPUT.put_line(result);
-	WHEN too_many_students THEN
-		result :='ÏµúÎåÄ ÏàòÍ∞ïÏã†Ï≤≠ Ïù∏ÏõêÏùÑ Ï¥àÍ≥ºÌïòÏó¨ Îì±Î°ùÌï† Ïàò ÏóÜÏäµÎãàÎã§.';
-		DBMS_OUTPUT.put_line(result);
-	WHEN duplicate_period THEN
-		result :='Í∞ôÏùÄ ÏãúÍ∞ÑÏóê ÏàòÍ∞ïÏã†Ï≤≠Ìïú Í≥ºÎ™©Ïù¥ ÏûàÏäµÎãàÎã§.';
-		DBMS_OUTPUT.put_line(result);
-	WHEN OTHERS THEN
-		ROLLBACK;
-		result := SQLCODE;
-		DBMS_OUTPUT.put_line(result);
->>>>>>> d09a88ceb95bd0965745ffe6af820eecf754c402
-=======
-
-EXCEPTION
-   WHEN NO_DATA_FOUND THEN
-      DBMS_OUTPUT.put_line('no data found');
-   WHEN credit_limit_over THEN
-      result := '√÷¥Î«–¡°¿ª √ ∞˙«œø¥Ω¿¥œ¥Ÿ.';
-      DBMS_OUTPUT.put_line(result);
-   WHEN duplicate_course THEN
-      result :='¿ÃπÃ ºˆ∞≠Ω≈√ª«— ∞˙∏Ò¿‘¥œ¥Ÿ.';
-      DBMS_OUTPUT.put_line(result);
-   WHEN too_many_students THEN
-      result :='√÷¥Î ºˆ∞≠Ω≈√ª ¿Œø¯¿ª √ ∞˙«œø© µÓ∑œ«“ ºˆ æ¯Ω¿¥œ¥Ÿ.';
-      DBMS_OUTPUT.put_line(result);
-   WHEN duplicate_period THEN
-      result :='∞∞¿∫ Ω√∞£ø° ºˆ∞≠Ω≈√ª«— ∞˙∏Ò¿Ã ¿÷Ω¿¥œ¥Ÿ.';
-      DBMS_OUTPUT.put_line(result);
-   WHEN OTHERS THEN
-      ROLLBACK;
-      result := SQLCODE;
-      DBMS_OUTPUT.put_line(result);
->>>>>>> 55cab73f51104e177ed0b030585d777136fab51f
 END;
 /
