@@ -35,7 +35,7 @@
 	}
 	#content-wrapper{
 		width:75%;
-		height:85vh;
+		height:80vh;
 		float:left;
 		overflow:auto
 	}
@@ -44,7 +44,8 @@
 	}
 	
 	#current-credit{
-		padding:20px;
+		margin-left:20px;
+		margin-right:5px;
 		float:left;
 	}
 	
@@ -59,11 +60,14 @@
 		width:100%;
 	}
 	
+	td{
+		word-break: keep-all;
+		white-space:pre-line
+	}
 </style>
 
 <body>
 <%@ include file="top.jsp" %>
-=
 <%
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
@@ -220,29 +224,29 @@
 			break;
 		}
 		
-		c_time = c_time + " " + c_period + " 교시";
+		c_time = c_time + " " + c_period + "교시";
 		
 		switch(c_day2){
 		case 1:
-			c_time = "\n" + c_time +"월";
+			c_time = c_time +"\n월";
 			break;
 		case 2:
-			c_time = "\n" + c_time +"화";
+			c_time = c_time +"\n화";
 			break;
 		case 3:
-			c_time = "\n" + c_time +"수";
+			c_time = c_time +"\n수";
 			break;
 		case 4:
-			c_time = "\n" + c_time +"목";
+			c_time = c_time +"\n목";
 			break;
 		case 5:
-			c_time = "\n" + c_time +"금";
+			c_time = c_time +"\n금";
 			break;
 		default:
 			break;
 		}
 		
-		c_time = c_time + " " + c_period + " 교시";
+		c_time = c_time + " " + c_period + "교시";
 		
 		int c_credit= myResultSet.getInt("c_credit");//학점
 		
