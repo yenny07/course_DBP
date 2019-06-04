@@ -25,22 +25,28 @@
 		background:#f8f9fa;
 	}
 	#accordionSidebar{
-		width:20%;
 		float:left;
 	}
 
 	.navbar-expand{
-		width:75%;
+		width:70%;
 		float:left;
 		text-align:right
 	}
 	#content-wrapper{
-		width:75%;
+		width:70%;
 		height:80vh;
 		float:left;
 		overflow:auto
 	}
-	.select{
+	#table-header{
+		width:70%;
+		float:left;
+		overflow:auto
+	}
+	
+	
+	select{
 		float:right;
 	}
 	
@@ -60,13 +66,13 @@
 		margin : auto;
 		width:100%;
 	}
-	
 	th{
 		text-align: center;
 		word-break: keep-all;
 	}
 	td{
 		text-align: center;
+		margin: auto;
 		word-break: keep-all;
 		white-space:pre-line
 	}
@@ -74,6 +80,7 @@
 
 <body>
 <%@include file="top.jsp"%>
+<div id="table-header">
 
       <%
       int year_semester = 0;
@@ -184,7 +191,7 @@ try {
 <div id="current-credit">
 	<p>현재 신청한 학점 : <%= s_credit %></p>
 </div>
-
+</div>
 
 
 

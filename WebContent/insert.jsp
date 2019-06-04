@@ -28,17 +28,24 @@
 	}
 
 	.navbar-expand{
-		width:75%;
+		width:70%;
 		float:left;
 		text-align:right
 	}
 	#content-wrapper{
-		width:75%;
+		width:70%;
 		height:80vh;
 		float:left;
 		overflow:auto
 	}
-	.select{
+	#table-header{
+		width:70%;
+		float:left;
+		overflow:auto
+	}
+	
+	
+	select{
 		float:right;
 	}
 	
@@ -72,6 +79,7 @@
 
 <body>
 <%@ include file="top.jsp" %>
+<div id="table-header">
 <%
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
@@ -161,7 +169,7 @@
 <div id="current-credit">
 	<p>현재 신청한 학점 : <%= s_credit %></p>
 </div>
-
+</div>
 
 	<!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
