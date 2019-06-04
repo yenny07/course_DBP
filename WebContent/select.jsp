@@ -61,7 +61,12 @@
 		width:100%;
 	}
 	
+	th{
+		text-align: center;
+		word-break: keep-all;
+	}
 	td{
+		text-align: center;
 		word-break: keep-all;
 		white-space:pre-line
 	}
@@ -139,6 +144,7 @@ ArrayList<Integer> courseCredit = new ArrayList<>();
 ArrayList<Integer> courseNumber = new ArrayList<>();
 ArrayList<String> courseMajor = new ArrayList<>();
 ArrayList<Integer> courseDay1 = new ArrayList<>();
+ArrayList<Integer> courseDay2 = new ArrayList<>();
 ArrayList<Integer> coursePeriod = new ArrayList<>();
 int day;
 
@@ -164,7 +170,7 @@ try {
       courseMajor.add(rs.getString("c_major"));
       coursePeriod.add(rs.getInt("c_period"));
       courseDay1.add(rs.getInt("c_day1"));
-      courseDay1.add(rs.getInt("c_day2"));
+      courseDay2.add(rs.getInt("c_day2"));
    }
    
 
@@ -242,17 +248,36 @@ try {
          day = courseDay1.remove(0);
          if (day == 1) {
             out.println("월 " + period + "교시");
-            out.println("<br>");
-            out.println("수 " + period + "교시");
          }
          else if (day == 2) {
             out.println("화 " + period + "교시");
-            out.println("<br>");
-            out.println("목 " + period + "교시");
          }
          else if (day == 3) {
-            out.println("금 " + period + "교시");
+            out.println("수 " + period + "교시");
          }
+         else if (day == 4) {
+             out.println("목 " + period + "교시");
+          }
+         else if (day == 5) {
+             out.println("금 " + period + "교시");
+          }
+         out.println("\n");
+         day = courseDay2.remove(0);
+         if (day == 1) {
+            out.println("월 " + period + "교시");
+         }
+         else if (day == 2) {
+            out.println("화 " + period + "교시");
+         }
+         else if (day == 3) {
+            out.println("수 " + period + "교시");
+         }
+         else if (day == 4) {
+             out.println("목 " + period + "교시");
+          }
+         else if (day == 5) {
+             out.println("금 " + period + "교시");
+          }
          out.println("</td>");
          
          out.println("<td align = \"center\" >");

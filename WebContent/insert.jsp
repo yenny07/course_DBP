@@ -59,8 +59,12 @@
 		margin : auto;
 		width:100%;
 	}
-	
+	th{
+		text-align: center;
+		word-break: keep-all;
+	}
 	td{
+		text-align: center;
 		word-break: keep-all;
 		white-space:pre-line
 	}
