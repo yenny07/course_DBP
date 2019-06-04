@@ -59,7 +59,7 @@
 		%>
 		<script>
 		alert("수강신청이 취소되었습니다.");
-		location.href="delete2.jsp";
+		location.href="delete.jsp";
 		</script>
 		<%
 		

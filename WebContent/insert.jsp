@@ -79,12 +79,14 @@
 	}else{
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}
-	System.out.println(year_semester);
-	if (session_id != null){
+	System.out.println(session_id);
+	System.out.println(session_id == null);
+	if (session_id == null){
 		System.out.println(session_id);
+		response.sendRedirect("login.jsp");
+		return;
 	}else{
-			System.out.println(session_id);
-			response.sendRedirect("login.jsp");
+		System.out.println(session_id);
 	}
 	
 	int year = year_semester / 100;

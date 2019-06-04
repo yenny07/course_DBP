@@ -35,11 +35,11 @@
         	수강신청
       </div>
       <li class="nav-item">
-        <b><a class="nav-link" href=login.jsp><i class="fas fa-fw fa-mouse-pointer"></i>
+        <b><a class="nav-link" href=insert.jsp><i class="fas fa-fw fa-mouse-pointer"></i>
           <span>수강신청 입력</span></a></b>
       </li>
       <li class="nav-item">
-        <b><a class="nav-link" href=login.jsp><i class="fas fa-fw fa-times"></i>
+        <b><a class="nav-link" href=delete.jsp><i class="fas fa-fw fa-times"></i>
           <span>수강신청 삭제</span></a></b>
       </li>
       <li class="nav-item">
@@ -81,7 +81,7 @@
           <span>수강신청 입력</span></a></b>
       </li>
       <li class="nav-item">
-        <b><a class="nav-link" href=delete2.jsp><i class="fas fa-fw fa-times"></i>
+        <b><a class="nav-link" href=delete.jsp><i class="fas fa-fw fa-times"></i>
           <span>수강신청 삭제</span></a></b>
       </li>
       <li class="nav-item">

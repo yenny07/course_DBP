@@ -74,6 +74,7 @@
 <%@ include file="top.jsp" %>
 <%   if (session_id==null){
 	response.sendRedirect("login.jsp");
+	return;
 }%>
 <%
 Connection myConn = null;     
