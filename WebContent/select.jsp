@@ -147,6 +147,7 @@ ArrayList<Integer> courseDay1 = new ArrayList<>();
 ArrayList<Integer> courseDay2 = new ArrayList<>();
 ArrayList<Integer> coursePeriod = new ArrayList<>();
 int day;
+String p_id;
 
 String period;
 
@@ -183,22 +184,7 @@ try {
 <div id="current-credit">
 	<p>현재 신청한 학점 : <%= s_credit %></p>
 </div>
-<%
-   
-	
-	
-	rs.close();
-   pstmt.close();
-   myConn.close();
-   
-}catch (ClassNotFoundException e){
-   e.printStackTrace();
-   System.out.println("jdbc driver 로딩 실패");
-}catch (SQLException e){
-   e.printStackTrace();
-   System.out.println("오라클 연결 실패");
-}
-%>
+
 
 
 
@@ -240,7 +226,14 @@ try {
          out.println("</td>");
          
          out.print("<td align = \"center\" >");
-         out.println(profID.remove(0));
+         p_id = profID.remove(0);
+         String mySQL = "select p_name from professor where p_id = '" + p_id + "'";
+         Statement prof_stmt = myConn.createStatement();
+ 		 ResultSet prof_rs = prof_stmt.executeQuery(mySQL);
+ 		 prof_rs.next();
+ 		 String p_name = prof_rs.getString("P_NAME");
+         
+         out.println(p_name);
          out.println("</td>");
          
          out.print("<td align = \"center\" >");
@@ -287,7 +280,22 @@ try {
       }
       out.flush();
 %>
-   </table>   
+ <%
+   
+	
+	
+	rs.close();
+   pstmt.close();
+   myConn.close();
+   
+}catch (ClassNotFoundException e){
+   e.printStackTrace();
+   System.out.println("jdbc driver 로딩 실패");
+}catch (SQLException e){
+   e.printStackTrace();
+   System.out.println("오라클 연결 실패");
+}
+%>  </table>   
    
           </div>
         </div>
