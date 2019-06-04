@@ -27,17 +27,16 @@
 		background:#f8f9fa;
 	}
 	#accordionSidebar{
-		width:20%;
 		float:left;
 	}
 
 	.navbar-expand{
-		width:75%;
+		width:70%;
 		float:left;
 		text-align:right
 	}
 	#content-wrapper{
-		width:75%;
+		width:70%;
 		height:85vh;
 		float:left;
 		overflow:auto

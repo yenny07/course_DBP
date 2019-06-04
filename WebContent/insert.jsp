@@ -24,7 +24,6 @@
 		background:#f8f9fa;
 	}
 	#accordionSidebar{
-		width:20%;
 		float:left;
 	}
 
@@ -65,6 +64,7 @@
 	}
 	td{
 		text-align: center;
+		margin: auto;
 		word-break: keep-all;
 		white-space:pre-line
 	}

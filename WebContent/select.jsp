@@ -96,37 +96,37 @@
   	if(year_semester == 201902){
   		%>
   		<select name="year_semester" onchange="location = this.value;">
-  			<option value='insert.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
-  			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
-      		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
-      		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
+  			<option value='select.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
+  			<option value='select.jsp?year_semester=201901' >2019년 1학기</option>
+      		<option value='select.jsp?year_semester=201802'>2018년 2학기</option>
+      		<option value='select.jsp?year_semester=201801'>2018년 1학기</option>
   		</select>
   		<%
   	}else if(year_semester == 201901){
   		%>
   		<select name="year_semester" onchange="location = this.value;">
-  			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
-  			<option value='insert.jsp?year_semester=201901' selected="selected" >2019년 1학기</option>
-      		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
-      		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
+  			<option value='select.jsp?year_semester=201902'>2019년 2학기</option>	
+  			<option value='select.jsp?year_semester=201901' selected="selected" >2019년 1학기</option>
+      		<option value='select.jsp?year_semester=201802'>2018년 2학기</option>
+      		<option value='select.jsp?year_semester=201801'>2018년 1학기</option>
   		</select>
   		<%
   	}else if(year_semester == 201802){
   		%>
   		<select name="year_semester" onchange="location = this.value;">
-  			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
-  			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
-      		<option value='insert.jsp?year_semester=201802' selected="selected">2018년 2학기</option>
-      		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
+  			<option value='select.jsp?year_semester=201902'>2019년 2학기</option>	
+  			<option value='select.jsp?year_semester=201901' >2019년 1학기</option>
+      		<option value='select.jsp?year_semester=201802' selected="selected">2018년 2학기</option>
+      		<option value='select.jsp?year_semester=201801'>2018년 1학기</option>
   		</select>
   		<%
   	}else if(year_semester == 201801){
   		%>
   		<select name="year_semester" onchange="location = this.value;">
-  			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
-  			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
-      		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
-      		<option value='insert.jsp?year_semester=201801' selected="selected">2018년 1학기</option>
+  			<option value='select.jsp?year_semester=201902'>2019년 2학기</option>	
+  			<option value='select.jsp?year_semester=201901' >2019년 1학기</option>
+      		<option value='select.jsp?year_semester=201802'>2018년 2학기</option>
+      		<option value='select.jsp?year_semester=201801' selected="selected">2018년 1학기</option>
   		</select>
   		<%
   	} %>        
@@ -155,7 +155,7 @@ PreparedStatement pstmt;
 try {
    Class.forName(dbdriver);
    Connection myConn = DriverManager.getConnection(dburl, user, passwd);
-   pstmt = myConn.prepareStatement("SELECT c_id, c_name, p_id, c_credit, c_number, c_major, c_period, c_day1 FROM course WHERE c_year = ? AND c_semester = ? AND (c_id, c_number) IN (SELECT c_id, c_number FROM enroll WHERE s_id = ?)");
+   pstmt = myConn.prepareStatement("SELECT c_id, c_name, p_id, c_credit, c_number, c_major, c_period, c_day1, c_day2 FROM course WHERE c_year = ? AND c_semester = ? AND (c_id, c_number) IN (SELECT c_id, c_number FROM enroll WHERE s_id = ?)");
    pstmt.setInt(1, nYear);
    pstmt.setInt(2, nSemester);
    pstmt.setString(3, session_id);
@@ -227,23 +227,23 @@ try {
       while (!courseID.isEmpty()) {
          out.println("<tr>");
          
-         out.println("<td align = \"center\" >");
+         out.print("<td align = \"center\" >");
          out.println(courseID.remove(0));
          out.println("</td>");
          
-         out.println("<td align = \"center\" >");
+         out.print("<td align = \"center\" >");
          out.println(courseNumber.remove(0));
          out.println("</td>");
          
-         out.println("<td align = \"center\" >");
+         out.print("<td align = \"center\" >");
          out.println(courseName.remove(0));
          out.println("</td>");
          
-         out.println("<td align = \"center\" >");
+         out.print("<td align = \"center\" >");
          out.println(profID.remove(0));
          out.println("</td>");
          
-         out.println("<td align = \"center\" >");
+         out.print("<td align = \"center\" >");
          period = coursePeriod.remove(0).toString();
          day = courseDay1.remove(0);
          if (day == 1) {
@@ -261,7 +261,6 @@ try {
          else if (day == 5) {
              out.println("금 " + period + "교시");
           }
-         out.println("\n");
          day = courseDay2.remove(0);
          if (day == 1) {
             out.println("월 " + period + "교시");
@@ -280,7 +279,7 @@ try {
           }
          out.println("</td>");
          
-         out.println("<td align = \"center\" >");
+         out.print("<td align = \"center\" >");
          out.println(courseCredit.remove(0));
          out.println("</td>");
          

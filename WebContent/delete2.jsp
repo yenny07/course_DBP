@@ -75,7 +75,6 @@
 <%   if (session_id==null){
 	response.sendRedirect("login.jsp");
 }%>
-}
 <%
 Connection myConn = null;     
 Statement stmt = null;
