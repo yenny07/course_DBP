@@ -22,7 +22,6 @@
 <style>
 	html{
 		height:100vh;
-		overflow:hidden;
 	}
 	body{
 		background:#f8f9fa;
@@ -145,7 +144,7 @@ int s_credit = 0;
    </tr>
    <tr>
      <td id = "student_credit">수강학점</td>
-     <td ><%=s_credit%></td>
+     <td ><%=s_credit%> / 18</td>
    </tr>
     </table>
 

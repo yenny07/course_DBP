@@ -168,7 +168,6 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
 
-<br>
 <table class="table table-bordered" align="center" border>
 <tr>
          <th>과목번호</th>

@@ -15,6 +15,56 @@
   	<!-- Custom styles for this template-->
   	<link href="css/sb-admin-2.min.css" rel="stylesheet">
 </head>
+<style type="text/css">
+	html{
+		height:100vh;
+		overflow:hidden;
+	}
+	body{
+		background:#f8f9fa;
+	}
+	#accordionSidebar{
+		width:20%;
+		float:left;
+	}
+
+	.navbar-expand{
+		width:75%;
+		float:left;
+		text-align:right
+	}
+	#content-wrapper{
+		width:75%;
+		height:80vh;
+		float:left;
+		overflow:auto
+	}
+	.select{
+		float:right;
+	}
+	
+	#current-credit{
+		margin-left:20px;
+		margin-right:5px;
+		float:left;
+	}
+	
+	.form{
+		margin : auto;
+		width:100%;
+	}
+	
+	.table{
+		background: white;
+		margin : auto;
+		width:100%;
+	}
+	
+	td{
+		word-break: keep-all;
+		white-space:pre-line
+	}
+</style>
 <body>
 <%@ include file="top.jsp" %>
 <%   if (session_id==null) response.sendRedirect("login.jsp");  %>
@@ -56,8 +106,24 @@ ResultSet std_rs = std_stmt.executeQuery(std_SQL);
 std_rs.next();
 int s_credit = std_rs.getInt("s_credit");
 %>
-<p>현재 신청한 학점 : <%= s_credit %></h4>
-<table width="75%" align="center" border>
+<div id="current-credit">
+	<p>현재 신청한 학점 : <%= s_credit %></p>
+</div>
+
+	<!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          
+          
+
+<table class="table table-bordered" width="75%" align="center" border>
 <br>
 <tr>
          <th>과목번호</th>
@@ -118,19 +184,19 @@ String c_time = "";
 		
 		switch(c_day2){
 		case 1:
-			c_time = "\n" + c_time +"월";
+			c_time = c_time +"\n월";
 			break;
 		case 2:
-			c_time = "\n" + c_time +"화";
+			c_time = c_time +"\n화";
 			break;
 		case 3:
-			c_time = "\n" + c_time +"수";
+			c_time = c_time +"\n수";
 			break;
 		case 4:
-			c_time = "\n" + c_time +"목";
+			c_time = c_time +"\n목";
 			break;
 		case 5:
-			c_time = "\n" + c_time +"금";
+			c_time = c_time +"\n금";
 			break;
 		default:
 			break;
@@ -160,4 +226,19 @@ String c_time = "";
 	//pstmt.close();
 	//myConn.close();
 %>
-</table></body></html>
+</table>
+
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+ 
+
+</body>
+
+</html>
