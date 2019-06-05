@@ -150,11 +150,9 @@ int s_credit = 0;
 		  </div>
 		  
 		  
-		<% myConn.close(); } else {%>
-
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-		<% } %>
+		<% myConn.close(); } else {
+			response.sendRedirect("login.jsp");
+		} %>
 
         </div>
         <!-- /.container-fluid -->
