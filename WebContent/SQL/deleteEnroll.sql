@@ -8,9 +8,10 @@ IS
 
 
    courseMAX NUMBER;
-  coursecurrent NUMBER;
+   coursecurrent NUMBER;
    nYEAR NUMBER;
    nSEMESTER NUMBER;
+   courseCREDIT NUMBER;
    
 BEGIN
    
@@ -21,8 +22,8 @@ BEGIN
    ' / ' || courseIDNO );
    
  
-select c_current
-into coursecurrent
+select c_current, c_credit
+into coursecurrent, courseCREDIT
 from course
 where c_id = courseID AND c_number = courseIDNO AND c_year = nYEAR AND c_semester = nSEMESTER;
 
