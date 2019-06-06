@@ -4,7 +4,6 @@
 <%@ page import="java.sql.*" %>
 <!DOCTYPE html>
 <html>
-
 <head> <meta charset="EUC-KR">
 	<title>데이터베이스를 활용한 수강신청 시스템입니다.</title>
 	<meta charset="UTF-8">
@@ -75,7 +74,6 @@ int s_grade = 0;
 String s_major = null; 
 int s_credit = 0;
 %>
-
 	<!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
