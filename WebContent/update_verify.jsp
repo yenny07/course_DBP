@@ -10,18 +10,21 @@ String passwd = "2019"; //pw
 
 Class.forName(dbdriver);
 Connection myConn = null;
-Statement stmt = null;
+CallableStatement cstmt = null;
+String mySql;
 
    try { 
       myConn = DriverManager.getConnection(dburl, user, passwd);
-      stmt = myConn.createStatement();
       String enterId = request.getParameter("id");
       String enterPwd = request.getParameter("password");
       String enterPwdConfirm = request.getParameter("passwordConfirm");
       
       if (enterPwd.equals(enterPwdConfirm)) {
-         String mySql = "update student set s_pwd = '" + enterPwd + "' where s_id = '" + enterId +"'";
-         stmt.executeUpdate(mySql);
+    	 mySql = "{call change_pwd(?,?)}";
+    	 cstmt = myConn.prepareCall(mySql);
+    	 cstmt.setString(1, enterId);
+    	 cstmt.setString(2, enterPwd);
+    	 cstmt.execute();
 %>
          <script>
             alert("수정이 완료되었습니다");
