@@ -76,6 +76,8 @@ String s_name = null;
 int s_grade = 0; 
 String s_major = null; 
 int s_credit = 0;
+int isLeavedNo = 0; String isLeaved = "";
+
 %>
 
 	<!-- Content Wrapper -->
@@ -90,7 +92,7 @@ int s_credit = 0;
                      myConn = DriverManager.getConnection(dburl, user, passwd);
                     
                      /* show_stu_info 호출*/
-                   String sql = "{call show_stu_info(?,?,?,?,?,?)}";
+                   String sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
                    CallableStatement cstmt = myConn.prepareCall(sql);
                    cstmt.setString(1, session_id); // s_id
                    cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
@@ -98,15 +100,22 @@ int s_credit = 0;
                    cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
                    cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
                    cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
+                   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
                    cstmt.execute(); // 프로시저 실행
 
                    s_pwd = cstmt.getString(2);
-                    s_name = cstmt.getString(3);
+                   s_name = cstmt.getString(3);
                    s_grade = cstmt.getInt(4);
                    s_major = cstmt.getString(5);
-                    s_credit = cstmt.getInt(6);
-                      
-                   System.out.println(session_id + s_pwd + s_name + s_grade + s_major + s_credit);
+                   s_credit = cstmt.getInt(6);
+                   isLeavedNo = cstmt.getInt(7);
+                   
+                   if(isLeavedNo == 1){
+                	   isLeaved = "휴학";
+                   }else{
+                	   isLeaved = "재학";
+                   }
+                   System.out.println(session_id + s_pwd + s_name + s_grade + s_major + s_credit + isLeavedNo + isLeaved);
                   }catch(SQLException e){
                       out.println(e);
                       e.printStackTrace();
@@ -125,7 +134,7 @@ int s_credit = 0;
           			<th colspan="3" style="text-align:center">회원 정보</th>
    				<tr>
    <tr>
-   	 <td rowspan="5" style="text-align:center"><img src="img/character_new03.gif" alt="profile" id="profile"></td>
+   	 <td rowspan="6" style="text-align:center"><img src="img/character_new03.gif" alt="profile" id="profile"></td>
      <td id="update_td">학번</td>
      <td><%=session_id%></td>
    </tr>
@@ -144,6 +153,10 @@ int s_credit = 0;
    <tr>
      <td id = "student_credit">수강학점</td>
      <td ><%=s_credit%> / 18</td>
+   </tr>
+   <tr>
+     <td id = "student_credit">학적상태</td>
+     <td ><%=isLeaved%></td>
    </tr>
     </table>
 

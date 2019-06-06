@@ -93,7 +93,8 @@ Statement stmt = null;
      String dbdriver = "oracle.jdbc.driver.OracleDriver";    
      session_id=(String)session.getAttribute("user");
  	
-     String sql = "select * from COURSE c, enroll e WHERE c.c_id = e.c_id AND c.c_number = e.c_number AND e.s_id ='" + session_id + "'";
+     String sql = "select * from COURSE c, enroll e WHERE c.c_id = e.c_id AND c.c_number = e.c_number AND e.s_id ='" + session_id +
+    		 "' AND e.c_year = 2019 AND e.c_semester = 2 AND c.c_year = 2019 AND c.c_semester = 2";
      //session_id = session.getId();
 	System.out.println("sessionid:"+session_id);
      
@@ -171,7 +172,8 @@ int s_credit = std_rs.getInt("s_credit");
 		int p_id = myResultSet.getInt("p_id");
 		int c_day1 = myResultSet.getInt("c_day1");
 		int c_day2 = myResultSet.getInt("c_day2");
-		int c_period = myResultSet.getInt("c_period");
+		int c_period1 = myResultSet.getInt("c_period1");
+		int c_period2 = myResultSet.getInt("c_period2");
 		
 String c_time = "";
 		
@@ -195,7 +197,7 @@ String c_time = "";
 			break;
 		}
 		
-		c_time = c_time + " " + c_period + " 교시";
+		c_time = c_time + " " + c_period1 + " 교시";
 		
 		switch(c_day2){
 		case 1:
@@ -217,7 +219,7 @@ String c_time = "";
 			break;
 		}
 		
-		c_time = c_time + " " + c_period + " 교시";
+		c_time = c_time + " " + c_period2 + " 교시";
 		
 		String pSQL = "select p_name from professor where p_id = '" + p_id + "'";
 		Statement prof_stmt = myConn.createStatement();

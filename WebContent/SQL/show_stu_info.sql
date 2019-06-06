@@ -5,14 +5,15 @@ pwd OUT VARCHAR2,
 name OUT VARCHAR2,
 grade OUT NUMBER,
 major OUT VARCHAR2,
-credit OUT NUMBER
+credit OUT NUMBER,
+isLeaved_out OUT NUMBER
 )
 IS
 
 BEGIN
 
-select s_pwd, s_name, s_grade, s_major, s_credit
-into pwd, name, grade, major, credit
+select s_pwd, s_name, s_grade, s_major, s_credit, isLeaved
+into pwd, name, grade, major, credit, isLeaved_out
 from student
 where s_id = id;
 

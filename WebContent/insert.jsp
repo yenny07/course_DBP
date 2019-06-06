@@ -160,17 +160,26 @@
 
 %>
 <% 
-	String std_SQL = "select s_credit from student where s_id = '" + session_id + "'";
+	String std_SQL = "select s_credit, isLeaved from student where s_id = '" + session_id + "'";
 	Statement std_stmt = myConn.createStatement();
 	ResultSet std_rs = std_stmt.executeQuery(std_SQL);
 	std_rs.next();
 	int s_credit = std_rs.getInt("s_credit");
+	int isLeaved = std_rs.getInt("isLeaved");
+	if (isLeaved == 0){
 %>
 <div id="current-credit">
 	<p>현재 신청한 학점 : <%= s_credit %></p>
 </div>
 </div>
-
+<%}else{
+	%>
+<div id="current-credit">
+	<p>현재 휴학 중입니다.</p>
+</div>
+</div>
+<%
+}%>
 	<!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -211,7 +220,8 @@
 		int p_id = myResultSet.getInt("p_id");
 		int c_day1 = myResultSet.getInt("c_day1");
 		int c_day2 = myResultSet.getInt("c_day2");
-		int c_period = myResultSet.getInt("c_period");
+		int c_period1 = myResultSet.getInt("c_period1");
+		int c_period2 = myResultSet.getInt("c_period2");
 		int c_max = myResultSet.getInt("c_max");
 		int c_current = myResultSet.getInt("c_current");
 		
@@ -237,7 +247,7 @@
 			break;
 		}
 		
-		c_time = c_time + " " + c_period + "교시";
+		c_time = c_time + " " + c_period1 + "교시";
 		
 		switch(c_day2){
 		case 1:
@@ -259,7 +269,7 @@
 			break;
 		}
 		
-		c_time = c_time + " " + c_period + "교시";
+		c_time = c_time + " " + c_period2 + "교시";
 		
 		int c_credit= myResultSet.getInt("c_credit");//학점
 		
@@ -280,7 +290,7 @@
   <td align="center"><%= c_current %></td>
   <td align="center"><%= c_max %></td>
   <%
-  	if(year_semester == 201902){
+  	if(year_semester == 201902 && isLeaved == 0){
   		%>
   		<td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
   		<%
@@ -289,7 +299,7 @@
 	  <td align="center">신청불가</td>
   		<%
   }
-  %>
+%>
 </tr>
 <%
 		}
