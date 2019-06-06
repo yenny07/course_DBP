@@ -4,11 +4,11 @@
 <%@ page import="java.io.*" %>
 <%@ page import="java.sql.*" %>
 <html>
+<%@ include file="top.jsp" %>
 <head>
    <title>수강신청 사용자 정보 수정</title>
 </head>
 <body>
-<%@ include file="top.jsp" %>
 <%
 String dbdriver = "oracle.jdbc.driver.OracleDriver"; //JDBC 드라이버 로딩
 String dburl = "jdbc:oracle:thin:@localhost:1521:orcl"; //url
@@ -57,6 +57,8 @@ int s_credit = 0;
         s_credit = cstmt.getInt(6);
           
        System.out.println(session_id + s_pwd + s_name + s_grade + s_major + s_credit);
+       cstmt.close();
+       myConn.close(); 
       }catch(SQLException e){
           out.println(e);
           e.printStackTrace();
@@ -90,15 +92,54 @@ int s_credit = 0;
      <td colspan="3"><input id="update_pw_in_confirm" type="password" name="passwordConfirm" size="10" ></td>
    </tr>
    <tr>
+   	 <%
+   	 if (isLeaved == 1) {
+   		 out.println("<td colspan=\"3\">");
+   		 out.println("<input id=\"leaved_confirm\" type=\"radio\" name=\"leavedConfirm\" checked = \"checked\" value=\"휴학 여부\" disabled>");
+   		 out.print("<td id=\"update_td_confirm\">");
+   		 out.print("휴학 여부");
+   		 out.print("</td>");
+   		 out.println("</td>");
+   	 }
+   	 else {
+   		 out.println("<td colspan=\"3\">");
+   		 out.println("<input id=\"leaved_confirm\" type=\"radio\" name=\"leavedConfirm\" value=\"휴학 여부\" disabled>");
+   		 out.print("<td id=\"update_td_confirm\">");
+   		 out.print("휴학 여부");
+   		 out.print("</td>");
+   		 out.println("</td>");
+   	 }
+   	 %>
+   </tr>
+   <tr>
        <td colspan="4" align="center">
         <input id="update_btn" type="submit" value="수정 완료">
         <input id="update_btn" type="reset" value="초기화">
+        <%
+        if (isLeaved == 1) {
+        	out.println("<input id=\"leave_btn\" name = \"leaved\" type=\"button\" value = \"휴학 신청\" onclick = \"leaveSemester()\" disabled>");
+        }
+        else {
+        	out.println("<input id=\"leave_btn\" name = \"leaved\" type=\"button\" value = \"휴학 신청\" onclick = \"leaveSemester()\">");
+        }
+        %>
     </tr>
     </table>
     </form>
 <%
-      //cstmt.close();
-      myConn.close(); 
 %>
 </body>
+<script>
+	function leaveSemester() {
+		var message = confirm('휴학을 신청하시겠습니까?');
+		if(message == true) {
+			location.href = 'update_leaved.jsp?leaved=true';
+			return true;
+		}
+		else {
+			location.href = 'update_leaved.jsp?leaved=false';
+			return false;
+		}
+	}
+</script>
 </html>
