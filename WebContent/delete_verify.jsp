@@ -18,7 +18,7 @@
 	Connection myConn = null;
 	String result = null;
 	ResultSet rs = null;
-	PreparedStatement pstmt = null;
+	CallableStatement cstmt = null;
 
 	
 	try{
@@ -32,40 +32,31 @@
 		System.out.println("오라클 연결 실패");
 	}
 	
-    String sql = "delete from enroll where c_id = ? and c_number = ?";
-    System.out.println("c_id :"+c_id + " / c_number: " + c_id_no);
-	pstmt = myConn.prepareStatement(sql);
-	pstmt.setString(1,c_id);
-	pstmt.setInt(2,c_id_no);
-//	rs= pstmt.executeUpdate();
-	pstmt.executeUpdate();
-
+	cstmt = myConn.prepareCall("{call deleteEnroll(?,?,?)}",
+	         ResultSet.TYPE_SCROLL_SENSITIVE,
+	           ResultSet.CONCUR_READ_ONLY);
+	   cstmt.setString(1, s_id);
+	   cstmt.setString(2, c_id);
+	   cstmt.setInt(3,c_id_no);
 	
-	
-	/*
-	boolean besult = rs.next();
-	System.out.println(besult);
-	if(besult) {
-		System.out.print(rs.getInt("s_credit"));
-	}*/
-	/*
-	CallableStatement cstmt = myConn.prepareCall("{call DeleteEnroll()}",
-			ResultSet.TYPE_SCROLL_SENSITIVE,
-	        ResultSet.CONCUR_READ_ONLY);
-	
-	
-	cstmt.execute();
-		*/
-		%>
-		<script>
-		alert("수강신청이 취소되었습니다.");
-		location.href="delete.jsp";
-		</script>
-		<%
-		
-		
-		
-		 myConn.commit(); pstmt.close(); myConn.close(); 
+	   try {
+		      cstmt.execute();
+		      result = "수강신청이 취소되었습니다.";
+		      //result = cstmt.getString(6);
+		      %>
+		      <script>
+		      alert("<%= result %>");
+		      location.href="delete.jsp";
+		      </script>
+		      <%
+		      } catch(SQLException ex) {
+		      System.err.println("SQLException: " + ex.getMessage());
+		      }
+		      finally {
+		      if (cstmt != null)
+		      try { myConn.commit(); cstmt.close(); myConn.close(); }
+		      catch(SQLException ex) { }
+		      }
 		
 	//pstmt.close();
 	//myConn.close();
