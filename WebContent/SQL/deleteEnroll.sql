@@ -32,7 +32,7 @@ SET c_current = coursecurrent -1
 where c_id = courseID AND c_number = courseIDNO AND c_year = nYEAR AND c_semester = nSEMESTER;
 
 UPDATE STUDENT
-set s_credit = s_credit -3
+set s_credit = s_credit - courseCREDIT
 where s_id = studentID;
 
 
