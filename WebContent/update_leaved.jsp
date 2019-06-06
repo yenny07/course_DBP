@@ -24,7 +24,13 @@ Statement stmt = null;
       if (isLeave.equals("true")) {			
 		String sql = "update student set isLeaved = 1 where s_id = "+session_id;		
 		stmt.executeUpdate(sql);
-%>
+		String sql2 = "delete from enroll where s_id = "+session_id;		
+		stmt.executeUpdate(sql);
+		String sql3 = "update student set s_credit = 0 where s_id = "+session_id;		
+		stmt.executeUpdate(sql);
+		stmt.executeUpdate(sql2);
+		stmt.executeUpdate(sql3);
+%>		
 		<script>
 		alert('휴학 신청이 완료되었습니다.')
 		location.href = "main.jsp";
@@ -35,10 +41,11 @@ Statement stmt = null;
   		stmt.executeUpdate(sql);
   %>
   		<script>
-  		alert('휴학 신청이 완료되었습니다.')
+  		alert('휴학 취소가 완료되었습니다.')
   		location.href = "main.jsp";
   		</script>
-      <%}
+      <%
+      myConn.commit();}
    }
    catch(SQLException ex) {
       String sMessage;
