@@ -25,7 +25,7 @@
       </li>
       <li class="nav-item">
         <b><a class="nav-link" href=update.jsp><i class="fas fa-fw fa-wrench"></i>
-          <span>비밀번호 수정</span></a></b>
+          <span>개인정보 수정</span></a></b>
       </li>
       
       <!-- Divider -->
@@ -67,7 +67,7 @@
       </li>
       <li class="nav-item">
         <b><a class="nav-link" href=update.jsp><i class="fas fa-fw fa-wrench"></i>
-          <span>비밀번호 수정</span></a></b>
+          <span>개인정보 수정</span></a></b>
       </li>
       
       <!-- Divider -->

@@ -27,10 +27,18 @@ Statement stmt = null;
 %>
 		<script>
 		alert('휴학 신청이 완료되었습니다.')
-		location.href = "login.jsp";
+		location.href = "main.jsp";
 		</script>
 <%
-      }
+      }else{
+    	  String sql = "update student set isLeaved = 0 where s_id = "+session_id;		
+  		stmt.executeUpdate(sql);
+  %>
+  		<script>
+  		alert('휴학 신청이 완료되었습니다.')
+  		location.href = "main.jsp";
+  		</script>
+      <%}
    }
    catch(SQLException ex) {
       String sMessage;

@@ -52,6 +52,12 @@
 		margin : auto;
 		width:80%;
 	}
+	
+	#isLeaved_table{
+		background: white;
+		margin : 10px auto;
+		width:80%;
+	}
 
 </style>
 <body>
@@ -73,6 +79,7 @@ String s_name = null;
 int s_grade = 0; 
 String s_major = null; 
 int s_credit = 0;
+int isLeavedNo = 0; String isLeaved = "";
 %>
 	<!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -86,7 +93,7 @@ int s_credit = 0;
                      myConn = DriverManager.getConnection(dburl, user, passwd);
                     
                      /* show_stu_info 호출*/
-                   String sql = "{call show_stu_info(?,?,?,?,?,?)}";
+                  String sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
                    CallableStatement cstmt = myConn.prepareCall(sql);
                    cstmt.setString(1, session_id); // s_id
                    cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
@@ -94,14 +101,17 @@ int s_credit = 0;
                    cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
                    cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
                    cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
+                   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
                    cstmt.execute(); // 프로시저 실행
 
-                   s_pwd = cstmt.getString(2);
-                    s_name = cstmt.getString(3);
-                   s_grade = cstmt.getInt(4);
-                   s_major = cstmt.getString(5);
-                    s_credit = cstmt.getInt(6);
-                      
+                   isLeavedNo = cstmt.getInt(7);
+                   
+                   if(isLeavedNo == 1){
+                	   isLeaved = "휴학";
+                   }else{
+                	   isLeaved = "재학";
+                   }
+                   
                    System.out.println(session_id + s_pwd + s_name + s_grade + s_major + s_credit);
                   }catch(SQLException e){
                       out.println(e);
@@ -116,10 +126,12 @@ int s_credit = 0;
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          	<form action="update_verify.jsp?id=<%=session_id%>" method="post" id="update_post">
+          <div class="col-12">
+          <form action="update_verify.jsp?id=<%=session_id%>" method="post" id="update_post">
           		<table class="table table-bordered" align="center" id="update_table">
           		<tr>
           			<th colspan="2" style="text-align:center">수정할 비밀번호</th>
+          		</tr>
    				<tr>
      				<td id="update_td">비밀번호</td>
      				<td ><input id="update_pw_in" type="password" name="password" size="10"></td>
@@ -132,9 +144,40 @@ int s_credit = 0;
        				<td colspan="2" align="center">
         			<input class="btn btn-primary" id="update_btn" type="submit" value="수정 완료">
         			<input class="btn btn-primary" id="update_btn" type="reset" value="초기화">
+        			</td>
     			</tr>
     			</table>
-          	</form>	
+          	</form>
+          	<table class="table table-bordered" align="center" id="isLeaved_table">
+          		<tr>
+          			<th colspan="2" style="text-align:center">휴학신청</th>
+          		</tr>
+          		<tr>
+     				<td colspan="1" id = "student_isLeaved">학적상태</td>
+     				<td colspan="1" ><%=isLeaved%></td>
+   				</tr>
+   				<tr>
+   				<%
+        	if (isLeavedNo == 1) {
+        		%>
+        		<td colspan="2"align="center">
+        		<input class="btn btn-primary" id="leave_btn" name = "leaved" type="button" value = "휴학 취소" onclick = "leaveSemesterCancle()">
+        		</td>
+        		<%
+        		}
+        	else {
+        		%>
+           		<td colspan="2"align="center">
+           		<input class="btn btn-primary" id="leave_btn" name = "leaved" type="button" value = "휴학  신청" onclick = "leaveSemester()">
+           		</td>
+           	<%
+        	}
+        %>
+        		</tr>
+
+    			</table>
+          </div>
+          	
 		  </div>
 		  
 		  
@@ -152,4 +195,20 @@ int s_credit = 0;
     <!-- End of Content Wrapper -->
 
 </body>
+<script>
+   function leaveSemester() {
+      var message = confirm('휴학을 신청하시겠습니까?');
+      if(message == true) {
+         location.href = 'update_leaved.jsp?leaved=true';
+         return true;
+      }
+   }
+   function leaveSemesterCancle() {
+	      var message = confirm('휴학을 취소하시겠습니까?');
+	      if(message == true) {
+	         location.href = 'update_leaved.jsp?leaved=false';
+	         return true;
+	      }
+	   }
+</script>
 </html>

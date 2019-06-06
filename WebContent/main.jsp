@@ -155,7 +155,7 @@ int isLeavedNo = 0; String isLeaved = "";
      <td ><%=s_credit%> / 18</td>
    </tr>
    <tr>
-     <td id = "student_credit">학적상태</td>
+     <td id = "student_isLeaved">학적상태</td>
      <td ><%=isLeaved%></td>
    </tr>
     </table>
