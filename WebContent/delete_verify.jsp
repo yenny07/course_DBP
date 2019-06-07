@@ -4,11 +4,11 @@
 <body>
 <%
 
-	String s_id = (String)session.getAttribute("user");
+	String session_id = (String)session.getAttribute("user");
 	String c_id=request.getParameter("c_id");
 	int c_id_no = Integer.parseInt(request.getParameter("c_id_no"));
 	System.out.println(c_id);
-	System.out.println(s_id);
+	System.out.println(session_id);
 %>	
 <%	
 	String dbdriver = "oracle.jdbc.driver.OracleDriver";
@@ -32,16 +32,37 @@
 		System.out.println("오라클 연결 실패");
 	}
 	
+	try{
+		Class.forName(dbdriver);
+		myConn = DriverManager.getConnection(dburl, user, passwd);
+	}catch (ClassNotFoundException e){
+		e.printStackTrace();
+		System.out.println("jdbc driver 로딩 실패");
+	}catch (SQLException e){
+		e.printStackTrace();
+		System.out.println("오라클 연결 실패");
+	}
+	if(session_id.length()==7){
 	cstmt = myConn.prepareCall("{call deleteEnroll(?,?,?)}",
 	         ResultSet.TYPE_SCROLL_SENSITIVE,
 	           ResultSet.CONCUR_READ_ONLY);
-	   cstmt.setString(1, s_id);
+	   cstmt.setString(1, session_id);
 	   cstmt.setString(2, c_id);
 	   cstmt.setInt(3,c_id_no);
+	}else if(session_id.length()==5){
+		cstmt = myConn.prepareCall("{call deleteCourse(?,?,?)}",
+		         ResultSet.TYPE_SCROLL_SENSITIVE,
+		           ResultSet.CONCUR_READ_ONLY);
+		   cstmt.setString(1, session_id);
+		   cstmt.setString(2, c_id);
+		   cstmt.setInt(3,c_id_no);
+	}
 	
 	   try {
+		   
 		      cstmt.execute();
-		      result = "수강신청이 취소되었습니다.";
+		      System.out.println("executed");
+		      result = "강의 개설이 취소되었습니다.";
 		      //result = cstmt.getString(6);
 		      %>
 		      <script>
@@ -58,8 +79,6 @@
 		      catch(SQLException ex) { }
 		      }
 		
-	//pstmt.close();
-	//myConn.close();
 	%>
 </body>
 </html>

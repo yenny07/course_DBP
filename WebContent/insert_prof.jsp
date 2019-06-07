@@ -171,7 +171,7 @@
 					
 			Class.forName(dbdriver);
 		    myConn =  DriverManager.getConnection (dburl, user, passwd);
-		    String sql = "select * from COURSE where c_year = ? and c_semester = ?";
+		    String sql = "select * from COURSE where c_year = ? and c_semester = ? order by c_id";
 			pstmt = myConn.prepareStatement(sql);
 			pstmt.setInt(1, year);
 			pstmt.setInt(2,semester);
