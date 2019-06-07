@@ -75,6 +75,7 @@ String pwd = null;
 String name = null; 
 int grade = 0; 
 String major = null; 
+String creditSQL = null;
 int credit = 0;
 int isLeavedNo = 0; String isLeaved = "";
 
@@ -99,23 +100,29 @@ int isLeavedNo = 0; String isLeaved = "";
                     
                    if(session_id.length() == 7){
                      /* show_stu_info 호출*/
-	                   sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
+	                   sql = "{call show_stu_info(?,?,?,?,?,?)}";
     	               cstmt = myConn.prepareCall(sql);
         	           cstmt.setString(1, session_id); // s_id
        		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
        	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //s_name
     	               cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
         	           cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
-            	       cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
-                	   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
+                	   cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // isLeaved
 	                   cstmt.execute(); // 프로시저 실행
 	
     	               pwd = cstmt.getString(2);
         	           name = cstmt.getString(3);
             	       grade = cstmt.getInt(4);
                 	   major = cstmt.getString(5);
-    	               credit = cstmt.getInt(6);
-        	           isLeavedNo = cstmt.getInt(7);
+        	           isLeavedNo = cstmt.getInt(6);
+        	           
+        	           /* credit은 Student 테이블에 없음 */
+        	        creditSQL = "{? = call get_stu_credit(?)}";
+        	       	cstmt = myConn.prepareCall(creditSQL);
+        	       	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+        	       	cstmt.setString(2, session_id);
+        	       	cstmt.execute();
+        	       	credit = cstmt.getInt(1);
             	       
 	                   if(isLeavedNo == 1){
     	            	   isLeaved = "휴학";
@@ -159,19 +166,25 @@ int isLeavedNo = 0; String isLeaved = "";
        		<%
             	       
                    }else{
-                	   sql = "{call show_prof_info(?,?,?,?,?)}";
+                	   sql = "{call show_prof_info(?,?,?,?)}";
     	               cstmt = myConn.prepareCall(sql);
         	           cstmt.setString(1, session_id); // p_id
        		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // p_pwd
        	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //p_name
     	               cstmt.registerOutParameter(4, java.sql.Types.VARCHAR); // p_major
-            	       cstmt.registerOutParameter(5, java.sql.Types.INTEGER); // p_credit
                 	   cstmt.execute(); // 프로시저 실행
 	
     	               pwd = cstmt.getString(2);
         	           name = cstmt.getString(3);
             	       major = cstmt.getString(4);
-    	               credit = cstmt.getInt(5);
+            	       
+            	       /*prof의 credit은 Professor 테이블에 없음*/
+            	       creditSQL = "{? = call get_prof_credit(?)}";
+           	       	cstmt = myConn.prepareCall(creditSQL);
+           	       	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+           	       	cstmt.setString(2, session_id);
+           	       	cstmt.execute();
+           	       	credit = cstmt.getInt(1);
         	           
             	       System.out.println(session_id + pwd + name + grade + major + credit + isLeavedNo + isLeaved);
                        %>        

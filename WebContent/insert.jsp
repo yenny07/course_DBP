@@ -144,6 +144,7 @@
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user="sook";     String passwd="2019";
 	String dbdriver = "oracle.jdbc.driver.OracleDriver"; 
+	int isLeaved = 0;
 	
 	try {
 					
@@ -160,26 +161,36 @@
 
 %>
 <% 
-	String std_SQL = "select s_credit, isLeaved from student where s_id = '" + session_id + "'";
-	Statement std_stmt = myConn.createStatement();
-	ResultSet std_rs = std_stmt.executeQuery(std_SQL);
-	std_rs.next();
-	int s_credit = std_rs.getInt("s_credit");
-	int isLeaved = std_rs.getInt("isLeaved");
-	if (isLeaved == 0){
-%>
-<div id="current-credit">
-	<p>현재 신청한 학점 : <%= s_credit %></p>
-</div>
-</div>
-<%}else{
+	if(session_id.length() == 7){
+		String creditSQL = "{? = call get_stu_credit(?)}";
+		CallableStatement cstmt = myConn.prepareCall(creditSQL);
+		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+		cstmt.setString(2, session_id);
+		cstmt.execute();
+		int s_credit = cstmt.getInt(1);
+		
+		String std_SQL = "select isLeaved from student where s_id = '" + session_id + "'";
+		Statement std_stmt = myConn.createStatement();
+		ResultSet std_rs = std_stmt.executeQuery(std_SQL);
+		std_rs.next();
+
+		isLeaved = std_rs.getInt("isLeaved");
+		if (isLeaved == 0){
 	%>
-<div id="current-credit">
-	<p>현재 휴학 중입니다.</p>
-</div>
-</div>
-<%
+	<div id="current-credit">
+		<p>현재 신청한 학점 : <%= s_credit %></p>
+	</div>
+
+	<%}else{
+		%>
+	<div id="current-credit">
+		<p>현재 휴학 중입니다.</p>
+	</div>
+	<%
+	}
+	
 }%>
+</div>
 	<!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -290,7 +301,7 @@
   <td align="center"><%= c_current %></td>
   <td align="center"><%= c_max %></td>
   <%
-  	if(year_semester == 201902 && isLeaved == 0){
+  	if(year_semester == 201902 && isLeaved == 0 && session_id.length() == 7){
   		%>
   		<td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
   		<%
