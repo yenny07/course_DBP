@@ -42,6 +42,7 @@
 		float:left;
 		overflow:auto
 	}
+	
 	#update_post{
 		margin : auto;
 		width:100%;

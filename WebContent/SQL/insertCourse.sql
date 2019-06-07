@@ -10,12 +10,14 @@ IS
 	same_days EXCEPTION;
 	duplicate_period EXCEPTION;
 	duplicate_course_id EXCEPTION;
+	course_number_error EXCEPTION;
 	duplicate_course_name EXCEPTION;
 	diffrent_course_name EXCEPTION;
 
 	courseSUM NUMBER;
 	courseCOUNT NUMBER;
 	courseORIGINNAME VARCHAR2(50);
+	courseNUMBER NUMBER;
 	periodCOUNT1 NUMBER;
 	periodCOUNT2 NUMBER;
 	nYEAR NUMBER;
@@ -64,6 +66,18 @@ BEGIN
 
 	IF courseCOUNT > 0 THEN
 		RAISE duplicate_course_id;
+	END IF;
+
+	/*잘못된 분반 번호*/
+	SELECT NVL(MAX(c_number),0)
+	INTO courseNUMBER
+	FROM course
+	WHERE c_id = courseID AND c_year = nYEAR AND c_semester = nSEMESTER;
+
+	DBMS_OUTPUT.put_line(courseNUMBER);	
+
+	IF (courseNUMBER+1) != courseIDNO THEN
+		RAISE course_number_error;
 	END IF;
 	
 	/*이미 있는 강의 이름*/
@@ -136,6 +150,9 @@ EXCEPTION
       DBMS_OUTPUT.put_line(result);
    WHEN duplicate_course_id THEN
       result :='이미 있는 과목ID와 분반 번호 입니다.';
+      DBMS_OUTPUT.put_line(result);
+  WHEN course_number_error THEN
+      result :='잘못된 분반 번호 입니다.';
       DBMS_OUTPUT.put_line(result);
    WHEN duplicate_course_name THEN
       result :='이미 있는 과목이름 입니다.';

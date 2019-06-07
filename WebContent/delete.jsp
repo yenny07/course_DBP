@@ -75,6 +75,7 @@
 		word-break: keep-all;
 		white-space:pre-line
 	}
+	
 </style>
 <body>
 <%@ include file="top.jsp" %>

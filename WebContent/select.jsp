@@ -228,12 +228,10 @@ try {
        courseMax.add(rs.getInt("c_max"));
        courseCurrent.add(rs.getInt("c_current"));
    }
-<<<<<<< HEAD
-	%>
-=======
+
    }
    %>
->>>>>>> 059a020dadfea63c9d838306301204209ffe8c98
+
 </div>
 
 

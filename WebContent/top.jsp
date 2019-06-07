@@ -81,15 +81,15 @@
       </div>
       <li class="nav-item">
         <b><a class="nav-link" href=insert_prof.jsp?year_semester=201902><i class="fas fa-fw fa-mouse-pointer"></i>
-          <span>강의개설 입력</span></a></b>
+          <span>개설강의 입력</span></a></b>
       </li>
       <li class="nav-item">
         <b><a class="nav-link" href=delete.jsp><i class="fas fa-fw fa-times"></i>
-          <span>강의개설 삭제</span></a></b>
+          <span>개설강의 삭제</span></a></b>
       </li>
       <li class="nav-item">
         <b><a class="nav-link" href=select.jsp?year_semester=201902><i class="fas fa-fw fa-table"></i>
-          <span>강의개설 조회</span></a></b>
+          <span>개설강의 조회</span></a></b>
       </li>   
     <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

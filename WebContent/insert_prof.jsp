@@ -38,20 +38,19 @@
 		float:left;
 		overflow:auto
 	}
+	
 	#table-header{
-		width:70%;
+		width:100%;
 		float:left;
 		overflow:auto
 	}
 	
 	
-	select{
+	#year-dropdown{
 		float:right;
 	}
 	
 	#current-credit{
-		margin-left:20px;
-		margin-right:5px;
 		float:left;
 	}
 	
@@ -65,6 +64,7 @@
 		margin : auto;
 		width:100%;
 	}
+	
 	th{
 		text-align: center;
 		word-break: keep-all;
@@ -75,12 +75,36 @@
 		word-break: keep-all;
 		white-space:pre-line
 	}
+	
+	#insert-button{
+		margin:auto;
+	}
+	
+	#input-box{
+		margin-top:5px;
+		text-align:center;
+		width:100%;
+		height:38px;
+	}
+	
 </style>
 
 <body>
 <%@ include file="top.jsp" %>
-<div id="table-header">
-<%
+	<!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+	
+      <!-- Main Content -->
+      <div id="content">
+
+        <div class="container-fluid">
+
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between">
+          	
+          	<div id="table-header">
+          	<%
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
 		year_semester = 201902;
@@ -95,38 +119,38 @@
 	
 	if(year_semester == 201902){
 		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
-			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
-    		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
-    		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
+		<select id="year-dropdown" name="year_semester" onchange="location = this.value;">
+			<option value='insert_prof.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
+			<option value='insert_prof.jsp?year_semester=201901' >2019년 1학기</option>
+    		<option value='insert_prof.jsp?year_semester=201802'>2018년 2학기</option>
+    		<option value='insert_prof.jsp?year_semester=201801'>2018년 1학기</option>
 		</select>
 		<%
 	}else if(year_semester == 201901){
 		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
-			<option value='insert.jsp?year_semester=201901' selected="selected" >2019년 1학기</option>
-    		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
-    		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
+		<select id="year-dropdown" name="year_semester" onchange="location = this.value;">
+			<option value='insert_prof.jsp?year_semester=201902'>2019년 2학기</option>	
+			<option value='insert_prof.jsp?year_semester=201901' selected="selected" >2019년 1학기</option>
+    		<option value='insert_prof.jsp?year_semester=201802'>2018년 2학기</option>
+    		<option value='insert_prof.jsp?year_semester=201801'>2018년 1학기</option>
 		</select>
 		<%
 	}else if(year_semester == 201802){
 		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
-			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
-    		<option value='insert.jsp?year_semester=201802' selected="selected">2018년 2학기</option>
-    		<option value='insert.jsp?year_semester=201801'>2018년 1학기</option>
+		<select id="year-dropdown" name="year_semester" onchange="location = this.value;">
+			<option value='insert_prof.jsp?year_semester=201902'>2019년 2학기</option>	
+			<option value='insert_prof.jsp?year_semester=201901' >2019년 1학기</option>
+    		<option value='insert_prof.jsp?year_semester=201802' selected="selected">2018년 2학기</option>
+    		<option value='insert_prof.jsp?year_semester=201801'>2018년 1학기</option>
 		</select>
 		<%
 	}else if(year_semester == 201801){
 		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902'>2019년 2학기</option>	
-			<option value='insert.jsp?year_semester=201901' >2019년 1학기</option>
-    		<option value='insert.jsp?year_semester=201802'>2018년 2학기</option>
-    		<option value='insert.jsp?year_semester=201801' selected="selected">2018년 1학기</option>
+		<select id="year-dropdown" name="year_semester" onchange="location = this.value;">
+			<option value='insert_prof.jsp?year_semester=201902'>2019년 2학기</option>	
+			<option value='insert_prof.jsp?year_semester=201901' >2019년 1학기</option>
+    		<option value='insert_prof.jsp?year_semester=201802'>2018년 2학기</option>
+    		<option value='insert_prof.jsp?year_semester=201801' selected="selected">2018년 1학기</option>
 		</select>
 		<%
 	}
@@ -154,47 +178,101 @@
 
 %>
 <% 
-	if(session_id.length() == 7){
-		String creditSQL = "{? = call get_stu_credit(?)}";
+		String creditSQL = "{? = call get_prof_credit(?)}";
 		CallableStatement cstmt = myConn.prepareCall(creditSQL);
 		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 		cstmt.setString(2, session_id);
 		cstmt.execute();
-		int s_credit = cstmt.getInt(1);
+		int p_credit = cstmt.getInt(1);
 		
-		String std_SQL = "select isLeaved from student where s_id = '" + session_id + "'";
-		Statement std_stmt = myConn.createStatement();
-		ResultSet std_rs = std_stmt.executeQuery(std_SQL);
-		std_rs.next();
-
-		isLeaved = std_rs.getInt("isLeaved");
-		if (isLeaved == 0){
-	%>
+%>
 	<div id="current-credit">
-		<p>현재 신청한 학점 : <%= s_credit %></p>
+		<p>현재 개설한 강의 : <%= p_credit %> 학점</p>
 	</div>
-
-	<%}else{
-		%>
-	<div id="current-credit">
-		<p>현재 휴학 중입니다.</p>
-	</div>
-	<%
-	}
-	
-}%>
+          	
+			<form method="post" action="insert_verify.jsp" >
+        	<table class="table table-bordered" border>
+        	<tr>
+        		<td colspan="4" >과목번호</td>
+        		<td colspan="4"><input id="c_id" type="text" name="c_id" size="20"></td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">분반번호</td>
+        		<td colspan="4"><input id="c_id_no" type="text" name="c_id_no" size="20"></td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">과목이름</td>
+        		<td colspan="4"><input id="c_name" type="text" name="c_name" size="20"></td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">전공</td>
+        		<td colspan="4"><input id="c_major" type="text" name="c_major" size="20"></td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">학점</td>
+        		<td colspan="4"><input id="c_credit" type="text" name="c_credit" size="20"></td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">최대인원</td>
+        		<td colspan="4"><input id="c_max" type="text" name="c_max" size="20"></td>
+        	</tr>
+        	<tr>
+        		<td>첫번째 날</td>
+        		<td>
+        			<select id="day-period" name="c_day1">
+        				<option value="1" selected="selected">월</option>
+        				<option value="2" >화</option>
+        				<option value="3" >수</option>
+        				<option value="4" >목</option>
+        				<option value="5" >금</option>
+        			</select>
+        		</td>
+        		<td>교시</td>
+        		<td>
+        			<select id="day-period"  name="c_period1">
+        				<option value="1" selected="selected">1</option>
+        				<option value="2" >2</option>
+        				<option value="3" >3</option>
+        				<option value="4" >4</option>
+        				<option value="5" >5</option>
+        				<option value="6" >6</option>
+        				<option value="7" >7</option>
+        			</select>
+        		</td>
+        		<td>두번째 날</td>
+        		<td>
+        			<select id="day-period"  name="c_day2">
+        				<option value="1" >월</option>
+        				<option value="2" >화</option>
+        				<option value="3" selected="selected">수</option>
+        				<option value="4" >목</option>
+        				<option value="5" >금</option>
+        			</select>
+        		</td>
+        		<td>교시</td>
+        		<td>
+        			<select id="day-period"  name="c_period2">
+        				<option value="1" selected="selected">1</option>
+        				<option value="2" >2</option>
+        				<option value="3" >3</option>
+        				<option value="4" >4</option>
+        				<option value="5" >5</option>
+        				<option value="6" >6</option>
+        				<option value="7" >7</option>
+        			</select>
+        		</td>
+        	</tr>
+        	</table>
+        	<div id ="input-box">
+        					<INPUT class="btn btn-primary" id="insert-button" TYPE="SUBMIT" NAME="Submit" VALUE="작성완료">
+							<INPUT class="btn btn-primary" id="insert-button" TYPE="RESET" VALUE="초기화">
+        	</div>
+        </form>
+		<p>개설된 강의</p>
 </div>
-	<!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-        <div class="container-fluid">
-
-          <!-- Page Heading -->
+          
+</div>
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-
 <table class="table table-bordered" align="center" border>
 <tr>
          <th>과목번호</th>
@@ -205,8 +283,7 @@
          <th>학점</th>
          <th>현재 수강인원</th>
          <th>최대 수강인원</th>
-         <th>수강신청</th>
-      </tr>
+         </tr>
 <%
 
 
@@ -293,17 +370,6 @@
   <td align="center"><%= c_credit %></td>
   <td align="center"><%= c_current %></td>
   <td align="center"><%= c_max %></td>
-  <%
-  	if(year_semester == 201902 && isLeaved == 0 && session_id.length() == 7){
-  		%>
-  		<td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
-  		<%
-  	}else{
-	  %>
-	  <td align="center">신청불가</td>
-  		<%
-  }
-%>
 </tr>
 <%
 		}
