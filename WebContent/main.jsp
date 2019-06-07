@@ -222,9 +222,7 @@ int isLeavedNo = 0; String isLeaved = "";
                   }
             
             
-            myConn.close(); } else {
-			response.sendRedirect("login.jsp");
-		} %>
+            myConn.close(); }%>
 
         </div>
         <!-- /.container-fluid -->

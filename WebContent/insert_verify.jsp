@@ -1,5 +1,9 @@
 <%@ page contentType="text/html; charset=EUC-KR" %>
 <%@ page import="java.sql.*" %>
+<% 
+    request.setCharacterEncoding("UTF-8");
+%>
+
 <html><head><title> 수강신청 입력 </title></head>
 <body>
 <%

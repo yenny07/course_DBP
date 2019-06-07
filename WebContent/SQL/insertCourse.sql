@@ -5,7 +5,10 @@ CREATE OR REPLACE PROCEDURE InsertCourse(professorID IN VARCHAR2, courseID IN VA
 			courseDAY2 IN NUMBER, coursePERIOD2 IN NUMBER,
 			result OUT VARCHAR2)
 IS
+	minimum_credit EXCEPTION;
+	maximum_credit EXCEPTION;
 	credit_limit_over EXCEPTION;
+	minimum_students EXCEPTION;	
 	too_many_students EXCEPTION;
 	same_days EXCEPTION;
 	duplicate_period EXCEPTION;
@@ -22,6 +25,11 @@ IS
 	periodCOUNT2 NUMBER;
 	nYEAR NUMBER;
 	nSEMESTER NUMBER;
+	tempDAY1 NUMBER;
+	tempPERIOD1 NUMBER;	
+	tempDAY2 NUMBER;
+	tempPERIOD2 NUMBER;
+
 BEGIN
 	result := ' ';
 	nYEAR := Date2EnrollYear(SYSDATE);
@@ -33,6 +41,21 @@ BEGIN
 	/*첫번째 날과 두번째 날이 같은날*/
 	IF courseDAY1 = courseDAY2 THEN
 		RAISE same_days;
+	END IF;
+	
+	/*최소 최대 학점*/
+	IF courseCREDIT < 1 THEN
+		RAISE minimum_credit;
+	END IF;
+
+	IF courseCREDIT >3 THEN
+		RAISE maximum_credit;
+	END IF;
+
+	/* 최소 학생 수*/
+
+	IF courseMAX <10 THEN
+		RAISE minimum_students;
 	END IF;
 
 	/*최대 개설 강의 초과*/
@@ -76,7 +99,7 @@ BEGIN
 
 	DBMS_OUTPUT.put_line(courseNUMBER);	
 
-	IF (courseNUMBER+1) != courseIDNO THEN
+	IF (courseNUMBER+1) != courseIDNO OR courseIDNO < 1 THEN
 		RAISE course_number_error;
 	END IF;
 	
@@ -110,30 +133,44 @@ BEGIN
 			RAISE diffrent_course_name;
 		END IF;
 	END IF;
+
+	IF courseDAY1 < courseDAY2 THEN
+		tempDAY1 := courseDAY1;
+		tempPERIOD1 := coursePERIOD1;
+		tempDAY2 := courseDAY2;
+		tempPERIOD2 := coursePERIOD2;
+	ELSE
+		tempDAY1 := courseDAY2;
+		tempPERIOD1 := coursePERIOD2;
+		tempDAY2 := courseDAY1;
+		tempPERIOD2 := coursePERIOD1;
+	END IF;
 	
 	/*이미 개설한 강의 시간대*/
 	SELECT count(*)
 	INTO periodCOUNT1
 	FROM course
 	WHERE p_id = professorID AND c_year = nYEAR AND c_semester = nSEMESTER
-		AND c_day1 = courseDAY1 AND c_period1 = coursePERIOD1;
+		AND c_day1 = tempDAY1 AND c_period1 = tempPERIOD1;
 	
 	SELECT count(*)
 	INTO periodCOUNT2
 	FROM course
 	WHERE p_id = professorID AND c_year = nYEAR AND c_semester = nSEMESTER
-		AND c_day2 = courseDAY2 AND c_period2 = coursePERIOD2;
+		AND c_day2 = tempDAY2 AND c_period2 = tempPERIOD2;
 
 	DBMS_OUTPUT.put_line(periodCOUNT1 || ' / ' || periodCOUNT2);
 
 	IF periodCOUNT1 > 0 OR periodCOUNT2 > 0 THEN
 		RAISE duplicate_period;
 	END IF;
-	
-	INSERT INTO course(c_id, c_name, c_year, c_semester, p_id, c_credit, c_number,
+
+	INSERT INTO course(c_id, c_name, c_year, c_semester, p_id, c_credit, c_number,c_major,
 			c_day1, c_day2, c_period1, c_period2, c_max, c_current)
-   	VALUES (courseID, courseNAME, nYEAR, nSEMESTER, professorID, courseCREDIT, courseIDNO,
-		courseDAY1, courseDAY2, coursePERIOD1, coursePERIOD2, courseMAX, 0);
+   	VALUES (courseID, courseNAME, nYEAR, nSEMESTER, professorID, courseCREDIT, courseIDNO, courseMAJOR,
+			tempDAY1, tempDAY2, tempPERIOD1, tempPERIOD2, courseMAX, 0);
+
+
 	
 	result := '강의개설이 완료되었습니다.';
 	DBMS_OUTPUT.put_line(result);
@@ -142,6 +179,15 @@ BEGIN
 EXCEPTION
    WHEN NO_DATA_FOUND THEN
       DBMS_OUTPUT.put_line('no data found');
+   WHEN minimum_credit THEN
+      result := '최소 학점은 1학점입니다.';
+      DBMS_OUTPUT.put_line(result);
+   WHEN maximum_credit THEN
+      result := '최대 학점은 3학점입니다.';
+      DBMS_OUTPUT.put_line(result);
+   WHEN minimum_students THEN
+      result := '최소 학생 수는 10명입니다.';
+      DBMS_OUTPUT.put_line(result);
    WHEN same_days THEN
       result := '첫번째 날과 두번째 날이 같은 요일입니다.';
       DBMS_OUTPUT.put_line(result);

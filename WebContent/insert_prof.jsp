@@ -1,5 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*"  %>
+<% 
+    request.setCharacterEncoding("UTF-8");
+%>
+
 <html>
 <head>
 <title>수강신청 입력</title>
@@ -194,27 +198,33 @@
         	<table class="table table-bordered" border>
         	<tr>
         		<td colspan="4" >과목번호</td>
-        		<td colspan="4"><input id="c_id" type="text" name="c_id" size="20"></td>
+        		<td colspan="4"><input id="c_id" type="text" name="c_id" size="20" placeholder="C0000"></td>
         	</tr>
         	<tr>
         		<td colspan="4">분반번호</td>
-        		<td colspan="4"><input id="c_id_no" type="text" name="c_id_no" size="20"></td>
+        		<td colspan="4"><input id="c_id_no" type="text" name="c_id_no" size="20" placeholder="1이상의 숫자"></td>
         	</tr>
         	<tr>
         		<td colspan="4">과목이름</td>
-        		<td colspan="4"><input id="c_name" type="text" name="c_name" size="20"></td>
+        		<td colspan="4"><input id="c_name" type="text" name="c_name" size="20" placeholder="25자 이하"></td>
         	</tr>
         	<tr>
         		<td colspan="4">전공</td>
-        		<td colspan="4"><input id="c_major" type="text" name="c_major" size="20"></td>
+        		<td colspan="4">
+        			<select id="day-period" name="c_major">
+        				<option value="기초교양대학" selected="selected">기초교양대학</option>
+        				<option value="컴퓨터과학부" >컴퓨터과학부</option>
+        				<option value="경영학부" >경영학부</option>
+        			</select>
+        		</td>
         	</tr>
         	<tr>
         		<td colspan="4">학점</td>
-        		<td colspan="4"><input id="c_credit" type="text" name="c_credit" size="20"></td>
+        		<td colspan="4"><input id="c_credit" type="text" name="c_credit" size="20" placeholder="1~3 사이의 숫자"></td>
         	</tr>
         	<tr>
         		<td colspan="4">최대인원</td>
-        		<td colspan="4"><input id="c_max" type="text" name="c_max" size="20"></td>
+        		<td colspan="4"><input id="c_max" type="text" name="c_max" size="20" placeholder="10이상 200이하의 숫자"></td>
         	</tr>
         	<tr>
         		<td>첫번째 날</td>
