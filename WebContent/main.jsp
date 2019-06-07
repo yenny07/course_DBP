@@ -67,15 +67,15 @@ String passwd = "2019"; //pw
 
 Class.forName(dbdriver); // DriverManager.registerDriver(dbdriver);
 Connection myConn = null;
-Statement stmt = null;
-String mySQL = null;
+CallableStatement cstmt = null;
+String sql = null;
 
 // show_stu_info 변수
-String s_pwd = null; 
-String s_name = null; 
-int s_grade = 0; 
-String s_major = null; 
-int s_credit = 0;
+String pwd = null; 
+String name = null; 
+int grade = 0; 
+String major = null; 
+int credit = 0;
 int isLeavedNo = 0; String isLeaved = "";
 
 %>
@@ -85,85 +85,131 @@ int isLeavedNo = 0; String isLeaved = "";
 
       <!-- Main Content -->
       <div id="content">
+      
+      <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
 
             <% if (session_id != null) {
             	try{
                     // oracle 연결
                      myConn = DriverManager.getConnection(dburl, user, passwd);
                     
+                   if(session_id.length() == 7){
                      /* show_stu_info 호출*/
-                   String sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
-                   CallableStatement cstmt = myConn.prepareCall(sql);
-                   cstmt.setString(1, session_id); // s_id
-                   cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
-                   cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //s_name
-                   cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
-                   cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
-                   cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
-                   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
-                   cstmt.execute(); // 프로시저 실행
+	                   sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
+    	               cstmt = myConn.prepareCall(sql);
+        	           cstmt.setString(1, session_id); // s_id
+       		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
+       	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //s_name
+    	               cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
+        	           cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
+            	       cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
+                	   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
+	                   cstmt.execute(); // 프로시저 실행
+	
+    	               pwd = cstmt.getString(2);
+        	           name = cstmt.getString(3);
+            	       grade = cstmt.getInt(4);
+                	   major = cstmt.getString(5);
+    	               credit = cstmt.getInt(6);
+        	           isLeavedNo = cstmt.getInt(7);
+            	       
+	                   if(isLeavedNo == 1){
+    	            	   isLeaved = "휴학";
+        	           }else{
+    	            	   isLeaved = "재학";
+        	           }
+            	       System.out.println(session_id + pwd + name + grade + major + credit + isLeavedNo + isLeaved);
+            	       
+                       %>        
+                 		<table class="table table-bordered" align="center" id="update_table">
+                 		<tr>
+                 			<th colspan="3" style="text-align:center">회원 정보</th>
+          				<tr>
+          				<tr>
+          	 				<td rowspan="6" style="text-align:center"><img src="img/character_new03.gif" alt="profile" id="profile"></td>
+            				<td id="update_td">학번</td>
+            				<td><%=session_id%></td>
+         	 			</tr>
+          				<tr>
+            				<td id = "student_name">이름</td>
+            				<td ><%=name%></td>
+          				</tr>
+          				<tr>
+            				<td id = "student_grade">학년</td>
+           					<td ><%=grade%></td>
+          				</tr>
+          				<tr>
+            				<td id = "student_major">전공</td>
+            				<td ><%=major%></td>
+          				</tr>
+          				<tr>
+       				     <td id = "student_credit">수강학점</td>
+            				<td ><%=credit%> / 18</td>
+          				</tr>
+        				<tr>
+            				<td id = "student_isLeaved">학적상태</td>
+            				<td ><%=isLeaved%></td>
+          				</tr>
+           			</table>
 
-                   s_pwd = cstmt.getString(2);
-                   s_name = cstmt.getString(3);
-                   s_grade = cstmt.getInt(4);
-                   s_major = cstmt.getString(5);
-                   s_credit = cstmt.getInt(6);
-                   isLeavedNo = cstmt.getInt(7);
-                   
-                   if(isLeavedNo == 1){
-                	   isLeaved = "휴학";
+       		<%
+            	       
                    }else{
-                	   isLeaved = "재학";
+                	   sql = "{call show_prof_info(?,?,?,?,?)}";
+    	               cstmt = myConn.prepareCall(sql);
+        	           cstmt.setString(1, session_id); // p_id
+       		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // p_pwd
+       	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //p_name
+    	               cstmt.registerOutParameter(4, java.sql.Types.VARCHAR); // p_major
+            	       cstmt.registerOutParameter(5, java.sql.Types.INTEGER); // p_credit
+                	   cstmt.execute(); // 프로시저 실행
+	
+    	               pwd = cstmt.getString(2);
+        	           name = cstmt.getString(3);
+            	       major = cstmt.getString(4);
+    	               credit = cstmt.getInt(5);
+        	           
+            	       System.out.println(session_id + pwd + name + grade + major + credit + isLeavedNo + isLeaved);
+                       %>        
+                 		<table class="table table-bordered" align="center" id="update_table">
+                 		<tr>
+                 			<th colspan="3" style="text-align:center">회원 정보</th>
+          				<tr>
+          				<tr>
+          	 				<td rowspan="4" style="text-align:center"><img src="img/character_new06.gif" alt="profile" id="profile"></td>
+            				<td id="update_td">학번</td>
+            				<td><%=session_id%></td>
+         	 			</tr>
+          				<tr>
+            				<td id = "student_name">이름</td>
+            				<td ><%=name%></td>
+          				</tr>
+          				<tr>
+            				<td id = "student_major">전공</td>
+            				<td ><%=major%></td>
+          				</tr>
+          				<tr>
+       				     <td id = "student_credit">강의학점</td>
+            				<td ><%=credit%> / 10</td>
+          				</tr>
+           			</table>
+
+       		<%
                    }
-                   System.out.println(session_id + s_pwd + s_name + s_grade + s_major + s_credit + isLeavedNo + isLeaved);
+                   
+                   
+                   
                   }catch(SQLException e){
                       out.println(e);
                       e.printStackTrace();
                   }
             
             
-            %>
-                    
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          		<table class="table table-bordered" align="center" id="update_table">
-          		<tr>
-          			<th colspan="3" style="text-align:center">회원 정보</th>
-   				<tr>
-   <tr>
-   	 <td rowspan="6" style="text-align:center"><img src="img/character_new03.gif" alt="profile" id="profile"></td>
-     <td id="update_td">학번</td>
-     <td><%=session_id%></td>
-   </tr>
-   <tr>
-     <td id = "student_name">이름</td>
-     <td ><%=s_name%></td>
-   </tr>
-   <tr>
-     <td id = "student_grade">학년</td>
-     <td ><%=s_grade%></td>
-   </tr>
-   <tr>
-     <td id = "student_major">전공</td>
-     <td ><%=s_major%></td>
-   </tr>
-   <tr>
-     <td id = "student_credit">수강학점</td>
-     <td ><%=s_credit%> / 18</td>
-   </tr>
-   <tr>
-     <td id = "student_isLeaved">학적상태</td>
-     <td ><%=isLeaved%></td>
-   </tr>
-    </table>
-
-		  </div>
-		  
-		  
-		<% myConn.close(); } else {
+            myConn.close(); } else {
 			response.sendRedirect("login.jsp");
 		} %>
 

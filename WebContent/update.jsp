@@ -93,7 +93,7 @@ int isLeavedNo = 0; String isLeaved = "";
                      myConn = DriverManager.getConnection(dburl, user, passwd);
                     
                      /* show_stu_info 호출*/
-                  String sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
+                   String sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
                    CallableStatement cstmt = myConn.prepareCall(sql);
                    cstmt.setString(1, session_id); // s_id
                    cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
