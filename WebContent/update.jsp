@@ -40,7 +40,12 @@
 		float : left;
 		overflow : auto
 	}
+<<<<<<< HEAD
 	#update_post {
+=======
+	
+	#update_post{
+>>>>>>> ca6864b4ce43ae98a1bd0855577097f138051911
 		margin : auto;
 		width : 100%;
 	}	
