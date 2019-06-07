@@ -90,19 +90,18 @@ int isLeavedNo = 0; String isLeaved = "";
                     
                      if(session_id.length() == 7){
                          /* show_stu_info 호출*/
-    	                   sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
+    	                   sql = "{call show_stu_info(?,?,?,?,?,?)}";
         	               cstmt = myConn.prepareCall(sql);
             	           cstmt.setString(1, session_id); // s_id
            		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
            	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //s_name
         	               cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
             	           cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
-                	       cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
-                    	   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
+                	       cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // isLeaved
     	                   cstmt.execute(); // 프로시저 실행
     	
         	               pwd = cstmt.getString(2);
-            	           isLeavedNo = cstmt.getInt(7);
+            	           isLeavedNo = cstmt.getInt(6);
                 	       
     	                   if(isLeavedNo == 1){
         	            	   isLeaved = "휴학";
@@ -112,14 +111,13 @@ int isLeavedNo = 0; String isLeaved = "";
                 	       System.out.println(session_id + pwd + isLeavedNo + isLeaved);
                      }else{
                     	 
-                    	 sql = "{call show_prof_info(?,?,?,?,?)}";
+                    	 sql = "{call show_prof_info(?,?,?,?)}";
       	               cstmt = myConn.prepareCall(sql);
           	           cstmt.setString(1, session_id); // p_id
          		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // p_pwd
          	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //p_name
       	               cstmt.registerOutParameter(4, java.sql.Types.VARCHAR); // p_major
-              	       cstmt.registerOutParameter(5, java.sql.Types.INTEGER); // p_credit
-                  	   cstmt.execute(); // 프로시저 실행
+              	       cstmt.execute(); // 프로시저 실행
   	
       	               pwd = cstmt.getString(2);
           	           
@@ -199,9 +197,7 @@ int isLeavedNo = 0; String isLeaved = "";
 		  </div>
 		  
 		  
-		<% myConn.close(); } else {
-			response.sendRedirect("login.jsp");
-		}%>
+		<% myConn.close(); }%>
 
         </div>
         <!-- /.container-fluid -->
