@@ -109,9 +109,6 @@ BEGIN
    SET c_current = courseCURRENT + 1
    WHERE c_id = courseID AND c_number = courseIDNO AND c_year = nYEAR AND c_semester = nSEMESTER;
 
-   UPDATE student
-   SET s_credit = (courseSUM + courseCREDIT)
-   WHERE s_id = studentID;
 
    result := '수강신청이 완료되었습니다.';
    DBMS_OUTPUT.put_line(result);
