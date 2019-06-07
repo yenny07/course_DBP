@@ -29,11 +29,7 @@
 		System.out.println("오라클 연결 실패");
 	}
 	
-<<<<<<< HEAD
-=======
-	
-	
->>>>>>> 059a020dadfea63c9d838306301204209ffe8c98
+
 	CallableStatement cstmt = myConn.prepareCall("{call InsertEnroll(?,?,?,?)}",
 			ResultSet.TYPE_SCROLL_SENSITIVE,
 	        ResultSet.CONCUR_READ_ONLY);
