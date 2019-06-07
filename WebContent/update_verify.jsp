@@ -20,17 +20,32 @@ String mySql;
       String enterPwdConfirm = request.getParameter("passwordConfirm");
       
       if (enterPwd.equals(enterPwdConfirm)) {
-    	 mySql = "{call change_pwd(?,?)}";
-    	 cstmt = myConn.prepareCall(mySql);
-    	 cstmt.setString(1, enterId);
-    	 cstmt.setString(2, enterPwd);
-    	 cstmt.execute();
-%>
-         <script>
-            alert("수정이 완료되었습니다");
-            location.href = "main.jsp";
-         </script>   
-<%      
+    	  if(enterId.length() == 7){
+    		  mySql = "{call change_pwd(?,?)}";
+    	    	 cstmt = myConn.prepareCall(mySql);
+    	    	 cstmt.setString(1, enterId);
+    	    	 cstmt.setString(2, enterPwd);
+    	    	 cstmt.execute();
+    			%>
+    	         <script>
+    	            alert("수정이 완료되었습니다");
+    	            location.href = "main.jsp";
+    	         </script>
+    	         <%
+    	  }else{
+    	  	mySql = "{call change_pwd_prof(?,?)}";
+    	    	 cstmt = myConn.prepareCall(mySql);
+    	    	 cstmt.setString(1, enterId);
+    	    	 cstmt.setString(2, enterPwd);
+    	    	 cstmt.execute();
+    			%>
+    	         <script>
+    	            alert("수정이 완료되었습니다");
+    	            location.href = "main.jsp";
+    	         </script>
+    	         <% 
+    	  }
+    	       
       }
       else {
 %>
@@ -40,12 +55,13 @@ String mySql;
          </script>
 <%      
       }
-   } catch(SQLException ex) {
+   	}
+   	catch(SQLException ex) {
       String sMessage;
       System.out.println(ex.getErrorCode());
       
       if (ex.getErrorCode() == 20002) {
-         sMessage="암호는 5자리 이상이어야 합니다";
+         sMessage="암호는 4자리 이상이어야 합니다";
       }
       else if (ex.getErrorCode() == 20003) {
          sMessage="암호에 공란은 입력되지 않습니다.";
