@@ -70,15 +70,11 @@ String passwd = "2019"; //pw
 
 Class.forName(dbdriver); // DriverManager.registerDriver(dbdriver);
 Connection myConn = null;
-Statement stmt = null;
-String mySQL = null;
+CallableStatement cstmt = null;
+String sql = null;
 
 // show_stu_info 변수
-String s_pwd = null; 
-String s_name = null; 
-int s_grade = 0; 
-String s_major = null; 
-int s_credit = 0;
+String pwd = null; 
 int isLeavedNo = 0; String isLeaved = "";
 %>
 	<!-- Content Wrapper -->
@@ -92,28 +88,45 @@ int isLeavedNo = 0; String isLeaved = "";
                     // oracle 연결
                      myConn = DriverManager.getConnection(dburl, user, passwd);
                     
-                     /* show_stu_info 호출*/
-                   String sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
-                   CallableStatement cstmt = myConn.prepareCall(sql);
-                   cstmt.setString(1, session_id); // s_id
-                   cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
-                   cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //s_name
-                   cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
-                   cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
-                   cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
-                   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
-                   cstmt.execute(); // 프로시저 실행
-
-                   isLeavedNo = cstmt.getInt(7);
-                   
-                   if(isLeavedNo == 1){
-                	   isLeaved = "휴학";
-                   }else{
-                	   isLeaved = "재학";
-                   }
-                   
-                   System.out.println(session_id + s_pwd + s_name + s_grade + s_major + s_credit);
-                  }catch(SQLException e){
+                     if(session_id.length() == 7){
+                         /* show_stu_info 호출*/
+    	                   sql = "{call show_stu_info(?,?,?,?,?,?,?)}";
+        	               cstmt = myConn.prepareCall(sql);
+            	           cstmt.setString(1, session_id); // s_id
+           		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
+           	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //s_name
+        	               cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
+            	           cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
+                	       cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // s_credit
+                    	   cstmt.registerOutParameter(7, java.sql.Types.INTEGER); // isLeaved
+    	                   cstmt.execute(); // 프로시저 실행
+    	
+        	               pwd = cstmt.getString(2);
+            	           isLeavedNo = cstmt.getInt(7);
+                	       
+    	                   if(isLeavedNo == 1){
+        	            	   isLeaved = "휴학";
+            	           }else{
+        	            	   isLeaved = "재학";
+            	           }
+                	       System.out.println(session_id + pwd + isLeavedNo + isLeaved);
+                     }else{
+                    	 
+                    	 sql = "{call show_prof_info(?,?,?,?,?)}";
+      	               cstmt = myConn.prepareCall(sql);
+          	           cstmt.setString(1, session_id); // p_id
+         		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // p_pwd
+         	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //p_name
+      	               cstmt.registerOutParameter(4, java.sql.Types.VARCHAR); // p_major
+              	       cstmt.registerOutParameter(5, java.sql.Types.INTEGER); // p_credit
+                  	   cstmt.execute(); // 프로시저 실행
+  	
+      	               pwd = cstmt.getString(2);
+          	           
+              	       System.out.println(session_id + pwd);
+      
+                     }
+                          }catch(SQLException e){
                       out.println(e);
                       e.printStackTrace();
                   }
@@ -148,6 +161,9 @@ int isLeavedNo = 0; String isLeaved = "";
     			</tr>
     			</table>
           	</form>
+          	<%
+          	if(session_id.length() == 7){
+          	%>
           	<table class="table table-bordered" align="center" id="isLeaved_table">
           		<tr>
           			<th colspan="2" style="text-align:center">휴학신청</th>
@@ -171,7 +187,9 @@ int isLeavedNo = 0; String isLeaved = "";
            		<input class="btn btn-primary" id="leave_btn" name = "leaved" type="button" value = "휴학  신청" onclick = "leaveSemester()">
            		</td>
            	<%
-        	}
+        		}
+          	}		
+   				
         %>
         		</tr>
 
