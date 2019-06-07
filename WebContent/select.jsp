@@ -154,52 +154,82 @@ ArrayList<Integer> courseDay1 = new ArrayList<>();
 ArrayList<Integer> courseDay2 = new ArrayList<>();
 ArrayList<Integer> coursePeriod1 = new ArrayList<>();
 ArrayList<Integer> coursePeriod2 = new ArrayList<>();
+ArrayList<Integer> courseMax = new ArrayList<>();
+ArrayList<Integer> courseCurrent = new ArrayList<>();
 int day1;
 int day2;
-String p_id;
+String p_id, sql;
 
 String period1;
 String period2;
 
 CallableStatement cstmt;
+ResultSet rs;
 
 try {
    Class.forName(dbdriver);
    Connection myConn = DriverManager.getConnection(dburl, user, passwd);
+   String stuOrProf = session_id;
    
-   String sql = "{call getCourseINF(?, ?, ?, ?)}";
-   cstmt = myConn.prepareCall(sql);
-   cstmt.setString(1, session_id);
-   cstmt.setInt(2, nYear);
-   cstmt.setInt(3, nSemester);
-   cstmt.registerOutParameter(4, oracle.jdbc.OracleTypes.CURSOR);
-   cstmt.execute();
-   ResultSet rs = (ResultSet)cstmt.getObject(4);
-   
-   while (rs.next()) {
-      courseID.add(rs.getString("c_id"));
-      courseName.add(rs.getString("c_name"));
-      profID.add(rs.getString("p_id"));
-      courseCredit.add(rs.getInt("c_credit"));
-      courseNumber.add(rs.getInt("c_number"));
-      courseMajor.add(rs.getString("c_major"));
-      coursePeriod1.add(rs.getInt("c_period1"));
-      coursePeriod2.add(rs.getInt("c_period2"));
-      courseDay1.add(rs.getInt("c_day1"));
-      courseDay2.add(rs.getInt("c_day2"));
+   if (stuOrProf.length() == 7) {
+	sql = "{call getCourseINF(?, ?, ?, ?)}";
+	cstmt = myConn.prepareCall(sql);
+	cstmt.setString(1, session_id);
+	cstmt.setInt(2, nYear);
+	cstmt.setInt(3, nSemester);
+	cstmt.registerOutParameter(4, oracle.jdbc.OracleTypes.CURSOR);
+	cstmt.execute();
+	rs = (ResultSet)cstmt.getObject(4);
+	
+	while (rs.next()) {
+		courseID.add(rs.getString("c_id"));
+		courseName.add(rs.getString("c_name"));
+		profID.add(rs.getString("p_id"));
+		courseCredit.add(rs.getInt("c_credit"));
+		courseNumber.add(rs.getInt("c_number"));
+		courseMajor.add(rs.getString("c_major"));
+		coursePeriod1.add(rs.getInt("c_period1"));
+		coursePeriod2.add(rs.getInt("c_period2"));
+		courseDay1.add(rs.getInt("c_day1"));
+	    courseDay2.add(rs.getInt("c_day2"));
+	}
+	   String creditSQL = "{? = call get_stu_credit(?)}";
+	  	cstmt = myConn.prepareCall(creditSQL);
+	  	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+	  	cstmt.setString(2, session_id);
+	  	cstmt.execute();
+		int s_credit = cstmt.getInt(1);
+		%>
+	<div id="current-credit">
+		<p>현재 신청한 학점 : <%= s_credit %></p>
+	</div>
+<%	
+	}
+   else {
+	sql = "{call getCourseINF_Prof(?, ?, ?, ?)}";
+	cstmt = myConn.prepareCall(sql);
+	cstmt.setString(1, session_id);
+	cstmt.setInt(2, nYear);
+	cstmt.setInt(3, nSemester);
+	cstmt.registerOutParameter(4, oracle.jdbc.OracleTypes.CURSOR);
+	cstmt.execute();
+	rs = (ResultSet)cstmt.getObject(4);
+	
+	while (rs.next()) {
+		courseID.add(rs.getString("c_id"));
+		courseName.add(rs.getString("c_name"));
+		courseCredit.add(rs.getInt("c_credit"));
+		courseNumber.add(rs.getInt("c_number"));
+		courseMajor.add(rs.getString("c_major"));
+		coursePeriod1.add(rs.getInt("c_period1"));
+		coursePeriod2.add(rs.getInt("c_period2"));
+		courseDay1.add(rs.getInt("c_day1"));
+	    courseDay2.add(rs.getInt("c_day2"));
+	    courseMax.add(rs.getInt("c_max"));
+	    courseCurrent.add(rs.getInt("c_current"));
+	}
    }
-   
-
-   creditSQL = "{? = call get_stu_credit(?)}";
-  	cstmt = myConn.prepareCall(creditSQL);
-  	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-  	cstmt.setString(2, session_id);
-  	cstmt.execute();
-	int s_credit = cstmt.getInt(1);
-	%>
-<div id="current-credit">
-	<p>현재 신청한 학점 : <%= s_credit %></p>
-</div>
+%>
 </div>
 
 
@@ -217,98 +247,190 @@ try {
 
 
    <table class="table table-bordered" width="75%" align="center" border>
-      <tr>
-         <th>과목번호</th>
-         <th>분반</th>
-         <th>과목명</th>
-         <th>교수</th>
-         <th>시간</th>
-         <th>학점</th>
-      </tr>
+<%	
+	if (stuOrProf.length() == 7) {
+%>
+	      <tr>
+	         <th>과목번호</th>
+	         <th>분반</th>
+	         <th>과목명</th>
+	         <th>전공</th>
+	         <th>교수</th>
+	         <th>시간</th>
+	         <th>학점</th>
+	      </tr>
 <%
-      while (!courseID.isEmpty()) {
-         out.println("<tr>");
-         
-         out.print("<td align = \"center\" >");
-         out.println(courseID.remove(0));
-         out.println("</td>");
-         
-         out.print("<td align = \"center\" >");
-         out.println(courseNumber.remove(0));
-         out.println("</td>");
-         
-         out.print("<td align = \"center\" >");
-         out.println(courseName.remove(0));
-         out.println("</td>");
-         
-         out.print("<td align = \"center\" >");
-         p_id = profID.remove(0);
-         String mySQL = "select p_name from professor where p_id = '" + p_id + "'";
-         Statement prof_stmt = myConn.createStatement();
- 		 ResultSet prof_rs = prof_stmt.executeQuery(mySQL);
- 		 prof_rs.next();
- 		 String p_name = prof_rs.getString("P_NAME");
-         
-         out.println(p_name);
-         out.println("</td>");
-         
-         out.print("<td align = \"center\" >");
-         period1 = coursePeriod1.remove(0).toString();
-         period2 = coursePeriod2.remove(0).toString();
-         day1 = courseDay1.remove(0);
-         day2 = courseDay2.remove(0);
-         
-         switch(day1) {
-         case 1:
-             out.println("월 " + period1 + "교시");
-             break;
-         case 2:
-             out.println("화 " + period1 + "교시");
-             break;
-         case 3:
-             out.println("수 " + period1 + "교시");
-             break;
-         case 4:
-        	 out.println("목 " + period1 + "교시");
-        	 break;
-         case 5:
-        	 out.println("금 " + period1 + "교시");
-        	 break;
-         }
-         switch(day2) {
-         case 1:
-             out.println("월 " + period2 + "교시");
-             break;
-         case 2:
-             out.println("화 " + period2 + "교시");
-             break;
-         case 3:
-             out.println("수 " + period2 + "교시");
-             break;
-         case 4:
-        	 out.println("목 " + period2 + "교시");
-        	 break;
-         case 5:
-        	 out.println("금 " + period2 + "교시");
-        	 break;
-         }
-         out.println("</td>");
-         
-         out.println("<td align = \"center\" >");
-         out.println(courseCredit.remove(0));
-         out.println("</td>");
-         
-         out.println("</tr>");
-      }
+	      while (!courseID.isEmpty()) {
+	         out.println("<tr>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseID.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseNumber.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseName.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseMajor.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         p_id = profID.remove(0);
+	         String mySQL = "select p_name from professor where p_id = '" + p_id + "'";
+	         Statement prof_stmt = myConn.createStatement();
+	 		 ResultSet prof_rs = prof_stmt.executeQuery(mySQL);
+	 		 prof_rs.next();
+	 		 String p_name = prof_rs.getString("P_NAME");
+	         
+	         out.println(p_name);
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         period1 = coursePeriod1.remove(0).toString();
+	         period2 = coursePeriod2.remove(0).toString();
+	         day1 = courseDay1.remove(0);
+	         day2 = courseDay2.remove(0);
+	         
+	         switch(day1) {
+	         case 1:
+	             out.println("월 " + period1 + "교시");
+	             break;
+	         case 2:
+	             out.println("화 " + period1 + "교시");
+	             break;
+	         case 3:
+	             out.println("수 " + period1 + "교시");
+	             break;
+	         case 4:
+	        	 out.println("목 " + period1 + "교시");
+	        	 break;
+	         case 5:
+	        	 out.println("금 " + period1 + "교시");
+	        	 break;
+	         }
+	         switch(day2) {
+	         case 1:
+	             out.println("월 " + period2 + "교시");
+	             break;
+	         case 2:
+	             out.println("화 " + period2 + "교시");
+	             break;
+	         case 3:
+	             out.println("수 " + period2 + "교시");
+	             break;
+	         case 4:
+	        	 out.println("목 " + period2 + "교시");
+	        	 break;
+	         case 5:
+	        	 out.println("금 " + period2 + "교시");
+	        	 break;
+	         }
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseCredit.remove(0));
+	         out.println("</td>");
+	         
+	         out.println("</tr>");
+	      }
+	}
+	else {
+%>
+	      <tr>
+	         <th>과목번호</th>
+	         <th>분반</th>
+	         <th>과목명</th>
+	         <th>전공</th>
+	         <th>현재 수강인원</th>
+	         <th>최대 수강인원</th>
+	         <th>시간</th>
+	         <th>학점</th>
+	      </tr>
+<%
+	      while (!courseID.isEmpty()) {
+	         out.println("<tr>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseID.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseNumber.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseName.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         out.println(courseMajor.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+			 out.println(courseCurrent.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+			 out.println(courseMax.remove(0));
+	         out.println("</td>");
+	         
+	         out.print("<td align = \"center\" >");
+	         period1 = coursePeriod1.remove(0).toString();
+	         period2 = coursePeriod2.remove(0).toString();
+	         day1 = courseDay1.remove(0);
+	         day2 = courseDay2.remove(0);
+	         
+	         switch(day1) {
+	         case 1:
+	             out.println("월 " + period1 + "교시");
+	             break;
+	         case 2:
+	             out.println("화 " + period1 + "교시");
+	             break;
+	         case 3:
+	             out.println("수 " + period1 + "교시");
+	             break;
+	         case 4:
+	        	 out.println("목 " + period1 + "교시");
+	        	 break;
+	         case 5:
+	        	 out.println("금 " + period1 + "교시");
+	        	 break;
+	         }
+	         switch(day2) {
+	         case 1:
+	             out.println("월 " + period2 + "교시");
+	             break;
+	         case 2:
+	             out.println("화 " + period2 + "교시");
+	             break;
+	         case 3:
+	             out.println("수 " + period2 + "교시");
+	             break;
+	         case 4:
+	        	 out.println("목 " + period2 + "교시");
+	        	 break;
+	         case 5:
+	        	 out.println("금 " + period2 + "교시");
+	        	 break;
+	         }
+	         out.println("</td>");
+	         
+	         out.println("<td align = \"center\" >");
+	         out.println(courseCredit.remove(0));
+	         out.println("</td>");
+	         
+	         out.println("</tr>");
+	      }
+	}
       out.flush();
 %>
  <%
-   
-	
-	
-	//rs.close();
-   //pstmt.close();
-   //myConn.close();
    
 }catch (ClassNotFoundException e){
    e.printStackTrace();
