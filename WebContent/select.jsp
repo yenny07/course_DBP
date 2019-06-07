@@ -229,16 +229,7 @@ try {
 	    courseCurrent.add(rs.getInt("c_current"));
 	}
    }
-    String creditSQL = "{? = call get_stu_credit(?)}";
-  	cstmt = myConn.prepareCall(creditSQL);
-  	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-  	cstmt.setString(2, session_id);
-  	cstmt.execute();
-	int s_credit = cstmt.getInt(1);
 	%>
-<div id="current-credit">
-	<p>현재 신청한 학점 : <%= s_credit %></p>
-</div>
 </div>
 
 
