@@ -190,11 +190,12 @@ try {
    }
    
 
-	String std_SQL = "select s_credit from student where s_id = '" + session_id + "'";
-	Statement std_stmt = myConn.createStatement();
-	ResultSet std_rs = std_stmt.executeQuery(std_SQL);
-	std_rs.next();
-	int s_credit = std_rs.getInt("s_credit");
+   creditSQL = "{? = call get_stu_credit(?)}";
+  	cstmt = myConn.prepareCall(creditSQL);
+  	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+  	cstmt.setString(2, session_id);
+  	cstmt.execute();
+	int s_credit = cstmt.getInt(1);
 	%>
 <div id="current-credit">
 	<p>현재 신청한 학점 : <%= s_credit %></p>
