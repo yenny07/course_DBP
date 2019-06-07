@@ -228,7 +228,6 @@ try {
        courseMax.add(rs.getInt("c_max"));
        courseCurrent.add(rs.getInt("c_current"));
    }
-
    }
    %>
 
