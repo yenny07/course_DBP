@@ -91,52 +91,52 @@
 	nSemester = year_semester % 100;
 	if (year_semester == 201902) {
 %>
-	<select name = "year_semester" onchange = "location = this.value;">
-		<option value = 'select.jsp?year_semester=201902' selected = "selected">2019년 2학기</option>   
-		<option value = 'select.jsp?year_semester=201901'>2019년 1학기</option>
-		<option value = 'select.jsp?year_semester=201802'>2018년 2학기</option>
-		<option value = 'select.jsp?year_semester=201801'>2018년 1학기</option>
-	</select>
+		<select name = "year_semester" onchange = "location = this.value;">
+			<option value = 'select.jsp?year_semester=201902' selected = "selected">2019년 2학기</option>   
+			<option value = 'select.jsp?year_semester=201901'>2019년 1학기</option>
+			<option value = 'select.jsp?year_semester=201802'>2018년 2학기</option>
+			<option value = 'select.jsp?year_semester=201801'>2018년 1학기</option>
+		</select>
 <%
 	} 
 	else if (year_semester == 201901) {
 %>
-	<select name = "year_semester" onchange = "location = this.value;">
-		<option value = 'select.jsp?year_semester=201902'>2019년 2학기</option>   
-		<option value = 'select.jsp?year_semester=201901' selected = "selected">2019년 1학기</option>
-		<option value = 'select.jsp?year_semester=201802'>2018년 2학기</option>
-		<option value = 'select.jsp?year_semester=201801'>2018년 1학기</option>
-	</select>
+		<select name = "year_semester" onchange = "location = this.value;">
+			<option value = 'select.jsp?year_semester=201902'>2019년 2학기</option>   
+			<option value = 'select.jsp?year_semester=201901' selected = "selected">2019년 1학기</option>
+			<option value = 'select.jsp?year_semester=201802'>2018년 2학기</option>
+			<option value = 'select.jsp?year_semester=201801'>2018년 1학기</option>
+		</select>
 <%
 	}
 	else if (year_semester == 201802) {
 %>
-	<select name = "year_semester" onchange="location = this.value;">
-		<option value = 'select.jsp?year_semester=201902'>2019년 2학기</option>   
-		<option value = 'select.jsp?year_semester=201901' >2019년 1학기</option>
-		<option value = 'select.jsp?year_semester=201802' selected = "selected">2018년 2학기</option>
-		<option value = 'select.jsp?year_semester=201801'>2018년 1학기</option>
-	</select>
+		<select name = "year_semester" onchange="location = this.value;">
+			<option value = 'select.jsp?year_semester=201902'>2019년 2학기</option>   
+			<option value = 'select.jsp?year_semester=201901' >2019년 1학기</option>
+			<option value = 'select.jsp?year_semester=201802' selected = "selected">2018년 2학기</option>
+			<option value = 'select.jsp?year_semester=201801'>2018년 1학기</option>
+		</select>
 <%
 	} 
 	else if (year_semester == 201801) {
 %>
-	<select name = "year_semester" onchange = "location = this.value;">
-		<option value = 'select.jsp?year_semester=201902'>2019년 2학기</option>   
-		<option value = 'select.jsp?year_semester=201901' >2019년 1학기</option>
-		<option value = 'select.jsp?year_semester=201802'>2018년 2학기</option>
-		<option value = 'select.jsp?year_semester=201801' selected = "selected">2018년 1학기</option>
-	</select>
+		<select name = "year_semester" onchange = "location = this.value;">
+			<option value = 'select.jsp?year_semester=201902'>2019년 2학기</option>   
+			<option value = 'select.jsp?year_semester=201901' >2019년 1학기</option>
+			<option value = 'select.jsp?year_semester=201802'>2018년 2학기</option>
+			<option value = 'select.jsp?year_semester=201801' selected = "selected">2018년 1학기</option>
+		</select>
 <%
 	}
-%>        
-<%
 	String dbdriver = "oracle.jdbc.driver.OracleDriver";
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user = "SOOK";
 	String passwd = "2019";
-	CallableStatement cstmt;
-	ResultSet rs;
+	Connection myConn = null;
+	CallableStatement cstmt = null;
+	ResultSet myResultSet = null;
+	String sql;
 	String stuOrProf = session_id;
 	
 	//수강신청 목록 혹은 개설과목 목록을 출력하는 데에 사용되는 배열 변수
@@ -152,14 +152,12 @@
 	ArrayList<Integer> coursePeriod2 = new ArrayList<>();
 	ArrayList<Integer> courseMax = new ArrayList<>();
 	ArrayList<Integer> courseCurrent = new ArrayList<>();
-	int day1, day2;
-	int credit;
-	String p_id, sql;
-	String period1, period2;
+	int day1, day2, credit;
+	String p_id, period1, period2;
 	
 	try {
 		Class.forName(dbdriver);
-		Connection myConn = DriverManager.getConnection(dburl, user, passwd);
+		myConn = DriverManager.getConnection(dburl, user, passwd);
 		
 		//아이디(학번)가 7자리면 학생모드
 		if (stuOrProf.length() == 7) {
@@ -171,18 +169,18 @@
 			cstmt.setInt(3, nSemester);
 			cstmt.registerOutParameter(4, oracle.jdbc.OracleTypes.CURSOR);
 			cstmt.execute();
-			rs = (ResultSet)cstmt.getObject(4); 
-			while (rs.next()) {
-				courseID.add(rs.getString("c_id"));
-				courseName.add(rs.getString("c_name"));
-				profID.add(rs.getString("p_id"));
-				courseCredit.add(rs.getInt("c_credit"));
-				courseNumber.add(rs.getInt("c_number"));
-				courseMajor.add(rs.getString("c_major"));
-				coursePeriod1.add(rs.getInt("c_period1"));
-				coursePeriod2.add(rs.getInt("c_period2"));
-				courseDay1.add(rs.getInt("c_day1"));
-				courseDay2.add(rs.getInt("c_day2"));
+			myResultSet = (ResultSet)cstmt.getObject(4); 
+			while (myResultSet.next()) {
+				courseID.add(myResultSet.getString("c_id"));
+				courseName.add(myResultSet.getString("c_name"));
+				profID.add(myResultSet.getString("p_id"));
+				courseCredit.add(myResultSet.getInt("c_credit"));
+				courseNumber.add(myResultSet.getInt("c_number"));
+				courseMajor.add(myResultSet.getString("c_major"));
+				coursePeriod1.add(myResultSet.getInt("c_period1"));
+				coursePeriod2.add(myResultSet.getInt("c_period2"));
+				courseDay1.add(myResultSet.getInt("c_day1"));
+				courseDay2.add(myResultSet.getInt("c_day2"));
 			}
 			
 			//Function 사용 부분
@@ -207,19 +205,19 @@
 			cstmt.setInt(3, nSemester);
 			cstmt.registerOutParameter(4, oracle.jdbc.OracleTypes.CURSOR);
 			cstmt.execute();
-			rs = (ResultSet)cstmt.getObject(4);   
-			while (rs.next()) {
-				courseID.add(rs.getString("c_id"));
-				courseName.add(rs.getString("c_name"));
-				courseCredit.add(rs.getInt("c_credit"));
-				courseNumber.add(rs.getInt("c_number"));
-				courseMajor.add(rs.getString("c_major"));
-				coursePeriod1.add(rs.getInt("c_period1"));
-				coursePeriod2.add(rs.getInt("c_period2"));
-				courseDay1.add(rs.getInt("c_day1"));
-				courseDay2.add(rs.getInt("c_day2"));
-				courseMax.add(rs.getInt("c_max"));
-				courseCurrent.add(rs.getInt("c_current"));
+			myResultSet = (ResultSet)cstmt.getObject(4);   
+			while (myResultSet.next()) {
+				courseID.add(myResultSet.getString("c_id"));
+				courseName.add(myResultSet.getString("c_name"));
+				courseCredit.add(myResultSet.getInt("c_credit"));
+				courseNumber.add(myResultSet.getInt("c_number"));
+				courseMajor.add(myResultSet.getString("c_major"));
+				coursePeriod1.add(myResultSet.getInt("c_period1"));
+				coursePeriod2.add(myResultSet.getInt("c_period2"));
+				courseDay1.add(myResultSet.getInt("c_day1"));
+				courseDay2.add(myResultSet.getInt("c_day2"));
+				courseMax.add(myResultSet.getInt("c_max"));
+				courseCurrent.add(myResultSet.getInt("c_current"));
 			}
 			
 			//Function 사용 부분
@@ -230,9 +228,9 @@
 			cstmt.execute();
 			credit = cstmt.getInt(1);
 %>
-	<div id = "current-credit">
-		<p>현재 개설과목의 총 학점 : <%=credit%></p>
-	</div>
+		<div id = "current-credit">
+			<p>현재 개설과목의 총 학점 : <%=credit%></p>
+		</div>
 <%   
 		}
 %>
