@@ -182,10 +182,12 @@
 
 %>
 <% 
-		String creditSQL = "{? = call get_prof_credit(?)}";
+		String creditSQL = "{? = call get_prof_credit(?,?,?)}";
 		CallableStatement cstmt = myConn.prepareCall(creditSQL);
 		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 		cstmt.setString(2, session_id);
+		cstmt.setInt(3, year);
+		cstmt.setInt(4, semester);
 		cstmt.execute();
 		int p_credit = cstmt.getInt(1);
 		

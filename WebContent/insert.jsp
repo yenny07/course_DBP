@@ -155,10 +155,12 @@
 %>
 <% 
 	if(session_id.length() == 7){
-		String creditSQL = "{? = call get_stu_credit(?)}";
+		String creditSQL = "{? = call get_stu_credit(?,?,?)}";
 		CallableStatement cstmt = myConn.prepareCall(creditSQL);
 		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 		cstmt.setString(2, session_id);
+		cstmt.setInt(3, year);
+		cstmt.setInt(4, semester);
 		cstmt.execute();
 		int s_credit = cstmt.getInt(1);
 		

@@ -186,10 +186,12 @@
 			}
 			
 			//Function 사용 부분
-			sql = "{? = call get_stu_credit(?)}";
+			sql = "{? = call get_stu_credit(?,?,?)}";
 			cstmt = myConn.prepareCall(sql);
 			cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 			cstmt.setString(2, session_id);
+			cstmt.setInt(3, nYear);
+			cstmt.setInt(4, nSemester);
 			cstmt.execute();
 			credit = cstmt.getInt(1);
 %>
@@ -223,10 +225,12 @@
 			}
 			
 			//Function 사용 부분
-			sql = "{? = call get_prof_credit(?)}";
+			sql = "{? = call get_prof_credit(?,?,?)}";
 			cstmt = myConn.prepareCall(sql);
 			cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 			cstmt.setString(2, session_id);
+			cstmt.setInt(3, nYear);
+			cstmt.setInt(4, nSemester);
 			cstmt.execute();
 			credit = cstmt.getInt(1);
 %>

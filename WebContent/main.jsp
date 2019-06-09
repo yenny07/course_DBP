@@ -117,10 +117,12 @@ int isLeavedNo = 0; String isLeaved = "";
         	           isLeavedNo = cstmt.getInt(6);
         	           
         	           /* credit은 Student 테이블에 없음 */
-        	        creditSQL = "{? = call get_stu_credit(?)}";
+        	        creditSQL = "{? = call get_stu_credit(?,?,?)}";
         	       	cstmt = myConn.prepareCall(creditSQL);
         	       	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
         	       	cstmt.setString(2, session_id);
+        	       	cstmt.setInt(3, 2019);
+        	       	cstmt.setInt(4, 2);
         	       	cstmt.execute();
         	       	credit = cstmt.getInt(1);
             	       
@@ -179,10 +181,12 @@ int isLeavedNo = 0; String isLeaved = "";
             	       major = cstmt.getString(4);
             	       
             	       /*prof의 credit은 Professor 테이블에 없음*/
-            	       creditSQL = "{? = call get_prof_credit(?)}";
+            	       creditSQL = "{? = call get_prof_credit(?,?,?)}";
            	       	cstmt = myConn.prepareCall(creditSQL);
            	       	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
            	       	cstmt.setString(2, session_id);
+        	       	cstmt.setInt(3, 2019);
+        	       	cstmt.setInt(4, 2);
            	       	cstmt.execute();
            	       	credit = cstmt.getInt(1);
         	           
