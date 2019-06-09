@@ -153,7 +153,7 @@
 <%     	       
 			}
 			//교수인 경우
-			else {
+			else if (session_id.length() == 5) {
 				//CallableStatement + Procedure 사용 부분 - 교번을 토대로 교수의 정보를 가져온다
 				sql = "{call show_prof_info(?,?,?,?)}";
 				cstmt = myConn.prepareCall(sql);
@@ -182,7 +182,7 @@
 						<td rowspan = "4" style = "text-align:center">
 							<img src = "img/character_new06.gif" alt = "profile" id = "profile">
 						</td>
-						<td id = "update_td">학번</td>
+						<td id = "update_td">교번</td>
 						<td><%=session_id%></td>
 					</tr>
 					<tr>

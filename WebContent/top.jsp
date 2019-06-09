@@ -71,7 +71,7 @@
 <%
 	}
 	//교수인 경우
-	else { 
+	else if (session_id.length() == 5) { 
 %>
 	<li class = "nav-item">
 		<b><a class = "nav-link" href = logout.jsp>
