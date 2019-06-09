@@ -1,10 +1,5 @@
-   
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*"  %>
-
-<%@ include file = "top.jsp" %>
-
-
 <html>
 <head>
 <title>수강신청 입력</title>
@@ -82,7 +77,7 @@
 </style>
 
 <body>
-
+<%@ include file = "top.jsp" %>
 
 <div id="table-header">
 <%
@@ -155,19 +150,16 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
           
-          
-
-<table class="table table-bordered" width="75%" align="center" border>
-<br>
-<tr>
-         <th>과목번호</th>
-         <th>분반</th>
-         <th>과목명</th>
-         <th>교수</th>
-         <th>시간</th>
-         <th>학점</th>
-         <th>수강취소</th>
-      </tr>
+			<table class="table table-bordered" width="75%" align="center" border>
+			<tr>
+  	       		<th>과목번호</th>
+         		<th>분반</th>
+         		<th>과목명</th>
+         		<th>교수</th>
+         		<th>시간</th>
+         		<th>학점</th>
+         		<th>수강취소</th>
+      		</tr>
 <%
 	
 	//교수와 학생을 sessionID 길이로 구분하여 삭제 할 수 있는 과목 리스트를 띄워주게 할 sql문
@@ -252,15 +244,15 @@
 		
 		
 %>
-<tr>
-  <td align="center"><%= c_id %></td>
-  <td align="center"><%= c_number %></td> 
-  <td align="center"><%= c_name %></td>
-  <td align="center"><%= p_name %></td>
-  <td align="center"><%= c_time %></td>
-  <td align="center"><%= c_credit %></td>
-  <td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>
-</tr>
+		<tr>
+  			<td align="center"><%= c_id %></td>
+  			<td align="center"><%= c_number %></td> 
+  			<td align="center"><%= c_name %></td>
+  			<td align="center"><%= p_name %></td>
+  			<td align="center"><%= c_time %></td>
+  			<td align="center"><%= c_credit %></td>
+  			<td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>
+		</tr>
 <%
 		}
 	}

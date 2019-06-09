@@ -1,318 +1,129 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.sql.*"  %>
-<html>
-<head>
-<title>ìˆ˜ê°•ì‹ ì²­ ì…ë ¥</title>
-<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  	<meta name="description" content="">
-  	<meta name="author" content="">
-  
-	
-	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  	<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  	<!-- Custom styles for this template-->
-  	<link href="css/sb-admin-2.min.css" rel="stylesheet">
-</head>
-<style type="text/css">
-	html{
-		height:100vh;
-		overflow:hidden;
-	}
-	body{
-		background:#f8f9fa;
-	}
-	#accordionSidebar{
-		float:left;
-	}
-	.navbar-expand{
-		width:70%;
-		float:left;
-		text-align:right
-	}
-	#content-wrapper{
-		width:70%;
-		height:80vh;
-		float:left;
-		overflow:auto
-	}
-	#table-header{
-		width:70%;
-		float:left;
-		overflow:auto
-	}
-	
-	
-	select{
-		float:right;
-	}
-	
-	#current-credit{
-		margin-left:20px;
-		margin-right:5px;
-		float:left;
-	}
-	
-	.form{
-		margin : auto;
-		width:100%;
-	}
-	
-	.table{
-		background: white;
-		margin : auto;
-		width:100%;
-	}
-	th{
-		text-align: center;
-		word-break: keep-all;
-	}
-	td{
-		text-align: center;
-		margin: auto;
-		word-break: keep-all;
-		white-space:pre-line
-	}
-</style>
-
-<body>
-<%@ include file="top.jsp" %>
-<div id="table-header">
-<%
-	int year_semester = 0;
-	if(request.getParameter("year_semester") == null)
-		year_semester = 201902;	
-	else
-		year_semester = Integer.parseInt(request.getParameter("year_semester"));
-	int year = year_semester / 100;
-	int semester = year_semester % 100;
-	
-	if(year_semester == 201902){
-		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902' selected="selected">2019ë…„ 2í•™ê¸°</option>	
-			<option value='insert.jsp?year_semester=201901' >2019ë…„ 1í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201802'>2018ë…„ 2í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201801'>2018ë…„ 1í•™ê¸°</option>
-		</select>
-		<%
-	}else if(year_semester == 201901){
-		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902'>2019ë…„ 2í•™ê¸°</option>	
-			<option value='insert.jsp?year_semester=201901' selected="selected" >2019ë…„ 1í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201802'>2018ë…„ 2í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201801'>2018ë…„ 1í•™ê¸°</option>
-		</select>
-		<%
-	}else if(year_semester == 201802){
-		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902'>2019ë…„ 2í•™ê¸°</option>	
-			<option value='insert.jsp?year_semester=201901' >2019ë…„ 1í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201802' selected="selected">2018ë…„ 2í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201801'>2018ë…„ 1í•™ê¸°</option>
-		</select>
-		<%
-	}else if(year_semester == 201801){
-		%>
-		<select name="year_semester" onchange="location = this.value;">
-			<option value='insert.jsp?year_semester=201902'>2019ë…„ 2í•™ê¸°</option>	
-			<option value='insert.jsp?year_semester=201901' >2019ë…„ 1í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201802'>2018ë…„ 2í•™ê¸°</option>
-    		<option value='insert.jsp?year_semester=201801' selected="selected">2018ë…„ 1í•™ê¸°</option>
-		</select>
-		<%
-	}
-	Connection myConn = null;     
-	PreparedStatement pstmt = null;
-	ResultSet myResultSet = null;
-	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String user="sook";     String passwd="2019";
-	String dbdriver = "oracle.jdbc.driver.OracleDriver"; 
-	int isLeaved = 0;
-	
-	try {		
-			Class.forName(dbdriver);
-		    myConn =  DriverManager.getConnection (dburl, user, passwd);
-		    String sql = "select * from COURSE where c_year = ? and c_semester = ? order by c_id";
-		    
-		    //sqlë¬¸ì€ ê·¸ëŒ€ë¡œì¸ë° ë°ì´í„°ë§Œ ë°”ë€ŒëŠ” ê²½ìš°ë¥¼ ìœ„í•´ preparedStatementë¥¼ ì´ìš©
-		    //setë©”ì†Œë“œë¡œ ë°ì´í„°ë¥¼ í•´ë‹¹ë˜ëŠ” ë¬¼ìŒí‘œ ìœ„ì¹˜ì— ëŒ€ì¹˜ì‹œí‚¨ë‹¤
-			pstmt = myConn.prepareStatement(sql);
-			pstmt.setInt(1, year);
-			pstmt.setInt(2,semester);
-	
-	    } catch(SQLException ex) {
-		     System.err.println("SQLException: " + ex.getMessage());
-	    }
-%>
+<%@ page contentType = "text/html; charset=EUC-KR" %>
+<%@ page import = "java.sql.*" %>
 <% 
-	if(session_id.length() == 7){
-		//ì €ì¥í‘ì…˜ì„ ìœ„í•œ CallableStatementì— ë“¤ì–´ê°€ëŠ” sqlë¬¸
-		//í•™ìƒì´ í˜„ì¬ ìˆ˜ê°•í•˜ëŠ” ê°•ì˜ê°€ ëª‡ í•™ì ì¸ì§€ ì•Œë ¤ì£¼ëŠ” í•¨ìˆ˜
-		String creditSQL = "{? = call get_stu_credit(?)}";
-		CallableStatement cstmt = myConn.prepareCall(creditSQL);
-		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-		cstmt.setString(2, session_id);
-		cstmt.execute();
-		int s_credit = cstmt.getInt(1);
-		
-		String std_SQL = "select isLeaved from student where s_id = '" + session_id + "'";
-		Statement std_stmt = myConn.createStatement();
-		ResultSet std_rs = std_stmt.executeQuery(std_SQL);
-		std_rs.next();
-		isLeaved = std_rs.getInt("isLeaved");
-		if (isLeaved == 0){
-	%>
-	<div id="current-credit">
-		<p>í˜„ì¬ ì‹ ì²­í•œ í•™ì  : <%= s_credit %></p>
-	</div>
-
-	<%}else{
-		%>
-	<div id="current-credit">
-		<p>í˜„ì¬ íœ´í•™ ì¤‘ì…ë‹ˆë‹¤.</p>
-	</div>
-	<%
-	}
+	request.setCharacterEncoding("UTF-8");
+%>
+<%
+	//ÇĞ»ı¸ğµå¿¡¼­´Â ¼ö°­½ÅÃ»ÇÑ ÇĞ»ıÀÇ ÇĞ¹øÀ» login_verify.jsp·ÎºÎÅÍ, ¼ö°­½ÅÃ»ÇÑ °ú¸ñÀÇ °ú¸ñ¹øÈ£, °ú¸ñºĞ¹İ µ¥ÀÌÅÍ¸¦ insert.jsp·ÎºÎÅÍ ¹Ş¾Æ¿Â´Ù
+	//±³¼ö¸ğµå¿¡¼­´Â °³¼³½ÅÃ»ÇÑ ±³¼öÀÇ ±³¹øÀ» login_verify.jsp·ÎºÎÅÍ, °³¼³½ÅÃ»ÇÑ °ú¸ñÀÇ °ú¸ñ¹øÈ£, °ú¸ñºĞ¹İ µ¥ÀÌÅÍ¸¦ insert_prof.jsp·ÎºÎÅÍ ¹Ş¾Æ¿Â´Ù
+	String session_id = (String) session.getAttribute("user");
+	String c_id = request.getParameter("c_id");
+	int c_id_no = Integer.parseInt(request.getParameter("c_id_no"));
 	
-}%>
-</div>
-	<!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-        <div class="container-fluid">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-
-<table class="table table-bordered" align="center" border>
-<tr>
-         <th>ê³¼ëª©ë²ˆí˜¸</th>
-         <th>ë¶„ë°˜</th>
-         <th>ê³¼ëª©ëª…</th>
-         <th>ì „ê³µ</th>
-         <th>êµìˆ˜</th>
-         <th>ì‹œê°„</th>
-         <th>í•™ì </th>
-         <th>í˜„ì¬ ìˆ˜ê°•ì¸ì›</th>
-         <th>ìµœëŒ€ ìˆ˜ê°•ì¸ì›</th>
-         <th>ìˆ˜ê°•ì‹ ì²­</th>
-      </tr>
+	String dbdriver = "oracle.jdbc.driver.OracleDriver";
+	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
+	String user = "sook";
+	String passwd = "2019";
+	Connection myConn = null;
+	CallableStatement cstmt = null;
+	String result = null;
+	
+	try {
+		Class.forName(dbdriver);
+		myConn = DriverManager.getConnection(dburl, user, passwd);
+	}
+	catch (ClassNotFoundException e) {
+		e.printStackTrace();
+		System.out.println("jdbc driver ·Îµù ½ÇÆĞ");
+	}
+	catch (SQLException e) {
+		e.printStackTrace();
+		System.out.println("¿À¶óÅ¬ ¿¬°á ½ÇÆĞ");
+	}
+	//ÇĞ»ıÀÎ °æ¿ì
+	if (session_id.length() == 7) {
+		//CallaleStatement + Procedure »ç¿ë ºÎºĞ - ¼±ÅÃÇÑ °ú¸ñÀ» ¼ö°­½ÅÃ» ¸ñ·Ï¿¡ Ãß°¡ÇÑ´Ù
+		cstmt = myConn.prepareCall("{call InsertEnroll(?,?,?,?)}", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		cstmt.setString(1, session_id);
+		cstmt.setString(2, c_id);
+		cstmt.setInt(3, c_id_no);
+		cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
+		try {
+			cstmt.execute();
+			result = cstmt.getString(4);
+%>
+	<script>
+		alert("<%=result%>");
+		location.href="insert.jsp?year_semester=201902";
+	</script>
 <%
-	myResultSet = pstmt.executeQuery();
-	if (myResultSet != null) {
-	while (myResultSet.next()) {
-		
-		String c_id = myResultSet.getString("c_id");//ê³¼ëª©ë²ˆí˜¸
-		int c_number = myResultSet.getInt("c_number");//ë¶„ë°˜
-		String c_name = myResultSet.getString("c_name");//ê³¼ëª©ëª…
-		String c_major = myResultSet.getString("c_major");//ê³¼ëª©ëª…
-		int p_id = myResultSet.getInt("p_id");
-		int c_day1 = myResultSet.getInt("c_day1");
-		int c_day2 = myResultSet.getInt("c_day2");
-		int c_period1 = myResultSet.getInt("c_period1");
-		int c_period2 = myResultSet.getInt("c_period2");
-		int c_max = myResultSet.getInt("c_max");
-		int c_current = myResultSet.getInt("c_current");
-		
-		String c_time = "";
-		
-		switch(c_day1){
-		case 1:
-			c_time = "ì›”";
-			break;
-		case 2:
-			c_time = "í™”";
-			break;
-		case 3:
-			c_time = "ìˆ˜";
-			break;
-		case 4:
-			c_time = "ëª©";
-			break;
-		case 5:
-			c_time = "ê¸ˆ";
-			break;
-		default:
-			break;
+		} 
+		catch (SQLException ex) {
+			System.err.println("SQLException: " + ex.getMessage());
+		}
+		finally {
+			if (cstmt != null) {
+				try { 
+					myConn.commit(); 
+					cstmt.close(); 
+					myConn.close(); 
+				}
+				catch (SQLException ex) { }
+			}
+		}
+	}
+	//±³¼öÀÎ °æ¿ì
+	else {
+		//±³¼ö°¡ °³¼³ÇÑ °ú¸ñ Á¤º¸¸¦ insert_prof.jsp·ÎºÎÅÍ ¹Ş¾Æ¿À´Â µ¥¿¡ »ç¿ëµÇ´Â º¯¼ö
+		String c_name=null; int c_credit = -1; String c_major = null; int c_max = -1;
+		int c_day1 = -1; int c_period1 = -1; int c_day2 = -1; int c_period2 = -1;
+		try{
+			c_name = request.getParameter("c_name");
+			c_credit = Integer.parseInt(request.getParameter("c_credit"));
+			c_major = request.getParameter("c_major");
+			c_max = Integer.parseInt(request.getParameter("c_max"));
+			c_day1 = Integer.parseInt(request.getParameter("c_day1"));
+			c_period1 = Integer.parseInt(request.getParameter("c_period1"));	
+			c_day2 = Integer.parseInt(request.getParameter("c_day2"));
+			c_period2 = Integer.parseInt(request.getParameter("c_period2"));
+		}catch (NumberFormatException nfe){ 
+			System.out.println("¿¹¿ÜÃ³¸®");
+%>
+			<script>
+				alert("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù.");
+			</script>
+<%
+			response.sendRedirect("insert_prof.jsp?year_semester=201902");
+			return;
 		}
 		
-		c_time = c_time + " " + c_period1 + "êµì‹œ";
-		
-		switch(c_day2){
-		case 1:
-			c_time = c_time +"\nì›”";
-			break;
-		case 2:
-			c_time = c_time +"\ní™”";
-			break;
-		case 3:
-			c_time = c_time +"\nìˆ˜";
-			break;
-		case 4:
-			c_time = c_time +"\nëª©";
-			break;
-		case 5:
-			c_time = c_time +"\nê¸ˆ";
-			break;
-		default:
-			break;
-		}
-		
-		c_time = c_time + " " + c_period2 + "êµì‹œ";
-		
-		int c_credit= myResultSet.getInt("c_credit");
-		
-		String mySQL = "select p_name from professor where p_id = '" + p_id + "'";
-		Statement prof_stmt = myConn.createStatement();//ì „ì§„ê³¼ ì½ê¸°ë§Œ ê°€ëŠ¥í•œ resultset ìƒì„±
-		ResultSet rs = prof_stmt.executeQuery(mySQL);
-		rs.next();
-		String p_name = rs.getString("P_NAME");
-		
+		try {
+			//CallaleStatement + Procedure »ç¿ë ºÎºĞ - ÀÔ·ÂÇÑ Á¤º¸¸¦ Åä´ë·Î »õ·Î¿î °ú¸ñÀ» °³¼³ÇÑ´Ù
+			cstmt = myConn.prepareCall("{call InsertCourse(?,?,?,?,?,?,?,?,?,?,?,?)}", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);		
+			cstmt.setString(1, session_id);		
+			cstmt.setString(2, c_id);
+			cstmt.setInt(3,c_id_no);
+			cstmt.setString(4, c_name);		
+			cstmt.setInt(5, c_credit);		
+			cstmt.setString(6, c_major);		
+			cstmt.setInt(7, c_max);		
+			cstmt.setInt(8, c_day1);		
+			cstmt.setInt(9, c_period1);	
+			cstmt.setInt(10, c_day2);
+			cstmt.setInt(11, c_period2);
+			cstmt.registerOutParameter(12, java.sql.Types.VARCHAR);
+			cstmt.execute();
+			result = cstmt.getString(12);
 %>
-<tr>
-  <td align="center"><%= c_id %></td>
-  <td align="center"><%= c_number %></td> 
-  <td align="center"><%= c_name %></td>
-  <td align="center"><%= c_major %></td>
-  <td align="center"><%= p_name %></td>
-  <td align="center"><%= c_time %></td>
-  <td align="center"><%= c_credit %></td>
-  <td align="center"><%= c_current %></td>
-  <td align="center"><%= c_max %></td>
-  <%
-  	if(year_semester == 201902 && isLeaved == 0 && session_id.length() == 7){
-  		%>
-  		<td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">ì‹ ì²­</a></td>
-  		<%
-  	}else{
-	  %>
-	  <td align="center">ì‹ ì²­ë¶ˆê°€</td>
-  		<%
-  }
-%>
-</tr>
+			<script>
+				alert("<%= result %>");
+				location.href="insert_prof.jsp?year_semester=201902";
+			</script>
 <%
+		} 
+		catch (SQLException ex) {
+			ex.printStackTrace();
+			System.err.println("SQLException: " + ex.getMessage());
+		}
+		finally {
+			if (cstmt != null) {
+				try { 
+					myConn.commit(); 
+					cstmt.close(); 
+					myConn.close(); 
+				}
+				catch (SQLException ex) { }
+			}
 		}
 	}
 %>
-</table>
-          	
-          </div>
-        </div>
-        <!-- /.container-fluid -->
-
-      </div>
-      <!-- End of Main Content -->
-
-    </div>
-    <!-- End of Content Wrapper -->
- 
-</body>
-</html>

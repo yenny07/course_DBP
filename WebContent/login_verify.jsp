@@ -24,8 +24,11 @@
 			sql = "select s_id, s_name from student where s_id = ? and s_pwd = ?"; 		
 		}
 		//교수인 경우
-		else {
+		else if (session_id.length() == 5){
 			sql = "select p_id, p_name from professor where p_id = ? and p_pwd= ?"; 
+		} else {
+			response.sendRedirect("login.jsp");
+			return;
 		}
 		//PreparedStatement 사용 부분 - 유효한 회원인지 확인한다
 		pstmt = myConn.prepareStatement(sql);

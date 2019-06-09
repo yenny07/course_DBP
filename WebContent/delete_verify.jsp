@@ -1,11 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*" %>
-<div id = "formDialogDiv" style = "display : none;">
-   <%@ include file = "top.jsp" %>
-</div>
-<html><head><title> 수강신청 입력 </title></head>
-<body>
 <%
+	String session_id = (String) session.getAttribute("user");
 	String c_id=request.getParameter("c_id");
 	int c_id_no = Integer.parseInt(request.getParameter("c_id_no"));
 %>	
@@ -83,6 +79,4 @@
 		   			 } catch(SQLException ex) { }
 			   }
 		
-	%>
-</body>
-</html>
+%>
