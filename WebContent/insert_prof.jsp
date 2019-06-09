@@ -176,17 +176,21 @@
 	catch (SQLException ex) {
 		System.err.println("SQLException: " + ex.getMessage());
 	}
-	
-	//CallableStatement + Function 사용 부분 - 현재 교수가 개설한 과목의 총 학점을 가져와서 보여준다
-	sql = "{? = call get_prof_credit(?)}";
-	cstmt = myConn.prepareCall(sql);
-	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-	cstmt.setString(2, session_id);
-	cstmt.execute();
-	credit = cstmt.getInt(1);	
+%>
+<%
+		//CallableStatement + Function 사용 부분 - 현재 교수가 개설한 과목의 총 학점을 가져와서 보여준다
+		String creditSQL = "{? = call get_prof_credit(?,?,?)}";
+		cstmt = myConn.prepareCall(creditSQL);
+		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+		cstmt.setString(2, session_id);
+		cstmt.setInt(3, 2019);
+		cstmt.setInt(4, 2);
+		cstmt.execute();
+		credit = cstmt.getInt(1);
+		
 %>
 		<div id = "current-credit">
-			<p>현재 개설한 강의 : <%=credit%>학점</p>
+			<p>2019년 2학기에 현재 개설한 강의 : <%=credit%>학점</p>
 		</div>
 		<form method = "post" action = "insert_verify.jsp" >
 		<table class = "table table-bordered" border>

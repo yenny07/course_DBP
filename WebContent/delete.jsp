@@ -1,5 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*"  %>
+
+<%@ include file = "top.jsp" %>
+
+
 <html>
 <head>
 <title>수강신청 입력</title>
@@ -77,12 +81,17 @@
 </style>
 
 <body>
-<%@ include file = "top.jsp" %>
+
 
 <div id="table-header">
+<%   if (session_id==null){
+	response.sendRedirect("login.jsp");
+	return;
+}%>
 <%
 	Connection myConn = null;     
 	Statement stmt = null;
+	CallableStatement cstmt = null;
 	ResultSet myResultSet = null; 
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user="sook";     String passwd="2019";
@@ -93,6 +102,7 @@
     String id = request.getParameter("userID");
     String pwd = request.getParameter("userPassword");
 	int cmax = 30;
+	int credit=0;
 	try {
 		
 		Class.forName(dbdriver);
@@ -105,36 +115,37 @@
 	if(session_id.length() == 5){	
 		//저장펑션을 위한 CallableStatement에 들어가는 sql문
 		//교수가 현재 담당하는 강의가 몇 학점인지 알려주는 함수
-		String creditSQL = "{? = call get_prof_credit(?)}";
-	  	CallableStatement cstmt = myConn.prepareCall(creditSQL);
-	  	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-	  	cstmt.setString(2, session_id);
-	  	cstmt.execute();
-		int p_credit = cstmt.getInt(1);
+			sql = "{? = call get_prof_credit(?,?,?)}";
+			cstmt = myConn.prepareCall(sql);
+			cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+			cstmt.setString(2, session_id);
+			cstmt.setInt(3, 2019);
+			cstmt.setInt(4, 2);
+			cstmt.execute();
+			credit = cstmt.getInt(1);
 		%>
 	
 		<div id="current-credit">
-			<p>현재 개설한 강의 : <%= p_credit %> 학점</p>
+			<p>현재 개설한 강의 : <%= credit %> 학점</p>
 		</div>
 		<%
 	}else if (session_id.length() == 7){
 		//저장펑션을 위한 CallableStatement에 들어가는 sql문
 		//학생이 현재 수강하는 강의가 몇 학점인지 알려주는 함수
-		String creditSQL = "{? = call get_stu_credit(?)}";
-		CallableStatement cstmt = myConn.prepareCall(creditSQL);
-		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-		cstmt.setString(2, session_id);
-		cstmt.execute();
-		int s_credit = cstmt.getInt(1);
+			sql = "{? = call get_stu_credit(?,?,?)}";
+			cstmt = myConn.prepareCall(sql);
+			cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+			cstmt.setString(2, session_id);
+			cstmt.setInt(3, 2019);
+			cstmt.setInt(4, 2);
+			cstmt.execute();
+			credit = cstmt.getInt(1);
 %>
 
 <div id="current-credit">
-	<p>현재 신청한 학점 : <%= s_credit %></p>
+	<p>현재 신청한 학점 : <%= credit %></p>
 </div>
 <%
-	}else{
-		response.sendRedirect("login.jsp");
-		return;
 	}
 %>
 
@@ -150,16 +161,19 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
           
-			<table class="table table-bordered" width="75%" align="center" border>
-			<tr>
-  	       		<th>과목번호</th>
-         		<th>분반</th>
-         		<th>과목명</th>
-         		<th>교수</th>
-         		<th>시간</th>
-         		<th>학점</th>
-         		<th>수강취소</th>
-      		</tr>
+          
+
+<table class="table table-bordered" width="75%" align="center" border>
+<br>
+<tr>
+         <th>과목번호</th>
+         <th>분반</th>
+         <th>과목명</th>
+         <th>교수</th>
+         <th>시간</th>
+         <th>학점</th>
+         <th>수강취소</th>
+      </tr>
 <%
 	
 	//교수와 학생을 sessionID 길이로 구분하여 삭제 할 수 있는 과목 리스트를 띄워주게 할 sql문
@@ -244,15 +258,15 @@
 		
 		
 %>
-		<tr>
-  			<td align="center"><%= c_id %></td>
-  			<td align="center"><%= c_number %></td> 
-  			<td align="center"><%= c_name %></td>
-  			<td align="center"><%= p_name %></td>
-  			<td align="center"><%= c_time %></td>
-  			<td align="center"><%= c_credit %></td>
-  			<td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>
-		</tr>
+<tr>
+  <td align="center"><%= c_id %></td>
+  <td align="center"><%= c_number %></td> 
+  <td align="center"><%= c_name %></td>
+  <td align="center"><%= p_name %></td>
+  <td align="center"><%= c_time %></td>
+  <td align="center"><%= c_credit %></td>
+  <td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>
+</tr>
 <%
 		}
 	}
