@@ -4,7 +4,7 @@
 <%@ page import = "java.sql.*" %>
 <html>
 <head> 
-<title>데이터베이스를 활용한 수강신청 시스템입니다.</title>
+<title>데이터베이스를 활용한 수강신청 시스템입니다</title>
 	<meta charset = "EUC-KR">
 	<meta charset = "UTF-8">
 	<meta http-equiv = "X-UA-Compatible" content = "IE=edge">
