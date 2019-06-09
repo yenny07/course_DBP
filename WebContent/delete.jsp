@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>수강신청 입력</title>
+<title>데이터베이스를 활용한 수강신청 시스템입니다</title>
 <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
