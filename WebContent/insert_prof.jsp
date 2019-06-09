@@ -81,6 +81,13 @@
 </style>
 <body>
 <%@ include file = "top.jsp" %>
+<%
+	//교수가 아니라면
+	if (session_id.length() != 5) {
+		response.sendRedirect("login.jsp");
+		return;
+	}
+%>
 	<!-- Content Wrapper -->
 	<div id="content-wrapper" class="d-flex flex-column">
 	<!-- Main Content -->
@@ -94,13 +101,15 @@
 	int nYear, nSemester;
 	
 	if (request.getParameter("year_semester") == null) {
-		year_semester = 201902;
+		year_semester = 201902; //year_semester라는 파라미터가 없을 경우 default값을 2019년 2학기로 한다.
 	} 
 	else {
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}	
-	nYear = year_semester / 100;
-	nSemester = year_semester % 100;
+	nYear = year_semester / 100; //년도
+	nSemester = year_semester % 100; //학기
+	
+	//각 학기별로 개설된 과목을 볼 수 있는 드롭다운 버튼
 	if (year_semester == 201902) {
 %>
 		<select id = "year-dropdown" name = "year_semester" onchange = "location = this.value;">
@@ -206,6 +215,54 @@
 					<option value = "기초교양대학" selected = "selected">기초교양대학</option>
 					<option value = "컴퓨터과학부" >컴퓨터과학부</option>
 					<option value = "경영학부" >경영학부</option>
+					<option value = "경제학부" >경제학부</option>
+					<option value = "한국어문학부" >한국어문학부</option>
+					<option value = "중어중문학부" >중어중문학부</option>
+					<option value = "프랑스언어문화학과" >프랑스언어문화학과</option>
+					<option value = "독일언어문화학과" >독일언어문화학과</option>
+					<option value = "역사문화학과" >역사문화학과</option>
+					<option value = "일본학과" >일본학과</option>
+					<option value = "문헌정보학과" >문헌정보학과</option>
+					<option value = "문화관광학전공" >문화관광학전공</option>
+					<option value = "르꼬르동블루 외식경영전공" >르꼬르동블루 외식경영전공</option>
+					<option value = "교육학부" >교육학부</option>
+					<option value = "화학과" >화학과</option>
+					<option value = "생명시스템학부" >생명시스템학부</option>
+					<option value = "수학과" >수학과</option>
+					<option value = "통계학과" >통계학과</option>
+					<option value = "체육교육과" >체육교육과</option>
+					<option value = "무용과" >무용과</option>
+					<option value = "화공생명공학부" >화공생명공학부</option>
+					<option value = "IT공학전공" >IT공학전공</option>
+					<option value = "전자공학전공" >전자공학전공</option>
+					<option value = "응용물리전공" >응용물리전공</option>
+					<option value = "화학과" >소프트웨어융합전공</option>
+					<option value = "기계시스템학부" >기계시스템학부</option>
+					<option value = "기초공학부" >기초공학부</option>
+					<option value = "가족자원경영학과" >가족자원경영학과</option>
+					<option value = "아동복지학부" >아동복지학부</option>
+					<option value = "의류학과" >의류학과</option>
+					<option value = "식품영양학과" >식품영양학과</option>
+					<option value = "정치외교학과" >정치외교학과</option>
+					<option value = "행정학과" >행정학과</option>
+					<option value = "홍보광고학과" >홍보광고학과</option>
+					<option value = "소비자경제학과" >소비자경제학과</option>
+					<option value = "사회심리학과" >사회심리학과</option>
+					<option value = "법학부" >법학부</option>
+					<option value = "피아노과" >피아노과</option>
+					<option value = "관현악과" >관현악과</option>
+					<option value = "성악과" >성악과</option>
+					<option value = "작곡과" >작곡과</option>
+					<option value = "시각영상디자인과" >시각영상디자인과</option>
+					<option value = "산업디자인과" >산업디자인과</option>
+					<option value = "환경디자인과" >환경디자인과</option>
+					<option value = "공예과" >공예과</option>
+					<option value = "회화과" >회화과</option>
+					<option value = "글로벌협력전공" >글로벌협력전공</option>
+					<option value = "앙트프러너십전공" >앙트프러너십전공</option>
+					<option value = "영어영문학전공" >영어영문학전공</option>
+					<option value = "테슬전공" >테슬전공</option>
+					<option value = "미디어학부" >미디어학부</option>
 				</select>
 				</td>
 			</tr>

@@ -84,9 +84,7 @@
 	else {
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}
-	if (session_id == null) {	//session_id == null 조건으로 줄여도 괜찮은지 해보기
-		response.sendRedirect("login.jsp");
-	}
+	
 	nYear = year_semester / 100;
 	nSemester = year_semester % 100;
 	if (year_semester == 201902) {
@@ -196,7 +194,7 @@
 	</div>
 <%   
 		}
-		else {
+		else if(stuOrProf.length() == 5){
 			//CallableStatement 사용 부분
 			sql = "{call getCourseINF_Prof(?, ?, ?, ?)}";
 			cstmt = myConn.prepareCall(sql);
@@ -232,6 +230,9 @@
 			<p>현재 개설과목의 총 학점 : <%=credit%></p>
 		</div>
 <%   
+		}else{
+			response.sendRedirect("login.jsp");
+			return;
 		}
 %>
 	</div>
@@ -334,7 +335,7 @@
 				out.println("</tr>");
 			}
 		}
-		else {
+		else if (stuOrProf.length() == 5) {
 %>
 				<tr>
 					<th>과목번호</th>
@@ -421,6 +422,9 @@
 				
 				out.println("</tr>");
 			}
+		}else{
+			response.sendRedirect("login.jsp");
+			return;
 		}
 		out.flush();
 %>

@@ -118,37 +118,36 @@
 %>        
 		<table class = "table table-bordered" align = "center" id = "update_table">
 			<tr>
-				<th colspan = "3" style = "text-align:center">회원 정보</th>
-				<tr>
-					<tr>
-						<td rowspan = "6" style = "text-align:center">
-							<img src = "img/character_new03.gif" alt = "profile" id = "profile">
-						</td>
-						<td id = "update_td">학번</td>
-						<td><%=session_id%></td>
-					</tr>
-					<tr>
-						<td id = "student_name">이름</td>
-						<td><%=name%></td>
-					</tr>
-					<tr>
-						<td id = "student_grade">학년</td>
-						<td><%=grade%></td>
-					</tr>
-					<tr>
-						<td id = "student_major">전공</td>
-						<td><%=major%></td>
-					</tr>
-					<tr>
-						<td id = "student_credit">수강학점</td>
-						<td><%=credit%> / 18</td>
-					</tr>
-					<tr>
-						<td id = "student_isLeaved">학적상태</td>
-						<td><%=isLeaved%></td>
-					</tr>
-				</tr>
+				<th colspan = "3" style = "text-align:center">회원 정보</th>	
 			</tr>
+			<tr>
+				<td rowspan = "6" style = "text-align:center">
+				<img src = "img/character_new03.gif" alt = "profile" id = "profile">
+				</td>
+				<td id = "update_td">학번</td>
+				<td><%=session_id%></td>
+			</tr>
+			<tr>
+				<td id = "student_name">이름</td>
+				<td><%=name%></td>
+			</tr>
+			<tr>
+				<td id = "student_grade">학년</td>
+				<td><%=grade%></td>
+			</tr>
+			<tr>
+				<td id = "student_major">전공</td>
+				<td><%=major%></td>
+			</tr>
+			<tr>
+				<td id = "student_credit">수강학점</td>
+				<td><%=credit%> / 18</td>
+			</tr>
+			<tr>
+				<td id = "student_isLeaved">학적상태</td>
+				<td><%=isLeaved%></td>
+			</tr>
+			<tr>
 		</table>
 <%     	       
 			}
@@ -177,31 +176,32 @@
 		<table class = "table table-bordered" align = "center" id = "update_table">
 			<tr>
 				<th colspan = "3" style = "text-align:center">회원 정보</th>
+			</tr>
+			<tr>
+				<td rowspan = "4" style = "text-align:center">
+				<img src = "img/character_new06.gif" alt = "profile" id = "profile">
+				</td>
+				<td id = "update_td">교번</td>
+				<td><%=session_id%></td>
+			</tr>
 				<tr>
-					<tr>
-						<td rowspan = "4" style = "text-align:center">
-							<img src = "img/character_new06.gif" alt = "profile" id = "profile">
-						</td>
-						<td id = "update_td">교번</td>
-						<td><%=session_id%></td>
-					</tr>
-					<tr>
-						<td id = "student_name">이름</td>
-						<td><%=name%></td>
-					</tr>
-					<tr>
-						<td id = "student_major">전공</td>
-						<td><%=major%></td>
-					</tr>
-					<tr>
-						<td id = "student_credit">강의학점</td>
-						<td><%=credit%> / 10</td>
-					</tr>
-				</tr>
+				<td id = "student_name">이름</td>
+				<td><%=name%></td>
+			</tr>
+				<tr>
+				<td id = "student_major">전공</td>
+				<td><%=major%></td>
+			</tr>
+			<tr>
+				<td id = "student_credit">강의학점</td>
+				<td><%=credit%> / 10</td>
 			</tr>
 		</table>
 <%
-			}  
+			}else{
+				response.sendRedirect("login.jsp");
+				return;
+			}
 		}
 		catch (SQLException e) {
 			out.println(e);

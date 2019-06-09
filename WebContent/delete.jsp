@@ -85,10 +85,6 @@
 
 
 <div id="table-header">
-<%   if (session_id==null){
-	response.sendRedirect("login.jsp");
-	return;
-}%>
 <%
 	Connection myConn = null;     
 	Statement stmt = null;
@@ -141,6 +137,9 @@
 	<p>현재 신청한 학점 : <%= s_credit %></p>
 </div>
 <%
+	}else{
+		response.sendRedirect("login.jsp");
+		return;
 	}
 %>
 

@@ -103,7 +103,7 @@
 				}
 			}
 			//교수인 경우
-			else {	
+			else if(session_id.length() == 5) {	
 				//CallableStatement + Procedure 사용 부분 - 교번을 받아 해당하는 교수의 정보를 받아온다
 				sql = "{call show_prof_info(?,?,?,?)}";
 				cstmt = myConn.prepareCall(sql);
@@ -113,6 +113,9 @@
 				cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
 				cstmt.execute();
 				pwd = cstmt.getString(2);                 
+			}else{
+				response.sendRedirect("login.jsp");
+				return;
 			}
 		}
 		catch (SQLException e) {

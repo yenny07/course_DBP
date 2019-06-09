@@ -79,6 +79,13 @@
 
 <body>
 <%@ include file="top.jsp" %>
+<%
+		//학생이 아닌 경우
+		if (session_id.length() != 7) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+%>
 <div id="table-header">
 <%
 	int year_semester = 0;
