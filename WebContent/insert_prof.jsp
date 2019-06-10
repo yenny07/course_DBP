@@ -189,7 +189,7 @@
 		cstmt.setInt(3, year);
 		cstmt.setInt(4, semester);
 		cstmt.execute();
-		int p_credit = cstmt.getInt(1);
+		int credit = cstmt.getInt(1);
 		
 %>
 		<div id = "current-credit">
