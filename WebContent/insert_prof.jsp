@@ -192,94 +192,151 @@
 		int p_credit = cstmt.getInt(1);
 		
 %>
-	<div id="current-credit">
-		<p>현재 개설한 강의 : <%= p_credit %> 학점</p>
-	</div>
-          	
-			<form method="post" action="insert_verify.jsp" >
-        	<table class="table table-bordered" border>
-        	<tr>
-        		<td colspan="4" >과목번호</td>
-        		<td colspan="4"><input id="c_id" type="text" name="c_id" size="20" placeholder="C0000"></td>
-        	</tr>
-        	<tr>
-        		<td colspan="4">분반번호</td>
-        		<td colspan="4"><input id="c_id_no" type="text" name="c_id_no" size="20" placeholder="1이상의 숫자"></td>
-        	</tr>
-        	<tr>
-        		<td colspan="4">과목이름</td>
-        		<td colspan="4"><input id="c_name" type="text" name="c_name" size="20" placeholder="25자 이하"></td>
-        	</tr>
-        	<tr>
-        		<td colspan="4">전공</td>
-        		<td colspan="4">
-        			<select id="day-period" name="c_major">
-        				<option value="기초교양대학" selected="selected">기초교양대학</option>
-        				<option value="컴퓨터과학부" >컴퓨터과학부</option>
-        				<option value="경영학부" >경영학부</option>
-        			</select>
-        		</td>
-        	</tr>
-        	<tr>
-        		<td colspan="4">학점</td>
-        		<td colspan="4"><input id="c_credit" type="text" name="c_credit" size="20" placeholder="1~3 사이의 숫자"></td>
-        	</tr>
-        	<tr>
-        		<td colspan="4">최대인원</td>
-        		<td colspan="4"><input id="c_max" type="text" name="c_max" size="20" placeholder="10이상 200이하의 숫자"></td>
-        	</tr>
-        	<tr>
-        		<td>첫번째 날</td>
-        		<td>
-        			<select id="day-period" name="c_day1">
-        				<option value="1" selected="selected">월</option>
-        				<option value="2" >화</option>
-        				<option value="3" >수</option>
-        				<option value="4" >목</option>
-        				<option value="5" >금</option>
-        			</select>
-        		</td>
-        		<td>교시</td>
-        		<td>
-        			<select id="day-period"  name="c_period1">
-        				<option value="1" selected="selected">1</option>
-        				<option value="2" >2</option>
-        				<option value="3" >3</option>
-        				<option value="4" >4</option>
-        				<option value="5" >5</option>
-        				<option value="6" >6</option>
-        				<option value="7" >7</option>
-        			</select>
-        		</td>
-        		<td>두번째 날</td>
-        		<td>
-        			<select id="day-period"  name="c_day2">
-        				<option value="1" >월</option>
-        				<option value="2" >화</option>
-        				<option value="3" selected="selected">수</option>
-        				<option value="4" >목</option>
-        				<option value="5" >금</option>
-        			</select>
-        		</td>
-        		<td>교시</td>
-        		<td>
-        			<select id="day-period"  name="c_period2">
-        				<option value="1" selected="selected">1</option>
-        				<option value="2" >2</option>
-        				<option value="3" >3</option>
-        				<option value="4" >4</option>
-        				<option value="5" >5</option>
-        				<option value="6" >6</option>
-        				<option value="7" >7</option>
-        			</select>
-        		</td>
-        	</tr>
-        	</table>
-        	<div id ="input-box">
-        					<INPUT class="btn btn-primary" id="insert-button" TYPE="SUBMIT" NAME="Submit" VALUE="작성완료">
-							<INPUT class="btn btn-primary" id="insert-button" TYPE="RESET" VALUE="초기화">
-        	</div>
-        </form>
+		<div id = "current-credit">
+			<p>2019년 2학기에 개설한 강의 : <%=credit%>학점</p>
+		</div>
+		<form method = "post" action = "insert_verify.jsp" >
+		<table class = "table table-bordered" border>
+			<tr>
+				<td colspan = "4" >과목번호</td>
+				<td colspan = "4">
+					<input id = "c_id" type = "text" name = "c_id" size = "20" placeholder = "C0000">
+				</td>
+			</tr>
+			<tr>
+				<td colspan = "4">분반번호</td>
+				<td colspan = "4">
+					<input id = "c_id_no" type = "text" name = "c_id_no" size = "20" placeholder = "1이상의 숫자">
+				</td>
+			</tr>
+			<tr>
+				<td colspan = "4">과목이름</td>
+				<td colspan = "4">
+					<input id = "c_name" type = "text" name = "c_name" size = "20" placeholder = "25자 이하">
+				</td>
+			</tr>
+			<tr>
+				<td colspan = "4">전공</td>
+				<td colspan = "4">
+				<select id = "day-period" name = "c_major">
+					<option value = "기초교양대학" selected = "selected">기초교양대학</option>
+					<option value = "컴퓨터과학부" >컴퓨터과학부</option>
+					<option value = "경영학부" >경영학부</option>
+					<option value = "경제학부" >경제학부</option>
+					<option value = "한국어문학부" >한국어문학부</option>
+					<option value = "중어중문학부" >중어중문학부</option>
+					<option value = "프랑스언어문화학과" >프랑스언어문화학과</option>
+					<option value = "독일언어문화학과" >독일언어문화학과</option>
+					<option value = "역사문화학과" >역사문화학과</option>
+					<option value = "일본학과" >일본학과</option>
+					<option value = "문헌정보학과" >문헌정보학과</option>
+					<option value = "문화관광학전공" >문화관광학전공</option>
+					<option value = "르꼬르동블루 외식경영전공" >르꼬르동블루 외식경영전공</option>
+					<option value = "교육학부" >교육학부</option>
+					<option value = "화학과" >화학과</option>
+					<option value = "생명시스템학부" >생명시스템학부</option>
+					<option value = "수학과" >수학과</option>
+					<option value = "통계학과" >통계학과</option>
+					<option value = "체육교육과" >체육교육과</option>
+					<option value = "무용과" >무용과</option>
+					<option value = "화공생명공학부" >화공생명공학부</option>
+					<option value = "IT공학전공" >IT공학전공</option>
+					<option value = "전자공학전공" >전자공학전공</option>
+					<option value = "응용물리전공" >응용물리전공</option>
+					<option value = "화학과" >소프트웨어융합전공</option>
+					<option value = "기계시스템학부" >기계시스템학부</option>
+					<option value = "기초공학부" >기초공학부</option>
+					<option value = "가족자원경영학과" >가족자원경영학과</option>
+					<option value = "아동복지학부" >아동복지학부</option>
+					<option value = "의류학과" >의류학과</option>
+					<option value = "식품영양학과" >식품영양학과</option>
+					<option value = "정치외교학과" >정치외교학과</option>
+					<option value = "행정학과" >행정학과</option>
+					<option value = "홍보광고학과" >홍보광고학과</option>
+					<option value = "소비자경제학과" >소비자경제학과</option>
+					<option value = "사회심리학과" >사회심리학과</option>
+					<option value = "법학부" >법학부</option>
+					<option value = "피아노과" >피아노과</option>
+					<option value = "관현악과" >관현악과</option>
+					<option value = "성악과" >성악과</option>
+					<option value = "작곡과" >작곡과</option>
+					<option value = "시각영상디자인과" >시각영상디자인과</option>
+					<option value = "산업디자인과" >산업디자인과</option>
+					<option value = "환경디자인과" >환경디자인과</option>
+					<option value = "공예과" >공예과</option>
+					<option value = "회화과" >회화과</option>
+					<option value = "글로벌협력전공" >글로벌협력전공</option>
+					<option value = "앙트프러너십전공" >앙트프러너십전공</option>
+					<option value = "영어영문학전공" >영어영문학전공</option>
+					<option value = "테슬전공" >테슬전공</option>
+					<option value = "미디어학부" >미디어학부</option>
+				</select>
+				</td>
+			</tr>
+			<tr>
+				<td colspan = "4">학점</td>
+				<td colspan = "4">
+					<input id = "c_credit" type = "text" name = "c_credit" size = "20" placeholder = "1~3 사이의 숫자">
+				</td>
+			</tr>
+			<tr>
+				<td colspan = "4">최대인원</td>
+				<td colspan = "4">
+					<input id = "c_max" type = "text" name = "c_max" size = "20" placeholder = "10이상 200이하의 숫자">
+				</td>
+			</tr>
+			<tr>
+				<td>첫번째 날</td>
+				<td>
+				<select id = "day-period" name = "c_day1">
+					<option value = "1" selected = "selected">월</option>
+					<option value = "2">화</option>
+					<option value = "3">수</option>
+					<option value = "4">목</option>
+					<option value = "5">금</option>
+				</select>
+				</td>
+				<td>교시</td>
+				<td>
+				<select id = "day-period" name = "c_period1">
+					<option value = "1" selected = "selected">1</option>
+					<option value = "2">2</option>
+					<option value = "3">3</option>
+					<option value = "4">4</option>
+					<option value = "5">5</option>
+					<option value = "6">6</option>
+					<option value = "7">7</option>
+				</select>
+				</td>
+				<td>두번째 날</td>
+				<td>
+				<select id = "day-period" name = "c_day2">
+					<option value = "1">월</option>
+					<option value = "2">화</option>
+					<option value = "3" selected = "selected">수</option>
+					<option value = "4">목</option>
+					<option value = "5">금</option>
+				</select>
+				</td>
+				<td>교시</td>
+				<td>
+				<select id = "day-period" name = "c_period2">
+					<option value = "1" selected = "selected">1</option>
+					<option value = "2">2</option>
+					<option value = "3">3</option>
+					<option value = "4">4</option>
+					<option value = "5">5</option>
+					<option value = "6">6</option>
+					<option value = "7">7</option>
+				</select>
+				</td>
+			</tr>
+		</table>
+		<div id = "input-box">
+			<INPUT class = "btn btn-primary" id = "insert-button" TYPE = "SUBMIT" NAME = "Submit" VALUE = "작성완료">
+			<INPUT class = "btn btn-primary" id = "insert-button" TYPE = "RESET" VALUE = "초기화">
+		</div>
+		</form>
 		<p>개설된 강의</p>
 </div>
           

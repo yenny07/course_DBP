@@ -10,6 +10,7 @@ IS
 	credit_limit_over EXCEPTION;
 	minimum_students EXCEPTION;	
 	too_many_students EXCEPTION;
+	too_long_name EXCEPTION;
 	same_days EXCEPTION;
 	duplicate_period EXCEPTION;
 	duplicate_course_id EXCEPTION;
@@ -41,6 +42,11 @@ BEGIN
 	/*첫번째 날과 두번째 날이 같은날*/
 	IF courseDAY1 = courseDAY2 THEN
 		RAISE same_days;
+	END IF;
+	
+	/*과목이름길이*/
+	IF LENGTH(courseNAME) > 25 THEN
+		RAISE too_long_name;
 	END IF;
 	
 	/*최소 최대 학점*/
@@ -151,13 +157,13 @@ BEGIN
 	INTO periodCOUNT1
 	FROM course
 	WHERE p_id = professorID AND c_year = nYEAR AND c_semester = nSEMESTER
-		AND c_day1 = tempDAY1 AND c_period1 = tempPERIOD1;
+		AND (c_day1 = tempDAY1 OR c_day2 = tempDAY1) AND c_period1 = tempPERIOD1;
 	
 	SELECT count(*)
 	INTO periodCOUNT2
 	FROM course
 	WHERE p_id = professorID AND c_year = nYEAR AND c_semester = nSEMESTER
-		AND c_day2 = tempDAY2 AND c_period2 = tempPERIOD2;
+		AND (c_day1 = tempDAY2 OR c_day2 = tempDAY2) AND c_period2 = tempPERIOD2;
 
 	DBMS_OUTPUT.put_line(periodCOUNT1 || ' / ' || periodCOUNT2);
 
@@ -187,6 +193,9 @@ EXCEPTION
       DBMS_OUTPUT.put_line(result);
    WHEN minimum_students THEN
       result := '최소 학생 수는 10명입니다.';
+      DBMS_OUTPUT.put_line(result);
+   WHEN too_long_name THEN
+      result := '과목 이름은 25자 이하입니다.';
       DBMS_OUTPUT.put_line(result);
    WHEN same_days THEN
       result := '첫번째 날과 두번째 날이 같은 요일입니다.';
