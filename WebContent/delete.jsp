@@ -84,10 +84,6 @@
 
 
 <div id="table-header">
-<%   if (session_id==null){
-	response.sendRedirect("login.jsp");
-	return;
-}%>
 <%
 	Connection myConn = null;     
 	Statement stmt = null;
