@@ -3,7 +3,7 @@
 <%@ page import = "java.util.ArrayList" %>
 <html>
 <head>
-<title>데이터베이스를 활용한 수강신청 시스템입니다</title>
+<title>수강신청 입력</title>
 	<meta charset = "UTF-8">
 	<meta http-equiv = "X-UA-Compatible" content = "IE=edge">
 	<meta name = "viewport" content = "width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -77,13 +77,16 @@
 	//연도, 학기를 지정하는 selectBox 출력
 	int year_semester = 0;
 	int nYear, nSemester;
+
 	if (request.getParameter("year_semester") == null) {
 		year_semester = 201902;
 	} 
 	else {
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}
-
+	if (session_id == null) {	//session_id == null 조건으로 줄여도 괜찮은지 해보기
+		response.sendRedirect("login.jsp");
+	}
 	nYear = year_semester / 100;
 	nSemester = year_semester % 100;
 	if (year_semester == 201902) {
@@ -193,7 +196,7 @@
 			credit = cstmt.getInt(1);
 %>
 	<div id = "current-credit">
-		<p> <%=nYear%>년 <%=nSemester%>학기에 신청한 학점 : <%=credit%></p>
+		<p>현재 신청한 학점 : <%=credit%></p>
 	</div>
 <%   
 		}
@@ -232,7 +235,7 @@
 			credit = cstmt.getInt(1);
 %>
 	<div id = "current-credit">
-		<p><%=nYear%>년 <%=nSemester%>학기에 개설한 과목의 총 학점 : <%=credit%></p>
+		<p>현재 개설과목의 총 학점 : <%=credit%></p>
 	</div>
 <%   
 		}

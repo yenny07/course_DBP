@@ -2,7 +2,7 @@
 <%@ page import="java.sql.*"  %>
 <html>
 <head>
-<title>데이터베이스를 활용한 수강신청 시스템입니다</title>
+<title>수강신청 입력</title>
 <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -79,13 +79,6 @@
 
 <body>
 <%@ include file="top.jsp" %>
-<%
-		//학생이 아닌 경우
-		if (session_id.length() != 7) {
-			response.sendRedirect("login.jsp");
-			return;
-		}
-%>
 <div id="table-header">
 <%
 	int year_semester = 0;
@@ -166,8 +159,8 @@
 		CallableStatement cstmt = myConn.prepareCall(creditSQL);
 		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 		cstmt.setString(2, session_id);
-		cstmt.setInt(3, 2019);
-		cstmt.setInt(4, 2);
+		cstmt.setInt(3, year);
+		cstmt.setInt(4, semester);
 		cstmt.execute();
 		int s_credit = cstmt.getInt(1);
 		
@@ -180,7 +173,7 @@
 		if (isLeaved == 0){
 	%>
 	<div id="current-credit">
-		<p>2019년 2학기에 신청한 학점 : <%= s_credit %></p>
+		<p>현재 신청한 학점 : <%= s_credit %></p>
 	</div>
 
 	<%}else{
