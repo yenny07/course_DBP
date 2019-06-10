@@ -190,7 +190,7 @@
 		
 %>
 		<div id = "current-credit">
-			<p>2019년 2학기에 현재 개설한 강의 : <%=credit%>학점</p>
+			<p>2019년 2학기에 개설한 강의 : <%=credit%>학점</p>
 		</div>
 		<form method = "post" action = "insert_verify.jsp" >
 		<table class = "table table-bordered" border>
