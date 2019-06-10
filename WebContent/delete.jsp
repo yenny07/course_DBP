@@ -1,11 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*"  %>
 
-   <%@ include file = "top.jsp" %>
+<%@ include file = "top.jsp" %>
+
 
 <html>
 <head>
-<title>수강신청 입력</title>
+<title>데이터베이스를 활용한 수강신청 시스템입니다</title>
 <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,7 +30,6 @@
 	#accordionSidebar{
 		float:left;
 	}
-
 	.navbar-expand{
 		width:70%;
 		float:left;
@@ -85,67 +85,61 @@
 
 <div id="table-header">
 <%
-Connection myConn = null;     
-Statement stmt = null;
-	PreparedStatement pstmt = null;
-	ResultSet myResultSet = null;   String mySQL = "";
+	Connection myConn = null;     
+	Statement stmt = null;
+	CallableStatement cstmt = null;
+	ResultSet myResultSet = null; 
 	String dburl = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String user="sook";     String passwd="2019";
-     String dbdriver = "oracle.jdbc.driver.OracleDriver";    
-     session_id=(String)session.getAttribute("user");
-     String sql="";
- 	
-
-     
-  //   else
-   // 	 sql = "select * from course c, enroll e whre c.p_id ='" + session_id +"'";
-
-     
-	System.out.println("sessionid:"+session_id);
-     
-     String id = request.getParameter("userID");
-     String pwd = request.getParameter("userPassword");
+    String dbdriver = "oracle.jdbc.driver.OracleDriver";    
+    session_id=(String)session.getAttribute("user");
+    String sql="";
+ 	 
+    String id = request.getParameter("userID");
+    String pwd = request.getParameter("userPassword");
 	int cmax = 30;
+	int credit=0;
 	try {
-		
-	///	int result = stmt.executeQuery(sql);
 		
 		Class.forName(dbdriver);
 	    myConn =  DriverManager.getConnection (dburl, user, passwd);
-		stmt = myConn.createStatement();	
-		pstmt = myConn.prepareStatement(sql);
-	//	pstmt.setString(1,"C1234");
-//		pstmt.setString(2,pwd);
-		
-		
+		stmt = myConn.createStatement();	//전진과 읽기만 가능한 resultset 생성
     } catch(SQLException ex) {
 	     System.err.println("SQLException: " + ex.getMessage());
     }
 	
-	if(session_id.length() == 5){
-	String creditSQL = "{? = call get_prof_credit(?)}";
-  	CallableStatement cstmt = myConn.prepareCall(creditSQL);
-  	cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-  	cstmt.setString(2, session_id);
-  	cstmt.execute();
-	int p_credit = cstmt.getInt(1);
-	%>
-
-	<div id="current-credit">
-		<p>현재 개설한 강의 : <%= p_credit %> 학점</p>
-	</div>
-	<%
+	if(session_id.length() == 5){	
+		//저장펑션을 위한 CallableStatement에 들어가는 sql문
+		//교수가 현재 담당하는 강의가 몇 학점인지 알려주는 함수
+			sql = "{? = call get_prof_credit(?,?,?)}";
+			cstmt = myConn.prepareCall(sql);
+			cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+			cstmt.setString(2, session_id);
+			cstmt.setInt(3, 2019);
+			cstmt.setInt(4, 2);
+			cstmt.execute();
+			credit = cstmt.getInt(1);
+		%>
+	
+		<div id="current-credit">
+			<p>현재 개설한 강의 : <%= credit %> 학점</p>
+		</div>
+		<%
 	}else if (session_id.length() == 7){
-		String creditSQL = "{? = call get_stu_credit(?)}";
-		CallableStatement cstmt = myConn.prepareCall(creditSQL);
-		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
-		cstmt.setString(2, session_id);
-		cstmt.execute();
-		int s_credit = cstmt.getInt(1);
+		//저장펑션을 위한 CallableStatement에 들어가는 sql문
+		//학생이 현재 수강하는 강의가 몇 학점인지 알려주는 함수
+			sql = "{? = call get_stu_credit(?,?,?)}";
+			cstmt = myConn.prepareCall(sql);
+			cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+			cstmt.setString(2, session_id);
+			cstmt.setInt(3, 2019);
+			cstmt.setInt(4, 2);
+			cstmt.execute();
+			credit = cstmt.getInt(1);
 %>
 
 <div id="current-credit">
-	<p>현재 신청한 학점 : <%= s_credit %></p>
+	<p>현재 신청한 학점 : <%= credit %></p>
 </div>
 <%
 	}
@@ -177,44 +171,27 @@ Statement stmt = null;
          <th>수강취소</th>
       </tr>
 <%
-
-//mySQL = "select c_id,c_id_no,c_name,c_unit from course where c_id not in (select c_id from enroll where s_id='" + session_id + "')";
-	mySQL="select * from course";
 	
+	//교수와 학생을 sessionID 길이로 구분하여 삭제 할 수 있는 과목 리스트를 띄워주게 할 sql문
     if(session_id.length() == 7){
  	    sql = "select * from COURSE c, enroll e WHERE c.c_id = e.c_id AND c.c_number = e.c_number AND e.s_id ='" + session_id +
     		 "' AND e.c_year = 2019 AND e.c_semester = 2 AND c.c_year = 2019 AND c.c_semester = 2";
-     //session_id = session.getId();
      }
-    
-    int s =  Integer.parseInt(session_id);
-     
-    if(session_id.length()==5){
-    	 System.out.println("dd");
-    	// sql = "select * from course c where c.p_id = '" + session_id +"'";
-    	 
+         
+    if(session_id.length() == 5){ 
     	 sql = "select distinct * from COURSE c, professor p WHERE c.p_id = p.p_id AND p.p_id = '" + session_id +
-        		 "' AND c.c_year = 2019 AND c.c_semester = 2";     
-  	    
+        		 "' AND c.c_year = 2019 AND c.c_semester = 2";         
     }
 	
 	myResultSet = stmt.executeQuery(sql);
-
-
-	//myResultSet = pstmt.executeQuery();
-	System.out.println("myreslutset"+myResultSet);
-
 	if (myResultSet != null) {
-		System.out.println("inside if");
+		
 	while (myResultSet.next()) {
 		
-		System.out.println("inside while");
+		//result 객체로 데이터를 가져옵니다
 		String c_id = myResultSet.getString("c_id");//과목번호
 		String c_name = myResultSet.getString("c_name");//과목명
-	//	System.out.println("c_id:"+c_id);
-	//	System.out.println("c_name"+c_name);
-
-		
+	
 		int c_credit= myResultSet.getInt("c_credit");//학점			
 		int c_number = myResultSet.getInt("c_number");//분반
 		int p_id = myResultSet.getInt("p_id");
@@ -223,7 +200,7 @@ Statement stmt = null;
 		int c_period1 = myResultSet.getInt("c_period1");
 		int c_period2 = myResultSet.getInt("c_period2");
 		
-String c_time = "";
+		String c_time = "";
 		
 		switch(c_day1){
 		case 1:
@@ -270,10 +247,10 @@ String c_time = "";
 		c_time = c_time + " " + c_period2 + " 교시";
 		
 		String pSQL = "select p_name from professor where p_id = '" + p_id + "'";
-		Statement prof_stmt = myConn.createStatement();
+		Statement prof_stmt = myConn.createStatement();//전진과 읽기만 가능한 resultset 생성
 		ResultSet rs = prof_stmt.executeQuery(pSQL);
 		rs.next();
-		String p_name = rs.getString("p_name");
+		String p_name = rs.getString("p_name"); //result객체로 데이터 가져오기
 		
 		
 %>
@@ -289,9 +266,6 @@ String c_time = "";
 <%
 		}
 	}
-	//stmt.close(); 
-	//pstmt.close();
-	//myConn.close();
 %>
 </table>
 
