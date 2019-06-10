@@ -6,7 +6,7 @@
 <html>
 
 <head> <meta charset="EUC-KR">
-	<title>데이터베이스를 활용한 수강신청 시스템입니다.</title>
+	<title>데이터베이스를 활용한 수강신청 시스템입니다</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,7 +29,6 @@
 	#accordionSidebar{
 		float:left;
 	}
-
 	.navbar-expand{
 		width:70%;
 		float:left;
@@ -55,7 +54,6 @@
 	#profile{
 		margin:0 auto;
 	}
-
 </style>
 <body>
 	<%@include file="top.jsp"%>
@@ -64,12 +62,10 @@ String dbdriver = "oracle.jdbc.driver.OracleDriver"; //JDBC 드라이버 로딩
 String dburl = "jdbc:oracle:thin:@localhost:1521:orcl"; //url
 String user = "sook"; //oracle login id
 String passwd = "2019"; //pw
-
 Class.forName(dbdriver); // DriverManager.registerDriver(dbdriver);
 Connection myConn = null;
 CallableStatement cstmt = null;
 String sql = null;
-
 // show_stu_info 변수
 String pwd = null; 
 String name = null; 
@@ -78,7 +74,6 @@ String major = null;
 String creditSQL = null;
 int credit = 0;
 int isLeavedNo = 0; String isLeaved = "";
-
 %>
 
 	<!-- Content Wrapper -->
