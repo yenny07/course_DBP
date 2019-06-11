@@ -1,5 +1,6 @@
 CREATE OR REPLACE PROCEDURE InsertCourse(professorID IN VARCHAR2, courseID IN VARCHAR2,
-			courseIDNO IN NUMBER, courseNAME IN VARCHAR2, courseCREDIT IN NUMBER,
+			courseIDNO IN NUMBER, courseNAME IN VARCHAR2, coursePosition IN VARCHAR2, 
+			courseCREDIT IN NUMBER,
 			courseMAJOR IN VARCHAR2, courseMAX IN NUMBER,
 			courseDAY1 IN NUMBER, coursePERIOD1 IN NUMBER,
 			courseDAY2 IN NUMBER, coursePERIOD2 IN NUMBER,
@@ -171,9 +172,9 @@ BEGIN
 		RAISE duplicate_period;
 	END IF;
 
-	INSERT INTO course(c_id, c_name, c_year, c_semester, p_id, c_credit, c_number,c_major,
+	INSERT INTO course(c_id, c_name, c_position, c_year, c_semester, p_id, c_credit, c_number,c_major,
 			c_day1, c_day2, c_period1, c_period2, c_max, c_current)
-   	VALUES (courseID, courseNAME, nYEAR, nSEMESTER, professorID, courseCREDIT, courseIDNO, courseMAJOR,
+   	VALUES (courseID, courseNAME, coursePosition, nYEAR, nSEMESTER, professorID, courseCREDIT, courseIDNO, courseMAJOR,
 			tempDAY1, tempDAY2, tempPERIOD1, tempPERIOD2, courseMAX, 0);
 
 
@@ -227,4 +228,3 @@ EXCEPTION
       DBMS_OUTPUT.put_line(result);
 END;
 /
-	

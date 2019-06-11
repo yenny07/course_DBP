@@ -204,6 +204,7 @@
          <th>과목명</th>
          <th>전공</th>
          <th>교수</th>
+         <th>강의실</th>
          <th>시간</th>
          <th>학점</th>
          <th>현재 수강인원</th>
@@ -226,6 +227,7 @@
 		String c_name = myResultSet.getString("c_name");//과목명
 		String c_major = myResultSet.getString("c_major");//과목명
 		int p_id = myResultSet.getInt("p_id");
+		String c_position = myResultSet.getString("c_position");
 		int c_day1 = myResultSet.getInt("c_day1");
 		int c_day2 = myResultSet.getInt("c_day2");
 		int c_period1 = myResultSet.getInt("c_period1");
@@ -294,6 +296,7 @@
   <td align="center"><%= c_name %></td>
   <td align="center"><%= c_major %></td>
   <td align="center"><%= p_name %></td>
+  <td align="center"><%= c_position %></td>
   <td align="center"><%= c_time %></td>
   <td align="center"><%= c_credit %></td>
   <td align="center"><%= c_current %></td>

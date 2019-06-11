@@ -143,6 +143,7 @@
 	ArrayList<String> courseID = new ArrayList<>();
 	ArrayList<String> courseName = new ArrayList<>();
 	ArrayList<String> profID = new ArrayList<>();
+	ArrayList<String> coursePosition = new ArrayList<>();
 	ArrayList<Integer> courseCredit = new ArrayList<>();
 	ArrayList<Integer> courseNumber = new ArrayList<>();
 	ArrayList<String> courseMajor = new ArrayList<>();
@@ -176,6 +177,7 @@
 				courseID.add(rs.getString("c_id"));
 				courseName.add(rs.getString("c_name"));
 				profID.add(rs.getString("p_id"));
+				coursePosition.add(rs.getString("c_position"));
 				courseCredit.add(rs.getInt("c_credit"));
 				courseNumber.add(rs.getInt("c_number"));
 				courseMajor.add(rs.getString("c_major"));
@@ -216,6 +218,7 @@
 				courseCredit.add(rs.getInt("c_credit"));
 				courseNumber.add(rs.getInt("c_number"));
 				courseMajor.add(rs.getString("c_major"));
+				coursePosition.add(rs.getString("c_position"));
 				coursePeriod1.add(rs.getInt("c_period1"));
 				coursePeriod2.add(rs.getInt("c_period2"));
 				courseDay1.add(rs.getInt("c_day1"));
@@ -258,6 +261,7 @@
 					<th>과목명</th>
 					<th>전공</th>
 					<th>교수</th>
+					<th>강의실</th>
 					<th>시간</th>
 					<th>학점</th>
 				</tr>
@@ -290,6 +294,10 @@
 				prof_rs.next();
 				String p_name = prof_rs.getString("P_NAME");
 				out.println(p_name);
+				out.println("</td>");
+				
+				out.print("<td align = \"center\" >");
+				out.println(coursePosition.remove(0));
 				out.println("</td>");
 				
 				out.print("<td align = \"center\" >");
@@ -347,6 +355,7 @@
 					<th>분반</th>
 					<th>과목명</th>
 					<th>전공</th>
+					<th>강의실</th>
 					<th>현재 수강인원</th>
 					<th>최대 수강인원</th>
 					<th>시간</th>
@@ -370,7 +379,11 @@
 				
 				out.print("<td align = \"center\" >");
 				out.println(courseMajor.remove(0));
-				out.println("</td>");            
+				out.println("</td>");
+				
+				out.print("<td align = \"center\" >");
+				out.println(coursePosition.remove(0));
+				out.println("</td>");
 				
 				out.print("<td align = \"center\" >");
 				out.println(courseCurrent.remove(0));

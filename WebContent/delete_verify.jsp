@@ -62,7 +62,12 @@
 		   
 		      cstmt.execute();
 		      System.out.println("executed");
-		      result = "강의 개설이 취소되었습니다.";
+		      if (session_id.length() == 7) {
+		    	  result = "수강 신청이 취소되었습니다.";
+		      }
+		      else {
+			      result = "강의 개설이 취소되었습니다.";
+		      }
 		      //result = cstmt.getString(6);
 		      %>
 		      <script>
