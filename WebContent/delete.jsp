@@ -166,6 +166,7 @@
          <th>분반</th>
          <th>과목명</th>
          <th>교수</th>
+         <th>강의실</th>
          <th>시간</th>
          <th>학점</th>
          <th>수강취소</th>
@@ -191,6 +192,7 @@
 		//result 객체로 데이터를 가져옵니다
 		String c_id = myResultSet.getString("c_id");//과목번호
 		String c_name = myResultSet.getString("c_name");//과목명
+		String c_position = myResultSet.getString("c_position");
 	
 		int c_credit= myResultSet.getInt("c_credit");//학점			
 		int c_number = myResultSet.getInt("c_number");//분반
@@ -259,6 +261,7 @@
   <td align="center"><%= c_number %></td> 
   <td align="center"><%= c_name %></td>
   <td align="center"><%= p_name %></td>
+  <td align="center"><%= c_position %></td>
   <td align="center"><%= c_time %></td>
   <td align="center"><%= c_credit %></td>
   <td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>

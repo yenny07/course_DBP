@@ -60,12 +60,13 @@
 			catch(SQLException ex) { }
 		}
 	}else{
-		CallableStatement cstmt = myConn.prepareCall("{call InsertCourse(?,?,?,?,?,?,?,?,?,?,?,?)}",
+		CallableStatement cstmt = myConn.prepareCall("{call InsertCourse(?,?,?,?,?,?,?,?,?,?,?,?,?)}",
 		ResultSet.TYPE_SCROLL_SENSITIVE,
 		ResultSet.CONCUR_READ_ONLY);
 		String c_name = request.getParameter("c_name");
 		int c_credit = Integer.parseInt(request.getParameter("c_credit"));
 		String c_major = request.getParameter("c_major");
+		String c_position = request.getParameter("c_position");
 		int c_max = Integer.parseInt(request.getParameter("c_max"));
 		int c_day1 = Integer.parseInt(request.getParameter("c_day1"));
 		int c_period1 = Integer.parseInt(request.getParameter("c_period1"));	
@@ -85,32 +86,35 @@
 		cstmt.setString(4, c_name);
 		System.out.println(c_name);
 		
-		cstmt.setInt(5, c_credit);
+		cstmt.setString(5, c_position);
+		System.out.println(c_position);
+		
+		cstmt.setInt(6, c_credit);
 		System.out.println(c_credit);
 		
-		cstmt.setString(6, c_major);
+		cstmt.setString(7, c_major);
 		System.out.println(c_major);
 		
-		cstmt.setInt(7, c_max);
+		cstmt.setInt(8, c_max);
 		System.out.println(c_max);
 		
-		cstmt.setInt(8, c_day1);
+		cstmt.setInt(9, c_day1);
 		System.out.println(c_day1);
 		
-		cstmt.setInt(9, c_period1);
+		cstmt.setInt(10, c_period1);
 		System.out.println(c_period1);
 		
-		cstmt.setInt(10, c_day2);
+		cstmt.setInt(11, c_day2);
 		System.out.println(c_day2);
 		
-		cstmt.setInt(11, c_period2);
+		cstmt.setInt(12, c_period2);
 		System.out.println(c_period2);
 		
-		cstmt.registerOutParameter(12, java.sql.Types.VARCHAR);
+		cstmt.registerOutParameter(13, java.sql.Types.VARCHAR);
 
 		try {
 			cstmt.execute();
-			result = cstmt.getString(12);
+			result = cstmt.getString(13);
 			%>
 			<script>
 			alert("<%= result %>");
