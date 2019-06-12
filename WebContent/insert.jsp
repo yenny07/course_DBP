@@ -81,15 +81,17 @@
 <%@ include file="top.jsp" %>
 <div id="table-header">
 <%
+	if(session_id.length() != 7){
+		response.sendRedirect("login.jsp");
+  		return;
+	}
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
 		year_semester = 201902;
 	}else{
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}
-	System.out.println(session_id);
-	System.out.println(session_id == null);
-
+	
 	int year = year_semester / 100;
 	int semester = year_semester % 100;
 	

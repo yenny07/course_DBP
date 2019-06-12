@@ -110,7 +110,7 @@ int isLeavedNo = 0; String isLeaved = "";
         	            	   isLeaved = "재학";
             	           }
                 	       System.out.println(session_id + pwd + isLeavedNo + isLeaved);
-                     }else{
+                     }else if(session_id.length() == 5){
                     	 
                     	 sql = "{call show_prof_info(?,?,?,?)}";
       	               cstmt = myConn.prepareCall(sql);
@@ -124,6 +124,9 @@ int isLeavedNo = 0; String isLeaved = "";
           	           
               	       System.out.println(session_id + pwd);
       
+                     }else{
+                    	 response.sendRedirect("login.jsp");
+                  		 return;
                      }
                           }catch(SQLException e){
                       out.println(e);

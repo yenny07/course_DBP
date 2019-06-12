@@ -348,7 +348,7 @@
 				out.println("</tr>");
 			}
 		}
-		else {
+		else if (stuOrProf.length() == 5) {
 %>
 				<tr>
 					<th>과목번호</th>
@@ -440,6 +440,9 @@
 				
 				out.println("</tr>");
 			}
+		}else{
+			response.sendRedirect("login.jsp");
+     		return;
 		}
 		out.flush();
 %>

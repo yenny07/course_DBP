@@ -107,7 +107,11 @@
           <div class="d-sm-flex align-items-center justify-content-between">
           	
           	<div id="table-header">
-          	<%
+<%
+	if(session_id.length() != 5){
+		response.sendRedirect("login.jsp");
+		return;
+	}
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
 		year_semester = 201902;
