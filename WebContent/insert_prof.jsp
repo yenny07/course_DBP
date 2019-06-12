@@ -108,23 +108,23 @@
           	
           	<div id="table-header">
 <%
-	if(session_id.length() != 5){
+	if(session_id.length() != 5){ //교수 아이디가 아닌경우 로그인 페이지로
 		response.sendRedirect("login.jsp");
 		return;
 	}
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
-		year_semester = 201902;
+		year_semester = 201902; //2019년 2학기를 default값으로
 	}else{
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}
 	System.out.println(session_id);
 	System.out.println(session_id == null);
 	
-	int year = year_semester / 100;
-	int semester = year_semester % 100;
+	int year = year_semester / 100; //년도
+	int semester = year_semester % 100; //학기
 	
-	if(year_semester == 201902){
+	if(year_semester == 201902){  //year_semester값에 따라 select default값이 바뀐다.
 		%>
 		<select id="year-dropdown" name="year_semester" onchange="location = this.value;">
 			<option value='insert_prof.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
@@ -170,7 +170,7 @@
 	String dbdriver = "oracle.jdbc.driver.OracleDriver"; 
 	int isLeaved = 0;
 	
-	try {
+	try { //개설과목 리스트는 학생과 동일
 					
 			Class.forName(dbdriver);
 		    myConn =  DriverManager.getConnection (dburl, user, passwd);
@@ -185,7 +185,7 @@
 
 %>
 <% 
-		String creditSQL = "{? = call get_prof_credit(?,?,?)}";
+		String creditSQL = "{? = call get_prof_credit(?,?,?)}"; //현재까지 개설한 과목의 학점
 		CallableStatement cstmt = myConn.prepareCall(creditSQL);
 		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 		cstmt.setString(2, session_id);
@@ -364,9 +364,6 @@
          <th>최대 수강인원</th>
          </tr>
 <%
-
-
-	//mySQL = "select c_id,c_id_no,c_name,c_unit from course where c_id not in (select c_id from enroll where s_id='" + session_id + "')";
 	myResultSet = pstmt.executeQuery();
 	System.out.println("myresultset"+myResultSet);
 
@@ -374,9 +371,9 @@
 	while (myResultSet.next()) {
 		
 		
-		String c_id = myResultSet.getString("c_id");//과목번호
-		int c_number = myResultSet.getInt("c_number");//분반
-		String c_name = myResultSet.getString("c_name");//과목명
+		String c_id = myResultSet.getString("c_id");
+		int c_number = myResultSet.getInt("c_number");
+		String c_name = myResultSet.getString("c_name");
 		int p_id = myResultSet.getInt("p_id");
 		String c_position = myResultSet.getString("c_position");
 		int c_day1 = myResultSet.getInt("c_day1");
@@ -455,9 +452,6 @@
 <%
 		}
 	}
-	//stmt.close(); 
-	//pstmt.close();
-	//myConn.close();
 %>
 </table>
           	

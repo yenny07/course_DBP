@@ -63,6 +63,7 @@
 		CallableStatement cstmt = myConn.prepareCall("{call InsertCourse(?,?,?,?,?,?,?,?,?,?,?,?,?)}",
 		ResultSet.TYPE_SCROLL_SENSITIVE,
 		ResultSet.CONCUR_READ_ONLY);
+		try{
 		String c_name = request.getParameter("c_name");
 		int c_credit = Integer.parseInt(request.getParameter("c_credit"));
 		String c_major = request.getParameter("c_major");
@@ -113,7 +114,14 @@
 		System.out.println(c_period2);
 		
 		cstmt.registerOutParameter(13, java.sql.Types.VARCHAR);
-
+		} catch (NumberFormatException e){ //input값이 잘못되었을 경우 예외 처리
+			%>
+			<script>
+			alert("잘못된 입력입니다.");
+			location.href="insert_prof.jsp?year_semester=201902";
+			</script>
+			<%
+		}
 		try {
 			cstmt.execute();
 			result = cstmt.getString(13);

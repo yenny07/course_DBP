@@ -68,8 +68,7 @@
 		      else {
 			      result = "강의 개설이 취소되었습니다.";
 		      }
-		      //result = cstmt.getString(6);
-		      %>
+		       %>
 		      <script>
 		      alert("<%= result %>");
 		      location.href="delete.jsp";
