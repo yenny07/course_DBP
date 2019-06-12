@@ -73,12 +73,6 @@
 		text-align: center;
 		word-break: keep-all;
 	}
-	td{
-		text-align: center;
-		margin: auto;
-		word-break: keep-all;
-		white-space:pre-line
-	}
 	
 	#insert-button{
 		margin:auto;
@@ -89,6 +83,11 @@
 		text-align:center;
 		width:100%;
 		height:38px;
+	}
+	
+	#position{
+		margin-top:0;
+		float:left;
 	}
 	
 </style>
@@ -276,7 +275,7 @@
 			<tr>
 				<td colspan = "4" >강의실 위치</td>
 				<td colspan = "4">
-					<input id = "c_id" type = "text" name = "c_position" size = "20" placeholder = "00관 000호">
+					<%@ include file="position.jsp" %>
 				</td>
 			</tr>
 			<tr>

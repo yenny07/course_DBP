@@ -66,7 +66,9 @@
 		String c_name = request.getParameter("c_name");
 		int c_credit = Integer.parseInt(request.getParameter("c_credit"));
 		String c_major = request.getParameter("c_major");
-		String c_position = request.getParameter("c_position");
+		String c_position1 = request.getParameter("c_position1");
+		String c_position2 = request.getParameter("c_position2");
+		String c_position = c_position1 + " " + c_position2;
 		int c_max = Integer.parseInt(request.getParameter("c_max"));
 		int c_day1 = Integer.parseInt(request.getParameter("c_day1"));
 		int c_period1 = Integer.parseInt(request.getParameter("c_period1"));	
