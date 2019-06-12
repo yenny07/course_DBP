@@ -14,6 +14,7 @@ IS
 	too_long_name EXCEPTION;
 	same_days EXCEPTION;
 	duplicate_period EXCEPTION;
+	duplicate_position EXCEPTION;
 	duplicate_course_id EXCEPTION;
 	course_number_error EXCEPTION;
 	duplicate_course_name EXCEPTION;
@@ -153,6 +154,25 @@ BEGIN
 		tempPERIOD2 := coursePERIOD1;
 	END IF;
 	
+	/*이미 예약된 강의실*/
+	SELECT count(*)
+	INTO courseCOUNT
+	FROM course
+	WHERE c_year = nYEAR AND c_semester = nSEMESTER AND c_day1 = tempDAY1 AND c_period1 = tempPERIOD1 AND c_position = coursePosition;
+	
+	IF courseCOUNT > 0 THEN
+		RAISE duplicate_position;
+	END IF;
+	
+	SELECT count(*)
+	INTO courseCOUNT
+	FROM course
+	WHERE c_year = nYEAR AND c_semester = nSEMESTER AND c_day2 = tempDAY2 AND c_period2 = tempPERIOD2 AND c_position = coursePosition;
+	
+	IF courseCOUNT > 0 THEN
+		RAISE duplicate_position;
+	END IF;
+	
 	/*이미 개설한 강의 시간대*/
 	SELECT count(*)
 	INTO periodCOUNT1
@@ -222,6 +242,9 @@ EXCEPTION
    WHEN duplicate_period THEN
       result :='같은 시간에 개설한 강의가 있습니다.';
       DBMS_OUTPUT.put_line(result);
+   WHEN duplicate_position THEN
+      result :='같은 시간에 이미 예약된 강의실입니다.';
+      DBMS_OUTPUT.put_line(result);   	
    WHEN OTHERS THEN
       ROLLBACK;
       result := SQLCODE;
