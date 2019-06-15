@@ -32,5 +32,3 @@ BEGIN
  
 END;
 /
-
- show error;

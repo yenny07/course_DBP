@@ -11,5 +11,6 @@ FROM course c
 WHERE  p_id = vp_id 
 AND (c_year, c_semester) IN ((vc_year, vc_semester))
 ORDER BY c.c_id ASC;
+
 END;
 /

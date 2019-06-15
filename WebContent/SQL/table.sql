@@ -8,10 +8,6 @@ isLeaved NUMBER(3), --휴학 유무 (0: 재학, 1: 휴학)
 CONSTRAINT student_pk PRIMARY KEY (s_id)
 );
 
-<<<<<<< HEAD
-=======
-(p_credit 삭제)
->>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 CREATE TABLE PROFESSOR(
 p_id varchar2(5),
 p_pwd VARCHAR2(15), -- professor 비밀번호
@@ -23,21 +19,14 @@ CONSTRAINT professor_pk PRIMARY KEY (p_id)
 CREATE TABLE COURSE(
 c_id VARCHAR2(20),
 c_name VARCHAR2(50),
-<<<<<<< HEAD
-=======
 c_position VARCHAR2(50),
->>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 c_year NUMBER, --년도
 c_semester NUMBER, -- 학기
 p_id VARCHAR2(5),  --교수id
 c_credit NUMBER, --학점
 c_number NUMBER, --분반번호
 c_major VARCHAR2(50), --전공
-<<<<<<< HEAD
 c_day1 NUMBER, --요일1 (1:월, 2:화, 3:수, 4:목, 5:금)
-=======
-c_day1 NUMBER, --요일1
->>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 c_day2 NUMBER, --요일2
 c_period1 NUMBER, --교시1
 c_period2 NUMBER, --교시2
