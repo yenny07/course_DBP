@@ -72,6 +72,7 @@
 	String isLeaved = "";
 %>
 	<!-- Content Wrapper -->
+<<<<<<< HEAD
 	<div id = "content-wrapper" class = "d-flex flex-column">
 		<!-- Main Content -->
 		<div id = "content">
@@ -199,6 +200,141 @@
 		<!-- End of Main Content -->
 	</div>
 	<!-- End of Content Wrapper -->
+=======
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+            <% if (session_id != null) {
+            	try{
+                    // oracle 연결
+                     myConn = DriverManager.getConnection(dburl, user, passwd);
+                    
+                     if(session_id.length() == 7){
+                         /* show_stu_info 호출*/
+    	                   sql = "{call show_stu_info(?,?,?,?,?,?)}";
+        	               cstmt = myConn.prepareCall(sql);
+            	           cstmt.setString(1, session_id); // s_id
+           		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // s_pwd
+           	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //s_name
+        	               cstmt.registerOutParameter(4, java.sql.Types.INTEGER); // s_grade
+            	           cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); // s_major
+                	       cstmt.registerOutParameter(6, java.sql.Types.INTEGER); // isLeaved
+    	                   cstmt.execute(); // 프로시저 실행
+    	
+        	               pwd = cstmt.getString(2);
+            	           isLeavedNo = cstmt.getInt(6);
+                	       
+    	                   if(isLeavedNo == 1){
+        	            	   isLeaved = "휴학";
+            	           }else{
+        	            	   isLeaved = "재학";
+            	           }
+                	       System.out.println(session_id + pwd + isLeavedNo + isLeaved);
+                     }else if(session_id.length() == 5){
+                    	 
+                    	 sql = "{call show_prof_info(?,?,?,?)}";
+      	               cstmt = myConn.prepareCall(sql);
+          	           cstmt.setString(1, session_id); // p_id
+         		            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR); // p_pwd
+         	    	        cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //p_name
+      	               cstmt.registerOutParameter(4, java.sql.Types.VARCHAR); // p_major
+              	       cstmt.execute(); // 프로시저 실행
+  	
+      	               pwd = cstmt.getString(2);
+          	           
+              	       System.out.println(session_id + pwd);
+      
+                     }else{
+                    	 response.sendRedirect("login.jsp");
+                  		 return;
+                     }
+                          }catch(SQLException e){
+                      out.println(e);
+                      e.printStackTrace();
+                  }
+            
+            
+            %>
+                    
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <div class="col-12">
+          <form action="update_verify.jsp?id=<%=session_id%>" method="post" id="update_post">
+          		<table class="table table-bordered" align="center" id="update_table">
+          		<tr>
+          			<th colspan="2" style="text-align:center">수정할 비밀번호</th>
+          		</tr>
+   				<tr>
+     				<td id="update_td">비밀번호</td>
+     				<td ><input id="update_pw_in" type="password" name="password" size="10"></td>
+   				</tr>
+   				<tr>
+     				<td id="update_td_confirm">비밀번호 확인</td>
+     				<td ><input id="update_pw_in_confirm" type="password" name="passwordConfirm" size="10" ></td>
+   				</tr>
+   				<tr>
+       				<td colspan="2" align="center">
+        			<input class="btn btn-primary" id="update_btn" type="submit" value="수정 완료">
+        			<input class="btn btn-primary" id="update_btn" type="reset" value="초기화">
+        			</td>
+    			</tr>
+    			</table>
+          	</form>
+          	<%
+          	if(session_id.length() == 7){
+          	%>
+          	<table class="table table-bordered" align="center" id="isLeaved_table">
+          		<tr>
+          			<th colspan="2" style="text-align:center">휴학신청</th>
+          		</tr>
+          		<tr>
+     				<td colspan="1" id = "student_isLeaved">학적상태</td>
+     				<td colspan="1" ><%=isLeaved%></td>
+   				</tr>
+   				<tr>
+   				<%
+        	if (isLeavedNo == 1) {
+        		%>
+        		<td colspan="2"align="center">
+        		<input class="btn btn-primary" id="leave_btn" name = "leaved" type="button" value = "휴학 취소" onclick = "leaveSemesterCancle()">
+        		</td>
+        		<%
+        		}
+        	else {
+        		%>
+           		<td colspan="2"align="center">
+           		<input class="btn btn-primary" id="leave_btn" name = "leaved" type="button" value = "휴학  신청" onclick = "leaveSemester()">
+           		</td>
+           	<%
+        		}
+          	}		
+   				
+        %>
+        		</tr>
+
+    			</table>
+          </div>
+          	
+		  </div>
+		  
+		  
+		<% myConn.close(); }%>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 </body>
 <script>
 	//휴학 신청, 휴학 신청 취소에 사용되는 함수 - 팝업이 뜨면 휴학 여부를 선택할 수 있고, 선택한 값을 update_leaved.jsp로 보낸다

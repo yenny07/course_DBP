@@ -162,7 +162,7 @@ int isLeavedNo = 0; String isLeaved = "";
 
        		<%
             	       
-                   }else{
+                   }else if(session_id.length() == 5){
                 	   sql = "{call show_prof_info(?,?,?,?)}";
     	               cstmt = myConn.prepareCall(sql);
         	           cstmt.setString(1, session_id); // p_id
@@ -211,6 +211,9 @@ int isLeavedNo = 0; String isLeaved = "";
            			</table>
 
        		<%
+                   }else{
+                	   response.sendRedirect("login.jsp");
+                 		return;
                    }
                    
                    

@@ -53,6 +53,7 @@
 		cstmt.setInt(3,c_id_no);
 	}
 	
+<<<<<<< HEAD
 	
 	  try {
 			cstmt.execute();
@@ -78,5 +79,31 @@
 		   			 myConn.commit(); cstmt.close(); myConn.close(); 
 		   			 } catch(SQLException ex) { }
 			   }
+=======
+	   try {
+		   
+		      cstmt.execute();
+		      System.out.println("executed");
+		      if (session_id.length() == 7) {
+		    	  result = "수강 신청이 취소되었습니다.";
+		      }
+		      else {
+			      result = "강의 개설이 취소되었습니다.";
+		      }
+		       %>
+		      <script>
+		      alert("<%= result %>");
+		      location.href="delete.jsp";
+		      </script>
+		      <%
+		      } catch(SQLException ex) {
+		      System.err.println("SQLException: " + ex.getMessage());
+		      }
+		      finally {
+		      if (cstmt != null)
+		      try { myConn.commit(); cstmt.close(); myConn.close(); }
+		      catch(SQLException ex) { }
+		      }
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 		
 %>

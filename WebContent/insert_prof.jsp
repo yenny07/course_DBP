@@ -63,6 +63,7 @@
 		text-align : center;
 		word-break : keep-all;
 	}
+<<<<<<< HEAD
 	td {
 		text-align : center;
 		margin : auto;
@@ -71,6 +72,11 @@
 	}
 	#insert-button {
 		margin : auto;
+=======
+	
+	#insert-button{
+		margin:auto;
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 	}
 	#input-box {
 		margin-top : 5px;
@@ -78,6 +84,15 @@
 		width : 100%;
 		height : 38px;
 	}
+<<<<<<< HEAD
+=======
+	
+	#position{
+		margin-top:0;
+		float:left;
+	}
+	
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 </style>
 <body>
 <%@ include file = "top.jsp" %>
@@ -89,6 +104,7 @@
 	}
 %>
 	<!-- Content Wrapper -->
+<<<<<<< HEAD
 	<div id="content-wrapper" class="d-flex flex-column">
 	<!-- Main Content -->
 	<div id="content">
@@ -117,6 +133,44 @@
 			<option value = 'insert_prof.jsp?year_semester=201901'>2019년 1학기</option>
 			<option value = 'insert_prof.jsp?year_semester=201802'>2018년 2학기</option>
 			<option value = 'insert_prof.jsp?year_semester=201801'>2018년 1학기</option>
+=======
+    <div id="content-wrapper" class="d-flex flex-column">
+	
+      <!-- Main Content -->
+      <div id="content">
+
+        <div class="container-fluid">
+
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between">
+          	
+          	<div id="table-header">
+<%
+	if(session_id.length() != 5){ //교수 아이디가 아닌경우 로그인 페이지로
+		response.sendRedirect("login.jsp");
+		return;
+	}
+	int year_semester = 0;
+	if( request.getParameter("year_semester") == null){
+		year_semester = 201902; //2019년 2학기를 default값으로
+	}else{
+		year_semester = Integer.parseInt(request.getParameter("year_semester"));
+	}
+	System.out.println(session_id);
+	System.out.println(session_id == null);
+	
+	int year = year_semester / 100; //년도
+	int semester = year_semester % 100; //학기
+	
+	if(year_semester == 201902){  //year_semester값에 따라 select default값이 바뀐다.
+		%>
+		<select id="year-dropdown" name="year_semester" onchange="location = this.value;">
+			<option value='insert_prof.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
+			<option value='insert_prof.jsp?year_semester=201901' >2019년 1학기</option>
+    		<option value='insert_prof.jsp?year_semester=201802'>2018년 2학기</option>
+    		<option value='insert_prof.jsp?year_semester=201801'>2018년 1학기</option>
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 		</select>
 <%
 	}
@@ -160,7 +214,18 @@
 	ResultSet myResultSet = null;
 	String sql;
 	
+<<<<<<< HEAD
 	int credit;
+=======
+	try { //개설과목 리스트는 학생과 동일
+					
+			Class.forName(dbdriver);
+		    myConn =  DriverManager.getConnection (dburl, user, passwd);
+		    String sql = "select * from COURSE where c_year = ? and c_semester = ? order by c_id";
+			pstmt = myConn.prepareStatement(sql);
+			pstmt.setInt(1, year);
+			pstmt.setInt(2,semester);
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 	
 	try {				
 		Class.forName(dbdriver);
@@ -177,10 +242,16 @@
 		System.err.println("SQLException: " + ex.getMessage());
 	}
 %>
+<<<<<<< HEAD
 <%
 		//CallableStatement + Function 사용 부분 - 현재 교수가 개설한 과목의 총 학점을 가져와서 보여준다
 		String creditSQL = "{? = call get_prof_credit(?,?,?)}";
 		cstmt = myConn.prepareCall(creditSQL);
+=======
+<% 
+		String creditSQL = "{? = call get_prof_credit(?,?,?)}"; //현재까지 개설한 과목의 학점
+		CallableStatement cstmt = myConn.prepareCall(creditSQL);
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 		cstmt.setString(2, session_id);
 		cstmt.setInt(3, 2019);
@@ -271,6 +342,12 @@
 				</td>
 			</tr>
 			<tr>
+				<td colspan = "4" >강의실 위치</td>
+				<td colspan = "4">
+					<%@ include file="position.jsp" %>
+				</td>
+			</tr>
+			<tr>
 				<td colspan = "4">학점</td>
 				<td colspan = "4">
 					<input id = "c_credit" type = "text" name = "c_credit" size = "20" placeholder = "1~3 사이의 숫자">
@@ -335,6 +412,7 @@
 		</div>
 		</form>
 		<p>개설된 강의</p>
+<<<<<<< HEAD
 		</div>          
 		</div>
 		<div class = "d-sm-flex align-items-center justify-content-between mb-4">
@@ -429,6 +507,110 @@
 				<td align = "center"><%=c_current%></td>
 				<td align = "center"><%=c_max%></td>
 			</tr>
+=======
+</div>
+          
+</div>
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+<table class="table table-bordered" align="center" border>
+<tr>
+         <th>과목번호</th>
+         <th>분반</th>
+         <th>과목명</th>
+         <th>교수</th>
+         <th>강의실</th>
+         <th>시간</th>
+         <th>학점</th>
+         <th>현재 수강인원</th>
+         <th>최대 수강인원</th>
+         </tr>
+<%
+	myResultSet = pstmt.executeQuery();
+	System.out.println("myresultset"+myResultSet);
+
+	if (myResultSet != null) {
+	while (myResultSet.next()) {
+		
+		
+		String c_id = myResultSet.getString("c_id");
+		int c_number = myResultSet.getInt("c_number");
+		String c_name = myResultSet.getString("c_name");
+		int p_id = myResultSet.getInt("p_id");
+		String c_position = myResultSet.getString("c_position");
+		int c_day1 = myResultSet.getInt("c_day1");
+		int c_day2 = myResultSet.getInt("c_day2");
+		int c_period1 = myResultSet.getInt("c_period1");
+		int c_period2 = myResultSet.getInt("c_period2");
+		int c_max = myResultSet.getInt("c_max");
+		int c_current = myResultSet.getInt("c_current");
+		
+		String c_time = "";
+		
+		switch(c_day1){
+		case 1:
+			c_time = "월";
+			break;
+		case 2:
+			c_time = "화";
+			break;
+		case 3:
+			c_time = "수";
+			break;
+		case 4:
+			c_time = "목";
+			break;
+		case 5:
+			c_time = "금";
+			break;
+		default:
+			break;
+		}
+		
+		c_time = c_time + " " + c_period1 + "교시";
+		
+		switch(c_day2){
+		case 1:
+			c_time = c_time +"\n월";
+			break;
+		case 2:
+			c_time = c_time +"\n화";
+			break;
+		case 3:
+			c_time = c_time +"\n수";
+			break;
+		case 4:
+			c_time = c_time +"\n목";
+			break;
+		case 5:
+			c_time = c_time +"\n금";
+			break;
+		default:
+			break;
+		}
+		
+		c_time = c_time + " " + c_period2 + "교시";
+		
+		int c_credit= myResultSet.getInt("c_credit");//학점
+		
+		String mySQL = "select p_name from professor where p_id = '" + p_id + "'";
+		Statement prof_stmt = myConn.createStatement();
+		ResultSet rs = prof_stmt.executeQuery(mySQL);
+		rs.next();
+		String p_name = rs.getString("P_NAME");
+		
+%>
+<tr>
+  <td align="center"><%= c_id %></td>
+  <td align="center"><%= c_number %></td> 
+  <td align="center"><%= c_name %></td>
+  <td align="center"><%= p_name %></td>
+  <td align="center"><%= c_position %></td>
+  <td align="center"><%= c_time %></td>
+  <td align="center"><%= c_credit %></td>
+  <td align="center"><%= c_current %></td>
+  <td align="center"><%= c_max %></td>
+</tr>
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 <%
 		}
 	}

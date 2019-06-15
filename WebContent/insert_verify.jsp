@@ -61,6 +61,7 @@
 				catch (SQLException ex) { }
 			}
 		}
+<<<<<<< HEAD
 	}
 	//교수인 경우
 	else {
@@ -87,6 +88,71 @@
 			return;
 		}
 		
+=======
+	}else{
+		CallableStatement cstmt = myConn.prepareCall("{call InsertCourse(?,?,?,?,?,?,?,?,?,?,?,?,?)}",
+		ResultSet.TYPE_SCROLL_SENSITIVE,
+		ResultSet.CONCUR_READ_ONLY);
+		try{
+		String c_name = request.getParameter("c_name");
+		int c_credit = Integer.parseInt(request.getParameter("c_credit"));
+		String c_major = request.getParameter("c_major");
+		String c_position1 = request.getParameter("c_position1");
+		String c_position2 = request.getParameter("c_position2");
+		String c_position = c_position1 + " " + c_position2;
+		int c_max = Integer.parseInt(request.getParameter("c_max"));
+		int c_day1 = Integer.parseInt(request.getParameter("c_day1"));
+		int c_period1 = Integer.parseInt(request.getParameter("c_period1"));	
+		int c_day2 = Integer.parseInt(request.getParameter("c_day2"));
+		int c_period2 = Integer.parseInt(request.getParameter("c_period2"));		
+		
+		
+		cstmt.setString(1, session_id);
+		System.out.println(session_id);
+		
+		cstmt.setString(2, c_id);
+		System.out.println(c_id);
+		
+		cstmt.setInt(3,c_id_no);
+		System.out.println(c_id_no);
+		
+		cstmt.setString(4, c_name);
+		System.out.println(c_name);
+		
+		cstmt.setString(5, c_position);
+		System.out.println(c_position);
+		
+		cstmt.setInt(6, c_credit);
+		System.out.println(c_credit);
+		
+		cstmt.setString(7, c_major);
+		System.out.println(c_major);
+		
+		cstmt.setInt(8, c_max);
+		System.out.println(c_max);
+		
+		cstmt.setInt(9, c_day1);
+		System.out.println(c_day1);
+		
+		cstmt.setInt(10, c_period1);
+		System.out.println(c_period1);
+		
+		cstmt.setInt(11, c_day2);
+		System.out.println(c_day2);
+		
+		cstmt.setInt(12, c_period2);
+		System.out.println(c_period2);
+		
+		cstmt.registerOutParameter(13, java.sql.Types.VARCHAR);
+		} catch (NumberFormatException e){ //input값이 잘못되었을 경우 예외 처리
+			%>
+			<script>
+			alert("잘못된 입력입니다.");
+			location.href="insert_prof.jsp?year_semester=201902";
+			</script>
+			<%
+		}
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 		try {
 			//CallaleStatement + Procedure 사용 부분 - 입력한 정보를 토대로 새로운 과목을 개설한다
 			cstmt = myConn.prepareCall("{call InsertCourse(?,?,?,?,?,?,?,?,?,?,?,?)}", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);		
@@ -103,8 +169,13 @@
 			cstmt.setInt(11, c_period2);
 			cstmt.registerOutParameter(12, java.sql.Types.VARCHAR);
 			cstmt.execute();
+<<<<<<< HEAD
 			result = cstmt.getString(12);
 %>
+=======
+			result = cstmt.getString(13);
+			%>
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 			<script>
 				alert("<%= result %>");
 				location.href="insert_prof.jsp?year_semester=201902";

@@ -88,19 +88,21 @@
 %>
 <div id="table-header">
 <%
+	if(session_id.length() != 7){ //학생 아이디가 아닌경우 로그인 페이지로
+		response.sendRedirect("login.jsp");
+  		return;
+	}
 	int year_semester = 0;
 	if( request.getParameter("year_semester") == null){
-		year_semester = 201902;
+		year_semester = 201902; //2019년 2학기를 default값으로
 	}else{
 		year_semester = Integer.parseInt(request.getParameter("year_semester"));
 	}
-	System.out.println(session_id);
-	System.out.println(session_id == null);
-
-	int year = year_semester / 100;
-	int semester = year_semester % 100;
 	
-	if(year_semester == 201902){
+	int year = year_semester / 100; //년도
+	int semester = year_semester % 100; //학기
+	
+	if(year_semester == 201902){ //year_semester값에 따라 select default값이 바뀐다.
 		%>
 		<select name="year_semester" onchange="location = this.value;">
 			<option value='insert.jsp?year_semester=201902' selected="selected">2019년 2학기</option>	
@@ -153,7 +155,7 @@
 		    String sql = "select * from COURSE where c_year = ? and c_semester = ? order by c_id";
 			pstmt = myConn.prepareStatement(sql);
 			pstmt.setInt(1, year);
-			pstmt.setInt(2,semester);
+			pstmt.setInt(2,semester); //year와 semester에 따른 수강 과목 리스트
 	
 	    } catch(SQLException ex) {
 		     System.err.println("SQLException: " + ex.getMessage());
@@ -162,6 +164,7 @@
 %>
 <% 
 	if(session_id.length() == 7){
+<<<<<<< HEAD
 		String creditSQL = "{? = call get_stu_credit(?,?,?)}";
 		CallableStatement cstmt = myConn.prepareCall(creditSQL);
 		cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
@@ -171,13 +174,24 @@
 		cstmt.execute();
 		int s_credit = cstmt.getInt(1);
 		
+=======
+>>>>>>> 0332e8f3d269e7765b94a8fa18335256a95044f3
 		String std_SQL = "select isLeaved from student where s_id = '" + session_id + "'";
 		Statement std_stmt = myConn.createStatement();
 		ResultSet std_rs = std_stmt.executeQuery(std_SQL);
 		std_rs.next();
 
 		isLeaved = std_rs.getInt("isLeaved");
-		if (isLeaved == 0){
+		if (isLeaved == 0){ // 재학상태라면 수강중인 학점이, 휴학 상태라면 휴학중이라고 나온다.
+			String creditSQL = "{? = call get_stu_credit(?,?,?)}"; //현재 수강 신청한 학점
+			CallableStatement cstmt = myConn.prepareCall(creditSQL);
+			cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+			cstmt.setString(2, session_id);
+			cstmt.setInt(3, year);
+			cstmt.setInt(4, semester);
+			cstmt.execute();
+			int s_credit = cstmt.getInt(1);
+			
 	%>
 	<div id="current-credit">
 		<p>2019년 2학기에 신청한 학점 : <%= s_credit %></p>
@@ -211,6 +225,7 @@
          <th>과목명</th>
          <th>전공</th>
          <th>교수</th>
+         <th>강의실</th>
          <th>시간</th>
          <th>학점</th>
          <th>현재 수강인원</th>
@@ -218,9 +233,6 @@
          <th>수강신청</th>
       </tr>
 <%
-
-
-	//mySQL = "select c_id,c_id_no,c_name,c_unit from course where c_id not in (select c_id from enroll where s_id='" + session_id + "')";
 	myResultSet = pstmt.executeQuery();
 	System.out.println("myresultset"+myResultSet);
 
@@ -232,13 +244,14 @@
 		int c_number = myResultSet.getInt("c_number");//분반
 		String c_name = myResultSet.getString("c_name");//과목명
 		String c_major = myResultSet.getString("c_major");//과목명
-		int p_id = myResultSet.getInt("p_id");
-		int c_day1 = myResultSet.getInt("c_day1");
-		int c_day2 = myResultSet.getInt("c_day2");
-		int c_period1 = myResultSet.getInt("c_period1");
-		int c_period2 = myResultSet.getInt("c_period2");
-		int c_max = myResultSet.getInt("c_max");
-		int c_current = myResultSet.getInt("c_current");
+		int p_id = myResultSet.getInt("p_id"); //교수이름
+		String c_position = myResultSet.getString("c_position"); //강의실 위치
+		int c_day1 = myResultSet.getInt("c_day1"); //첫번째 요일
+		int c_day2 = myResultSet.getInt("c_day2"); //두번째 요일
+		int c_period1 = myResultSet.getInt("c_period1"); //첫번째 요일의 교시
+		int c_period2 = myResultSet.getInt("c_period2"); //두번째 요일의 교시
+		int c_max = myResultSet.getInt("c_max"); //최대 수강인원
+		int c_current = myResultSet.getInt("c_current"); //현재 수강인원
 		
 		String c_time = "";
 		
@@ -301,6 +314,7 @@
   <td align="center"><%= c_name %></td>
   <td align="center"><%= c_major %></td>
   <td align="center"><%= p_name %></td>
+  <td align="center"><%= c_position %></td>
   <td align="center"><%= c_time %></td>
   <td align="center"><%= c_credit %></td>
   <td align="center"><%= c_current %></td>
@@ -310,9 +324,9 @@
   		%>
   		<td align="center"><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">신청</a></td>
   		<%
-  	}else{
+  	}else{ //지난학기 과목이거나 휴학상태면 신청불가
 	  %>
-	  <td align="center">신청불가</td>
+	  <td align="center">신청불가</td> 
   		<%
   }
 %>
@@ -320,9 +334,6 @@
 <%
 		}
 	}
-	//stmt.close(); 
-	//pstmt.close();
-	//myConn.close();
 %>
 </table>
           	

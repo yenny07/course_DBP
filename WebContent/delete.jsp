@@ -142,6 +142,9 @@
 	<p>현재 신청한 학점 : <%= credit %></p>
 </div>
 <%
+	}else{
+		response.sendRedirect("login.jsp");
+ 		return;
 	}
 %>
 
@@ -156,20 +159,17 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          
-          
-
-<table class="table table-bordered" width="75%" align="center" border>
-<br>
-<tr>
-         <th>과목번호</th>
-         <th>분반</th>
-         <th>과목명</th>
-         <th>교수</th>
-         <th>시간</th>
-         <th>학점</th>
-         <th>수강취소</th>
-      </tr>
+			<table class="table table-bordered" width="75%" align="center" border>
+			<tr>
+    		   <th>과목번호</th>
+  		       <th>분반</th>
+		       <th>과목명</th>
+		       <th>교수</th>
+         	   <th>강의실</th>
+         	   <th>시간</th>
+         	   <th>학점</th>
+               <th>수강취소</th>
+      		</tr>
 <%
 	
 	//교수와 학생을 sessionID 길이로 구분하여 삭제 할 수 있는 과목 리스트를 띄워주게 할 sql문
@@ -191,6 +191,7 @@
 		//result 객체로 데이터를 가져옵니다
 		String c_id = myResultSet.getString("c_id");//과목번호
 		String c_name = myResultSet.getString("c_name");//과목명
+		String c_position = myResultSet.getString("c_position");
 	
 		int c_credit= myResultSet.getInt("c_credit");//학점			
 		int c_number = myResultSet.getInt("c_number");//분반
@@ -252,22 +253,22 @@
 		rs.next();
 		String p_name = rs.getString("p_name"); //result객체로 데이터 가져오기
 		
-		
 %>
-<tr>
-  <td align="center"><%= c_id %></td>
-  <td align="center"><%= c_number %></td> 
-  <td align="center"><%= c_name %></td>
-  <td align="center"><%= p_name %></td>
-  <td align="center"><%= c_time %></td>
-  <td align="center"><%= c_credit %></td>
-  <td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>
-</tr>
+		<tr>
+ 			 <td align="center"><%= c_id %></td>
+  			 <td align="center"><%= c_number %></td> 
+  			 <td align="center"><%= c_name %></td>
+  			 <td align="center"><%= p_name %></td>
+  			 <td align="center"><%= c_position %></td>
+			 <td align="center"><%= c_time %></td>
+  			 <td align="center"><%= c_credit %></td>
+  			 <td align="center"><a href="delete_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_number %>">삭제</a></td>
+		</tr>
 <%
 		}
 	}
 %>
-</table>
+		</table>
 
           </div>
         </div>
